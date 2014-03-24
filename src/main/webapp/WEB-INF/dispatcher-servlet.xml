@@ -6,4 +6,19 @@
 
 	<context:component-scan base-package="cz.jiripinkas.jba.controller" />
 
+	<bean id="tilesConfigurer"
+		class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+		<property name="definitions">
+			<list>
+				<value>/WEB-INF/defs/general.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.tiles3.TilesView" />
+	</bean>
+
 </beans>
