@@ -28,5 +28,4 @@
 		<url-pattern>*.xml</url-pattern>
 	</servlet-mapping>
 
-
 </web-app>
