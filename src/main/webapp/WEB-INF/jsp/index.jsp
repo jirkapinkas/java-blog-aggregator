@@ -8,7 +8,7 @@
 </head>
 <body>
 
-hello world
+hello from spring web mvc
 
 </body>
 </html>
