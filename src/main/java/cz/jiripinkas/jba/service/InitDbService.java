@@ -47,7 +47,6 @@ public class InitDbService {
 
 		User userAdmin = new User();
 		userAdmin.setName("admin");
-		userAdmin.setEmail("email@noreply.com");
 		List<Role> roles = new ArrayList<Role>();
 		roles.add(roleAdmin);
 		roles.add(roleUser);
