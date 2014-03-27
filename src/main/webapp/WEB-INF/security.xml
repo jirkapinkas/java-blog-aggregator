@@ -9,7 +9,8 @@
 	<http>
 		<intercept-url pattern="/users**" access="ROLE_ADMIN" />
 		<intercept-url pattern="/users/**" access="ROLE_ADMIN" />
-		<form-login />
+		<form-login login-page="/login.html" />
+		<logout logout-url="/logout" />
 		<logout />
 	</http>
 
