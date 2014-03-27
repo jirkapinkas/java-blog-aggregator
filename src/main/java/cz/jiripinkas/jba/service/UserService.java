@@ -2,6 +2,8 @@ package cz.jiripinkas.jba.service;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +11,7 @@ import cz.jiripinkas.jba.entity.User;
 import cz.jiripinkas.jba.repository.UserRepository;
 
 @Service
+@Transactional
 public class UserService {
 
 	@Autowired
@@ -20,6 +23,10 @@ public class UserService {
 
 	public User findOne(int id) {
 		return userRepository.findOne(id);
+	}
+
+	public void save(User user) {
+		userRepository.save(user);
 	}
 
 }

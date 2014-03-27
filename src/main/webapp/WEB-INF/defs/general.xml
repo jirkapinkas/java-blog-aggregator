@@ -25,4 +25,10 @@
 		<put-attribute name="current" value="users" />
 	</definition>
 
+	<definition name="user-register" extends="common">
+		<put-attribute name="title" value="User registration" />
+		<put-attribute name="body" value="/WEB-INF/jsp/user-register.jsp" />
+		<put-attribute name="current" value="register" />
+	</definition>
+
 </tiles-definitions>
