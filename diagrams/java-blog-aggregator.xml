@@ -25,8 +25,8 @@
 		<entity-name>cz.jiripinkas.jba.entity.Role</entity-name>
 		<entity-width>120</entity-width>
 		<entity-height>146</entity-height>
-		<entity-X-Coordinate>32</entity-X-Coordinate>
-		<entity-Y-Coordinate>90</entity-Y-Coordinate>
+		<entity-X-Coordinate>18</entity-X-Coordinate>
+		<entity-Y-Coordinate>87</entity-Y-Coordinate>
 		<primary-collapsed>false</primary-collapsed>
 		<relation-collapsed>false</relation-collapsed>
 		<basic-collapsed>false</basic-collapsed>
@@ -36,7 +36,7 @@
 		<entity-name>cz.jiripinkas.jba.entity.User</entity-name>
 		<entity-width>120</entity-width>
 		<entity-height>206</entity-height>
-		<entity-X-Coordinate>270</entity-X-Coordinate>
+		<entity-X-Coordinate>290</entity-X-Coordinate>
 		<entity-Y-Coordinate>55</entity-Y-Coordinate>
 		<primary-collapsed>false</primary-collapsed>
 		<relation-collapsed>false</relation-collapsed>
