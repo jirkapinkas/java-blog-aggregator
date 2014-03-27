@@ -1,5 +1,7 @@
 package cz.jiripinkas.jba.controller;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,7 +32,7 @@ public class UserController {
 
 	@RequestMapping("/users/{id}")
 	public String detail(Model model, @PathVariable int id) {
-		model.addAttribute("user", userService.findOne(id));
+		model.addAttribute("user", userService.findOneWithBlogs(id));
 		return "user-detail";
 	}
 	
@@ -44,5 +46,6 @@ public class UserController {
 		userService.save(user);
 		return "redirect:/register.html?success=true";
 	}
+	
 	
 }
