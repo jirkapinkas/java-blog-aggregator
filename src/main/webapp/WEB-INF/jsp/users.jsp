@@ -3,8 +3,6 @@
 
 <%@ include file="../layout/taglib.jsp" %>
 
-
-
 <script type="text/javascript">
 $(document).ready(function() {
 	$(".triggerRemove").click(function(e) {
@@ -39,8 +37,6 @@ $(document).ready(function() {
 		</c:forEach>
 	</tbody>
 </table>
-
-
 
 
 <!-- Modal -->
