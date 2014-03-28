@@ -9,6 +9,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Email;
 
 @Entity
 public class User {
@@ -17,19 +20,23 @@ public class User {
 	@GeneratedValue
 	private Integer id;
 
+	@Size(min = 3, message = "Name must be at least 3 characters!")
 	private String name;
 
+	@Size(min = 1, message = "Invalid email address!")
+	@Email(message = "Invalid email address!")
 	private String email;
 
+	@Size(min = 5, message = "Name must be at least 5 characters!")
 	private String password;
-	
+
 	private boolean enabled;
-	
+
 	@ManyToMany
 	@JoinTable
 	private List<Role> roles;
-	
-	@OneToMany(mappedBy="user", cascade=CascadeType.REMOVE)
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
 	private List<Blog> blogs;
 
 	public boolean isEnabled() {
