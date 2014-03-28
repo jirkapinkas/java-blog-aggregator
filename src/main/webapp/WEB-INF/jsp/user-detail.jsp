@@ -3,7 +3,7 @@
 
 <%@ include file="../layout/taglib.jsp"%>
 
-<h1>${user.name}</h1>
+<h1><c:out value="${user.name}" /></h1>
 
 <!-- Button trigger modal -->
 <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
@@ -62,7 +62,7 @@ $(document).ready(function() {
 <!-- Nav tabs -->
 <ul class="nav nav-tabs">
 	<c:forEach items="${user.blogs}" var="blog">
-	  <li><a href="#blog_${blog.id}" data-toggle="tab">${blog.name}</a></li>
+	  <li><a href="#blog_${blog.id}" data-toggle="tab"><c:out value="${blog.name}" /></a></li>
 	</c:forEach>
 </ul>
 
@@ -70,12 +70,12 @@ $(document).ready(function() {
 <div class="tab-content">
 <c:forEach items="${user.blogs}" var="blog">
   <div class="tab-pane" id="blog_${blog.id}">
-	<h1>${blog.name}</h1>
+	<h1><c:out value="${blog.name}" /></h1>
 	<p>
 	
 	<a href="<spring:url value="/blog/remove/${blog.id}.html" />" class="btn btn-danger triggerRemove">remove blog</a>
 	
-	${blog.url}</p>
+	<c:out value="${blog.url}" /></p>
 
 	<table class="table table-bordered table-hover table-striped">
 		<thead>
@@ -87,8 +87,8 @@ $(document).ready(function() {
 		<tbody>
 			<c:forEach items="${blog.items}" var="item">
 				<tr>
-					<td>${item.title}</td>
-					<td>${item.link}</td>
+					<td><c:out value="${item.title}" /></td>
+					<td><c:out value="${item.link}" /></td>
 				</tr>
 			</c:forEach>
 		</tbody>

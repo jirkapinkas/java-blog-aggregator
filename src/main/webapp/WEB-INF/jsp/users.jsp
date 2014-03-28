@@ -25,7 +25,7 @@ $(document).ready(function() {
 			<tr>
 				<td>
 					<a href="<spring:url value="/users/${user.id}.html" />">
-						${user.name}
+						<c:out value="${user.name}" />
 					</a>
 				</td>
 				<td>
