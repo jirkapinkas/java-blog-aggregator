@@ -7,6 +7,7 @@
 	<thead>
 		<tr>
 			<th>user name</th>
+			<th>operations</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -15,6 +16,11 @@
 				<td>
 					<a href="<spring:url value="/users/${user.id}.html" />">
 						${user.name}
+					</a>
+				</td>
+				<td>
+					<a href="<spring:url value="/users/remove/${user.id}.html" />" class="btn btn-danger">
+						remove
 					</a>
 				</td>
 			</tr>

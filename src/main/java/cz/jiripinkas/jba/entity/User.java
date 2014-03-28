@@ -2,6 +2,7 @@ package cz.jiripinkas.jba.entity;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -28,7 +29,7 @@ public class User {
 	@JoinTable
 	private List<Role> roles;
 	
-	@OneToMany(mappedBy="user")
+	@OneToMany(mappedBy="user", cascade=CascadeType.REMOVE)
 	private List<Blog> blogs;
 
 	public boolean isEnabled() {
