@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" blockDefault="#all" version="1.0">
+	<xs:annotation>
+		<xs:documentation>XML Schema for RSS v2.0 feed files.
+		Revision: 2
+		Date: 31-March-2003
+		Based on the RSS 2.0 specification document at http://feeds.archive.org/validator/docs/rss2.html
+		Author: Jorgen Thelin
+		Feedback to: http://www.thearchitect.co.uk/weblog/archives/2003/03/000118.html</xs:documentation>
+	</xs:annotation>
+	<xs:element name="rss" type="tRss"/>
+	<xs:complexType name="tRss">
+		<xs:sequence>
+			<xs:element name="channel" type="tRssChannel" maxOccurs="unbounded"/>
+			<xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="version" type="xs:decimal" use="required" fixed="2.0"/>
+		<xs:anyAttribute namespace="##any"/>
+	</xs:complexType>
+	<xs:complexType name="tRssItem">
+		<xs:annotation>
+			<xs:documentation>An item may represent a "story" -- much like a story in a newspaper or magazine; if so its description is a synopsis of the story, and the link points to the full story. An item may also be complete in itself, if so, the description contains the text (entity-encoded HTML is allowed), and the link and title may be omitted.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="title" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The title of the item.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="description" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The item synopsis.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="link" type="xs:anyURI" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The URL of the item.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+	
+			<xs:element name="category" type="tCategory" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Includes the item in one or more categories. </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="comments" type="xs:anyURI" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>URL of a page for comments relating to the item.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="enclosure" type="tEnclosure" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Describes a media object that is attached to the item. </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="guid" type="tGuid" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>guid or permalink URL for this entry</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="pubDate" type="tRfc822FormatDate" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Indicates when the item was published.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="source" type="tSource" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The RSS channel that the item came from.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:anyAttribute namespace="##any"/>
+	</xs:complexType>
+	<xs:complexType name="tRssChannel">
+		<xs:sequence>
+			<xs:element name="title" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>The name of the channel. It's how people refer to your service. If you have an HTML website that contains the same information as your RSS file, the title of your channel should be the same as the title of your website.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="link" type="xs:anyURI">
+				<xs:annotation>
+					<xs:documentation>The URL to the HTML website corresponding to the channel.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="description" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Phrase or sentence describing the channel.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="language" type="xs:language" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The language the channel is written in. This allows aggregators to group all Italian language sites, for example, on a single page. A list of allowable values for this element, as provided by Netscape, is here. You may also use values defined by the W3C.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="copyright" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Copyright notice for content in the channel.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+	
+	
+			<xs:element name="pubDate" type="tRfc822FormatDate" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The publication date for the content in the channel. All date-times in RSS conform to the Date and Time Specification of RFC 822, with the exception that the year may be expressed with two characters or four characters (four preferred).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="lastBuildDate" type="tRfc822FormatDate" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The last time the content of the channel changed.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="category" type="tCategory" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Specify one or more categories that the channel belongs to.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="generator" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>A string indicating the program used to generate the channel.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="docs" type="xs:anyURI" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>A URL that points to the documentation for the format used in the RSS file. It's probably a pointer to this page. It's for people who might stumble across an RSS file on a Web server 25 years from now and wonder what it is.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="cloud" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Allows processes to register with a cloud to be notified of updates to the channel, implementing a lightweight publish-subscribe protocol for RSS feeds.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ttl" type="xs:nonNegativeInteger" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>ttl stands for time to live. It's a number of minutes that indicates how long a channel can be cached before refreshing from the source.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="image" type="tImage" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Specifies a GIF, JPEG or PNG image that can be displayed with the channel.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="textInput" type="tTextInput" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Specifies a text input box that can be displayed with the channel.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="skipHours" type="xs:nonNegativeInteger" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>A hint for aggregators telling them which hours they can skip.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="skipDays" type="xs:nonNegativeInteger" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>A hint for aggregators telling them which days they can skip.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="item" type="tRssItem" maxOccurs="unbounded"/>
+			<xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:anyAttribute namespace="##any"/>
+	</xs:complexType>
+	<xs:complexType name="tCategory">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="domain" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="tImage">
+		<xs:sequence>
+			<xs:element name="url" type="xs:anyURI">
+				<xs:annotation>
+					<xs:documentation>The URL of the image file.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="title" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Describes the image, it's used in the ALT attribute of the HTML &lt;img&gt; tag when the channel is rendered in HTML.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="link" type="xs:anyURI">
+				<xs:annotation>
+					<xs:documentation>The URL of the site, when the channel is rendered, the image is a link to the site. (Note, in practice the image &lt;title&gt; and &lt;link&gt; should have the same value as the channel's &lt;title&gt; and &lt;link&gt;. </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="width" type="tImageWidth" default="88" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The width of the image in pixels.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="height" type="tImageHeight" default="31" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The height of the image in pixels.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="description" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Text that is included in the TITLE attribute of the link formed around the image in the HTML rendering.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="tImageHeight">
+		<xs:annotation>
+			<xs:documentation>The height of the image in pixels.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:positiveInteger">
+			<xs:maxInclusive value="400"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="tImageWidth">
+		<xs:annotation>
+			<xs:documentation>The width of the image in pixels.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:positiveInteger">
+			<xs:maxInclusive value="144"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="tCloud">
+		<xs:annotation>
+			<xs:documentation>Specifies a web service that supports the rssCloud interface which can be implemented in HTTP-POST, XML-RPC or SOAP 1.1. 
+Its purpose is to allow processes to register with a cloud to be notified of updates to the channel, implementing a lightweight publish-subscribe protocol for RSS feeds.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="domain" type="xs:string" use="required"/>
+		<xs:attribute name="port" type="xs:positiveInteger" use="required"/>
+		<xs:attribute name="path" type="xs:string" use="required"/>
+		<xs:attribute name="registerProcedure" type="xs:string" use="required"/>
+		<xs:attribute name="protocol" type="tCloudProtocol" use="required"/>
+	</xs:complexType>
+	<xs:simpleType name="tCloudProtocol">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="xml-rpc"/>
+			<xs:enumeration value="http-post"/>
+			<xs:enumeration value="soap"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="tTextInput">
+		<xs:annotation>
+			<xs:documentation>The purpose of this element is something of a mystery! You can use it to specify a search engine box. Or to allow a reader to provide feedback. Most aggregators ignore it.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="title" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>The label of the Submit button in the text input area.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="description" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Explains the text input area.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="name" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>The name of the text object in the text input area.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="link" type="xs:anyURI">
+				<xs:annotation>
+					<xs:documentation>The URL of the CGI script that processes text input requests.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:simpleType name="tRfc822FormatDate">
+		<xs:annotation>
+			<xs:documentation>A date-time displayed in RFC-822 format.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:complexType name="tSource">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="url" type="xs:anyURI"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="tEnclosure">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="url" type="xs:anyURI" use="required">
+					<xs:annotation>
+						<xs:documentation>URL where the enclosure is located</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="length" type="xs:nonNegativeInteger" use="required">
+					<xs:annotation>
+						<xs:documentation>Size in bytes</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="type" type="xs:string" use="required">
+					<xs:annotation>
+						<xs:documentation>MIME media-type of the enclosure</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="tGuid">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="isPermaLink" type="xs:boolean" use="optional" default="true"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+</xs:schema>

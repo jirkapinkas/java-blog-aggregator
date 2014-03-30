@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" media="screen" href="/~d/styles/rss2full.xsl"?><?xml-stylesheet type="text/css" media="screen" href="http://feeds.feedburner.com/~d/styles/itemcontent.css"?><rss xmlns:feedburner="http://rssnamespace.org/feedburner/ext/1.0" version="2.0">
+<channel>
+<title>JavaVids: Java video tutorials</title>
+<description>This free online video tutorial in English on YouTube is a collection of Java video tutorials.</description>
+<link>http://www.javavids.com/</link>
+<lastBuildDate>Sun, 23 Mar 2014 08:01:34 +0000</lastBuildDate>
+<pubDate>Sun, 23 Mar 2014 08:01:34 +0000</pubDate>
+<ttl>1800</ttl>
+<atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="self" type="application/rss+xml" href="http://feeds.feedburner.com/javavids" /><feedburner:info uri="javavids" /><atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="hub" href="http://pubsubhubbub.appspot.com/" /><item>
+<title>How to generate web.xml in Eclipse</title>
+<description>How to easily generate deployment descriptor (web.xml) in Eclipse for various Java EE versions? With examples for Java EE 7, Java EE 6 and Java EE 5&lt;img src="http://feeds.feedburner.com/~r/javavids/~4/NzFxTrw7jtk" height="1" width="1"/&gt;</description>
+<link>http://feedproxy.google.com/~r/javavids/~3/NzFxTrw7jtk/how-to-generate-web-xml-in-eclipse.html</link>
+<pubDate>Sun, 23 Mar 2014 08:01:34 +0000</pubDate>
+<feedburner:origLink>http://www.javavids.com/video/how-to-generate-web-xml-in-eclipse.html</feedburner:origLink></item>
+<item>
+<title>Eclipse &amp; external Maven installation integration</title>
+<description>How to integrate your external Maven installation with Eclipse?&lt;img src="http://feeds.feedburner.com/~r/javavids/~4/QdlYiTAYmhU" height="1" width="1"/&gt;</description>
+<link>http://feedproxy.google.com/~r/javavids/~3/QdlYiTAYmhU/eclipse-external-maven-installation-integration.html</link>
+<pubDate>Sat, 22 Mar 2014 09:27:47 +0000</pubDate>
+<feedburner:origLink>http://www.javavids.com/video/eclipse-external-maven-installation-integration.html</feedburner:origLink></item>
+<item>
+<title>Open XML in pom.xml by default in Eclipse</title>
+<description>How to open plain XML in pom.xml by default in Eclipse? Tip for effective Maven usage.&lt;img src="http://feeds.feedburner.com/~r/javavids/~4/r4GPX_wA38o" height="1" width="1"/&gt;</description>
+<link>http://feedproxy.google.com/~r/javavids/~3/r4GPX_wA38o/open-xml-in-pomxml-by-default-in-eclipse.html</link>
+<pubDate>Sat, 22 Mar 2014 09:00:06 +0000</pubDate>
+<feedburner:origLink>http://www.javavids.com/video/open-xml-in-pomxml-by-default-in-eclipse.html</feedburner:origLink></item>
+<item>
+<title>Eclipse Content Assist without Ctrl + Space</title>
+<description>Tired of pressing CTRL + SPACE to get Content Assist in Eclipse?&lt;img src="http://feeds.feedburner.com/~r/javavids/~4/goY0owYDvME" height="1" width="1"/&gt;</description>
+<link>http://feedproxy.google.com/~r/javavids/~3/goY0owYDvME/eclipse-content-assist-without-ctrl-space.html</link>
+<pubDate>Fri, 21 Mar 2014 19:42:49 +0000</pubDate>
+<feedburner:origLink>http://www.javavids.com/video/eclipse-content-assist-without-ctrl-space.html</feedburner:origLink></item>
+<item>
+<title>Apache Tomcat &amp; UTF-8</title>
+<description>Apache Tomcat out-of-the-box uses ISO-8859-1 (also called Latin 1). How to use UTF-8 in Apache Tomcat?&lt;img src="http://feeds.feedburner.com/~r/javavids/~4/o-vY9YN1xtA" height="1" width="1"/&gt;</description>
+<link>http://feedproxy.google.com/~r/javavids/~3/o-vY9YN1xtA/apache-tomcat-utf-8.html</link>
+<pubDate>Fri, 21 Mar 2014 10:38:24 +0000</pubDate>
+<feedburner:origLink>http://www.javavids.com/video/apache-tomcat-utf-8.html</feedburner:origLink></item>
+<item>
+<title>Apache Tomcat Deploy web application</title>
+<description>How to deploy web application on Apache Tomcat using Context file? This is the most flexible and recommended way.&lt;img src="http://feeds.feedburner.com/~r/javavids/~4/9fc1EVmfJgw" height="1" width="1"/&gt;</description>
+<link>http://feedproxy.google.com/~r/javavids/~3/9fc1EVmfJgw/apache-tomcat-deploy-web-application.html</link>
+<pubDate>Fri, 21 Mar 2014 08:42:03 +0000</pubDate>
+<feedburner:origLink>http://www.javavids.com/video/apache-tomcat-deploy-web-application.html</feedburner:origLink></item>
+<item>
+<title>Apache Tomcat Configuration</title>
+<description>How to split Apache Tomcat installation (catalina home) and configuration (catalina base)? Tomcat best practice.&lt;img src="http://feeds.feedburner.com/~r/javavids/~4/-F59WSKNh8o" height="1" width="1"/&gt;</description>
+<link>http://feedproxy.google.com/~r/javavids/~3/-F59WSKNh8o/apache-tomcat-configuration.html</link>
+<pubDate>Thu, 20 Mar 2014 09:45:31 +0000</pubDate>
+<feedburner:origLink>http://www.javavids.com/video/apache-tomcat-configuration.html</feedburner:origLink></item>
+<item>
+<title>Apache Tomcat &amp; NetBeans integration</title>
+<description>How to integrate your Apache Tomcat and NetBeans IDE?&lt;img src="http://feeds.feedburner.com/~r/javavids/~4/_cECB5SjYk0" height="1" width="1"/&gt;</description>
+<link>http://feedproxy.google.com/~r/javavids/~3/_cECB5SjYk0/apache-tomcat--netbeans-integration.html</link>
+<pubDate>Wed, 19 Mar 2014 18:17:20 +0000</pubDate>
+<feedburner:origLink>http://www.javavids.com/video/apache-tomcat--netbeans-integration.html</feedburner:origLink></item>
+<item>
+<title>Apache Tomcat as a Windows service</title>
+<description>How to run Tomcat as a Windows service?&lt;img src="http://feeds.feedburner.com/~r/javavids/~4/w-5wbpSJbxM" height="1" width="1"/&gt;</description>
+<link>http://feedproxy.google.com/~r/javavids/~3/w-5wbpSJbxM/apache-tomcat-as-a-windows-service.html</link>
+<pubDate>Wed, 19 Mar 2014 18:14:11 +0000</pubDate>
+<feedburner:origLink>http://www.javavids.com/video/apache-tomcat-as-a-windows-service.html</feedburner:origLink></item>
+<item>
+<title>Maven multi module project</title>
+<description>How to create a Multi module project?&lt;img src="http://feeds.feedburner.com/~r/javavids/~4/fvrRuYBEldg" height="1" width="1"/&gt;</description>
+<link>http://feedproxy.google.com/~r/javavids/~3/fvrRuYBEldg/maven-multi-module-project.html</link>
+<pubDate>Fri, 31 Jan 2014 13:20:47 +0000</pubDate>
+<feedburner:origLink>http://www.javavids.com/video/maven-multi-module-project.html</feedburner:origLink></item>
+</channel>
+</rss>
