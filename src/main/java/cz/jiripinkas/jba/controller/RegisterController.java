@@ -40,5 +40,11 @@ public class RegisterController {
 		return "redirect:/register.html?success=true";
 	}
 	
+	@RequestMapping("/available")
+	@ResponseBody
+	public String available(@RequestParam String username) {
+		Boolean available = userService.findOne(username) == null;
+		return available.toString();
+	}
 
 }
