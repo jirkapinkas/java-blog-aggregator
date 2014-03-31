@@ -16,7 +16,7 @@ import org.hibernate.validator.constraints.Email;
 
 import cz.jiripinkas.jba.annotation.UniqueUsername;
 
-@Entity
+@Entity(name= "\"USER\"")
 public class User {
 
 	@Id
