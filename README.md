@@ -1,6 +1,6 @@
-<h1>Java Blog Aggregator is used in TopJavaBlogs</h1>
+<h1>Java Blog Aggregator</h1>
 
-<p>Project <a href="http://www.sqlvids.com" target="_blank">TopJavaBlogs</a> uses this system to aggregate latest news from Java world.</p>
+<p>Project <a href="http://www.topjavablogs.com" target="_blank">TopJavaBlogs</a> uses this system to aggregate latest news from Java world.</p>
 
 <h2>To run in development mode (using embedded HSQL database):</h2>
 
