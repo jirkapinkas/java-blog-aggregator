@@ -14,7 +14,6 @@
 		<intercept-url pattern="/account**" access="hasRole('ROLE_USER')" />
 		<form-login login-page="/login.html" />
 		<logout logout-url="/logout" />
-		<logout />
 	</http>
 
 	<authentication-manager>
