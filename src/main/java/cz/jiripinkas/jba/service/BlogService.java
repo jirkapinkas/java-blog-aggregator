@@ -1,5 +1,6 @@
 package cz.jiripinkas.jba.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,37 +25,46 @@ public class BlogService {
 
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private RssService rssService;
-	
+
 	@Autowired
 	private ItemRepository itemRepository;
-	
+
+	@Autowired
+	private ItemService itemService;
+
+	private Date lastIndexedDateFinish;
+
 	public void saveItems(Blog blog) {
 		try {
 			List<Item> items = rssService.getItems(blog.getUrl());
 			for (Item item : items) {
-				Item savedItem = itemRepository.findByBlogAndLink(blog, item.getLink());
-				if(savedItem == null) {
-					item.setBlog(blog);
-					itemRepository.save(item);
+				if (!itemService.isTooOld(item.getPublishedDate())) {
+					Item savedItem = itemRepository.findByBlogAndLink(blog, item.getLink());
+					if (savedItem == null) {
+						item.setBlog(blog);
+						itemRepository.save(item);
+					}
 				}
 			}
 		} catch (RssException e) {
-			e.printStackTrace();
+			System.out.println("exception during downloading: " + blog.getUrl());
+			System.out.println("message: " + e.getMessage());
 		}
 	}
-	
-	// 1 hour = 60 seconds * 60 minutes * 1000
-	@Scheduled(fixedDelay=3600000)
+
+	// 0.5 hour = 60 seconds * 30 minutes * 1000
+	@Scheduled(fixedDelay = 1800000)
 	public void reloadBlogs() {
 		List<Blog> blogs = blogRepository.findAll();
 		for (Blog blog : blogs) {
 			saveItems(blog);
 		}
+		lastIndexedDateFinish = new Date();
 	}
-
+	
 	public void save(Blog blog, String name) {
 		User user = userRepository.findByName(name);
 		blog.setUser(user);
@@ -69,6 +79,26 @@ public class BlogService {
 
 	public Blog findOne(int id) {
 		return blogRepository.findOne(id);
+	}
+
+	public Blog findOne(String url) {
+		return blogRepository.findByUrl(url);
+	}
+
+	public Blog findOneFetchUser(int id) {
+		return blogRepository.findOneFetchUser(id);
+	}
+
+	public long count() {
+		return blogRepository.count();
+	}
+
+	public Date getLastIndexedDateFinish() {
+		return lastIndexedDateFinish;
+	}
+
+	public void setLastIndexedDateFinish(Date lastIndexedDateFinish) {
+		this.lastIndexedDateFinish = lastIndexedDateFinish;
 	}
 
 }

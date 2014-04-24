@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import cz.jiripinkas.jba.entity.Blog;
 import cz.jiripinkas.jba.service.BlogService;
@@ -52,9 +54,16 @@ public class UserController {
 
 	@RequestMapping("/blog/remove/{id}")
 	public String removeBlog(@PathVariable int id) {
-		Blog blog = blogService.findOne(id);
+		Blog blog = blogService.findOneFetchUser(id);
 		blogService.delete(blog);
 		return "redirect:/account.html";
+	}
+
+	@RequestMapping("/blog/available")
+	@ResponseBody
+	public String available(@RequestParam String url) {
+		Boolean available = blogService.findOne(url) == null;
+		return available.toString();
 	}
 
 }

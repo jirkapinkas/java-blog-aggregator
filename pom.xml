@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>cz.jiripinkas.jba</groupId>
 	<artifactId>java-blog-aggregator</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>2.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<!-- Shared version number properties -->
@@ -11,23 +11,47 @@
 		<org.springframework.version>4.0.2.RELEASE</org.springframework.version>
 		<apache.tiles>3.0.3</apache.tiles>
 		<spring.security.version>3.2.3.RELEASE</spring.security.version>
+		<jackson.version>2.2.3</jackson.version>
 	</properties>
 
 	<dependencies>
 
-	<dependency>
-		<groupId>postgresql</groupId>
-		<artifactId>postgresql</artifactId>
-		<version>9.1-901-1.jdbc4</version>
-	</dependency>
-	
-	<dependency>
-		<groupId>commons-dbcp</groupId>
-		<artifactId>commons-dbcp</artifactId>
-		<version>1.4</version>
-	</dependency>
+		<dependency>
+			<groupId>net.sf.dozer</groupId>
+			<artifactId>dozer</artifactId>
+			<version>5.4.0</version>
+		</dependency>
 
-	<dependency>
+		<!-- available on Heroku, used in database-prod.xml -->
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>1.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.7.3</version>
+		</dependency>
+
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
@@ -61,12 +85,6 @@
 			<groupId>jstl</groupId>
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.hsqldb</groupId>
-			<artifactId>hsqldb</artifactId>
-			<version>2.3.2</version>
 		</dependency>
 
 		<dependency>
@@ -113,12 +131,30 @@
 			<version>1.7.6</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>1.7.6</version>
+		</dependency>
+
 		<!-- Core utilities used by other modules. Define this if you use Spring 
 			Utility APIs (org.springframework.core.*/org.springframework.util.*) -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
 			<version>${org.springframework.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>commons-logging</artifactId>
+					<groupId>commons-logging</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- Expression Language (depends on spring-core) Define this if you use 
@@ -216,26 +252,33 @@
 			<version>${org.springframework.version}</version>
 		</dependency>
 
-		<!-- Spring MVC for Portlet Environments (depends on spring-core, spring-beans, 
-			spring-context, spring-web) Define this if you use Spring MVC with a Portlet 
-			Container (org.springframework.web.portlet.*) -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc-portlet</artifactId>
-			<version>${org.springframework.version}</version>
-		</dependency>
-
-		<!-- Support for testing Spring applications with tools such as JUnit and 
-			TestNG This artifact is generally always defined with a 'test' scope for 
-			the integration testing framework and unit testing stubs -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>${org.springframework.version}</version>
-			<scope>test</scope>
-		</dependency>
-
 	</dependencies>
+
+	<profiles>
+
+		<profile>
+			<id>dev</id>
+			<dependencies>
+				<dependency>
+					<groupId>org.hsqldb</groupId>
+					<artifactId>hsqldb</artifactId>
+					<version>2.3.2</version>
+				</dependency>
+			</dependencies>
+		</profile>
+
+		<profile>
+			<id>prod</id>
+			<dependencies>
+				<dependency>
+					<groupId>postgresql</groupId>
+					<artifactId>postgresql</artifactId>
+					<version>9.1-901-1.jdbc4</version>
+				</dependency>
+			</dependencies>
+		</profile>
+
+	</profiles>
 
 	<build>
 		<plugins>

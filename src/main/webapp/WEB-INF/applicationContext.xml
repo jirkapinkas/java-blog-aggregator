@@ -28,6 +28,8 @@
 	<import resource="security.xml" />
 
 	<task:annotation-driven />
+
+	<bean class="org.dozer.DozerBeanMapper" />
 	
 	<beans profile="dev">
 		<import resource="database-dev.xml"/>

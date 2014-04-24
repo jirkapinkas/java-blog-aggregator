@@ -43,4 +43,10 @@
 		<put-attribute name="current" value="login" />
 	</definition>
 
+	<definition name="roadmap" extends="common">
+		<put-attribute name="title" value="Roadmap" />
+		<put-attribute name="body" value="/WEB-INF/jsp/roadmap.jsp" />
+		<put-attribute name="current" value="roadmap" />
+	</definition>
+
 </tiles-definitions>

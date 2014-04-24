@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -14,6 +15,8 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.URL;
 
+import cz.jiripinkas.jba.annotation.UniqueBlog;
+
 @Entity
 public class Blog {
 
@@ -21,20 +24,30 @@ public class Blog {
 	@GeneratedValue
 	private Integer id;
 
+	@UniqueBlog(message = "This blog already exists!")
 	@Size(min = 1, message = "Invalid URL!")
 	@URL(message = "Invalid URL!")
-	@Column(length = 1000)
+	@Column(length = 1000, unique = true)
 	private String url;
 
 	@Size(min = 1, message = "Name must be at least 1 character!")
 	private String name;
 
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
 
 	@OneToMany(mappedBy = "blog", cascade = CascadeType.REMOVE)
 	private List<Item> items;
+
+	public Blog() {
+	}
+
+	public Blog(String url, String name, User user) {
+		this.url = url;
+		this.name = name;
+		this.user = user;
+	}
 
 	public User getUser() {
 		return user;

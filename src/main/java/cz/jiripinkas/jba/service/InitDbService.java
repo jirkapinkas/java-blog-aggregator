@@ -1,7 +1,6 @@
 package cz.jiripinkas.jba.service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -12,7 +11,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import cz.jiripinkas.jba.entity.Blog;
-import cz.jiripinkas.jba.entity.Item;
 import cz.jiripinkas.jba.entity.Role;
 import cz.jiripinkas.jba.entity.User;
 import cz.jiripinkas.jba.repository.BlogRepository;
@@ -59,25 +57,25 @@ public class InitDbService {
 			userRepository.save(userAdmin);
 
 			Blog blogJavavids = new Blog();
-			blogJavavids.setName("JavaVids");
+			blogJavavids.setName("javavids");
 			blogJavavids
 					.setUrl("http://feeds.feedburner.com/javavids?format=xml");
 			blogJavavids.setUser(userAdmin);
 			blogRepository.save(blogJavavids);
 
-			// Item item1 = new Item();
-			// item1.setBlog(blogJavavids);
-			// item1.setTitle("first");
-			// item1.setLink("http://www.javavids.com");
-			// item1.setPublishedDate(new Date());
-			// itemRepository.save(item1);
-			//
-			// Item item2 = new Item();
-			// item2.setBlog(blogJavavids);
-			// item2.setTitle("second");
-			// item2.setLink("http://www.javavids.com");
-			// item2.setPublishedDate(new Date());
-			// itemRepository.save(item2);
+			Blog blogJavaSkoleni = new Blog();
+			blogJavaSkoleni.setName("java skoleni");
+			blogJavaSkoleni
+					.setUrl("http://novinky.seico.cz/java-skoleni");
+			blogJavaSkoleni.setUser(userAdmin);
+			blogRepository.save(blogJavaSkoleni);
+
+			Blog blogSqlSkoleni = new Blog();
+			blogSqlSkoleni.setName("sql skoleni");
+			blogSqlSkoleni
+					.setUrl("http://novinky.seico.cz/sql-skoleni");
+			blogSqlSkoleni.setUser(userAdmin);
+			blogRepository.save(blogSqlSkoleni);
 		}
 
 	}

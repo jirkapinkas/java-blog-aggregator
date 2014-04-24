@@ -16,12 +16,12 @@
 			<props>
 				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.hbm2ddl.auto">create</prop>
+				<prop key="hibernate.default_batch_fetch_size">10</prop>
 			</props>
 		</property>
 		<property name="persistenceProvider">
 			<bean class="org.hibernate.jpa.HibernatePersistenceProvider" />
 		</property>
 	</bean>
-
 
 </beans>

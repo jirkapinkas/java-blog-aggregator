@@ -64,7 +64,16 @@ $(document).ready(function() {
 					},
 					url: {
 						required : true,
-						url: true
+						url: true,
+						remote : {
+							url: "<spring:url value='/blog/available.html' />",
+							type: "get",
+							data: {
+								url: function() {
+									return $("#url").val();
+								}
+							}
+						}
 					}
 				},
 				highlight: function(element) {
@@ -72,6 +81,11 @@ $(document).ready(function() {
 				},
 				unhighlight: function(element) {
 					$(element).closest('.form-group').removeClass('has-error').addClass('has-success');
+				},
+				messages: {
+					url: {
+						remote: "Such blog already exists!"
+					}
 				}
 			}
 		);
@@ -94,7 +108,9 @@ $(document).ready(function() {
 	
 	<a href="<spring:url value="/blog/remove/${blog.id}.html" />" class="btn btn-danger triggerRemove">remove blog</a>
 	
-	<c:out value="${blog.url}" /></p>
+	<a href="<c:out value="${blog.url}" />" target="_blank"><c:out value="${blog.url}" /></a></p>
+
+	<p>Note: Only posts from last two weeks and max. 10 posts will be displayed.</p>
 
 	<table class="table table-bordered table-hover table-striped">
 		<thead>

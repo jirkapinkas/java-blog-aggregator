@@ -1,0 +1,1466 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:taxo="http://purl.org/rss/1.0/modules/taxonomy/">
+  <title>In Relation To - Bloggers</title>
+  <link rel="alternate" href="/Bloggers" />
+  <id>http://in.relation.to/servlets/feeds/atom.seam?feedId=2797</id>
+  <updated>2014-04-07T01:01:53Z</updated>
+  <dc:creator>System Administrator</dc:creator>
+  <dc:date>2014-04-07T01:01:53Z</dc:date>
+  <entry>
+    <title>Third milestone on the path for Hibernate Search 5</title>
+    <link rel="alternate" href="http://in.relation.to/Bloggers/ThirdMilestoneOnThePathForHibernateSearch5" />
+    <author>
+      <name>Sanne Grinovero</name>
+    </author>
+    <id>http://in.relation.to/Bloggers/ThirdMilestoneOnThePathForHibernateSearch5</id>
+    <updated>2014-04-04T15:20:32Z</updated>
+    <published>2014-04-04T15:20:32Z</published>
+    <summary type="html">&lt;p class="wikiPara"&gt;
+Version 5.0.0.Alpha3 is now &lt;a href="http://hibernate.org/search/downloads/"&gt;available&lt;/a&gt;: now integrating with Apache Lucene 4.7.1, which was released just 24 hours before.
+&lt;/p&gt;
+
+&lt;pre class="wikiPreformatted brush: xml"&gt;&amp;lt;dependency&amp;gt;
+ &amp;lt;groupId&amp;gt;org.hibernate&amp;lt;/groupId&amp;gt;
+ &amp;lt;artifactId&amp;gt;hibernate-search-orm&amp;lt;/artifactId&amp;gt;
+ &amp;lt;version&amp;gt;5.0.0.Alpha3&amp;lt;/version&amp;gt;
+&amp;lt;/dependency&amp;gt;
+&lt;/pre&gt;
+
+
+&lt;h1 class="wikiHeadline1" id=""&gt;More Like This&lt;/h1&gt;
+&lt;p class="wikiPara"&gt;
+Introduced and better described on &lt;a href="http://in.relation.to/Bloggers/SecondMilestoneTowardsHibernateSearch5IntroducingMoreLikeThisQueries"&gt;our previous post&lt;/a&gt; and in the &lt;a href="http://docs.jboss.org/hibernate/search/5.0/reference/en-US/html_single/#search-query-querydsl"&gt;Query DSL chapter&lt;/a&gt;, the new feature now also works with compressed fields and &lt;u&gt;@IndexedEmbedded&lt;/u&gt;.
+&lt;/p&gt;
+
+&lt;h1 class="wikiHeadline1" id=""&gt;OSGi and ClassLoaders&lt;/h1&gt;
+&lt;p class="wikiPara"&gt;
+On our path to 5.0 we're aiming to a full internal refactoring of ClassLoaders handling, Service loading strategies, etc.. with the goal to be reliable in complex modular deployments, including OSGi. To reach a full OSGi compatibility some public API packages will need to change in the next version too!
+&lt;/p&gt;
+
+&lt;h1 class="wikiHeadline1" id=""&gt;Many smaller details&lt;/h1&gt;
+&lt;p class="wikiPara"&gt;
+There is a list of smaller polishing, like more reliable JGroups and Infinispan tests, a diet program for dependencies, updates to latest Hibernate ORM, JGroups and Infinispan versions.
+&lt;/p&gt;
+
+&lt;h1 class="wikiHeadline1" id=""&gt;Performance tuning&lt;/h1&gt;
+&lt;p class="wikiPara"&gt;
+The primary performance bottleneck I've observed in the new Lucene 4 backend is the need to tune the &lt;tt&gt;max_threads_state&lt;/tt&gt; option on Lucene's &lt;tt&gt;IndexWriter&lt;/tt&gt;. This option controls the level of parallelism you want to allow  to the IndexWriter. The default is a very reasonable &lt;q&gt;8&lt;/q&gt;, but this is now configurable using the typical format as expressed in &lt;a href="http://docs.jboss.org/hibernate/search/5.0/reference/en-US/html_single/#lucene-indexing-performance"&gt;the Lucene Tuning chapter&lt;/a&gt;:
+&lt;/p&gt;
+
+&lt;pre class="wikiPreformatted"&gt;hibernate.search.​[default|&amp;lt;indexname&amp;gt;].​indexwriter.max_thread_states &lt;/pre&gt;
+
+
+&lt;h1 class="wikiHeadline1" id=""&gt;What's next?&lt;/h1&gt;
+&lt;p class="wikiPara"&gt;
+We're currently busy with OSGi tests, an easy way to extend the set of FieldBridges supported by the engine, improved handling of dynamic types and overall structure of how you define your indexed model. Also worth nothing that all of this will be integrated in the Infinispan Query engine soon.
+You can find an high level overview on our &lt;a href="http://hibernate.org/search/roadmap/"&gt;Roadmap page&lt;/a&gt;.
+&lt;/p&gt;
+
+&lt;h2 class="wikiHeadline2" id=""&gt;Useful links&lt;/h2&gt;
+&lt;ul class="wikiUnorderedList"&gt;
+&lt;li class="wikiUnorderedListItem"&gt; &lt;a href="http://hibernate.org/search/downloads/"&gt;Downloads&lt;/a&gt;&lt;/li&gt;
+&lt;li class="wikiUnorderedListItem"&gt; &lt;a href="http://docs.jboss.org/hibernate/search/5.0/reference/en-US/html_single/"&gt;Documentation&lt;/a&gt;&lt;/li&gt;
+&lt;li class="wikiUnorderedListItem"&gt; &lt;a href="https://community.jboss.org/wiki/HibernateSearchMigrationGuide#jive_content_id_Hibernate_Search_500Alpha2"&gt;Migration guide&lt;/a&gt;&lt;/li&gt;
+&lt;li class="wikiUnorderedListItem"&gt; &lt;a href="https://hibernate.atlassian.net/browse/HSEARCH"&gt;JIRA&lt;/a&gt;&lt;/li&gt;
+&lt;li class="wikiUnorderedListItem"&gt; &lt;a href="https://forum.hibernate.org/viewforum.php?f=9"&gt;Forums&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;</summary>
+    <dc:creator>Sanne Grinovero</dc:creator>
+    <dc:date>2014-04-04T15:20:32Z</dc:date>
+  </entry>
+  <entry>
+    <title>Hibernate ORM 4.3.5.Final Released</title>
+    <link rel="alternate" href="http://in.relation.to/Bloggers/HibernateORM435FinalReleased" />
+    <author>
+      <name>Brett Meyer</name>
+    </author>
+    <id>http://in.relation.to/Bloggers/HibernateORM435FinalReleased</id>
+    <updated>2014-04-02T15:28:33Z</updated>
+    <published>2014-04-02T15:28:33Z</published>
+    <summary type="html">&lt;p class="wikiPara"&gt;
+Hibernate ORM 4.3.5.Final was just released!  Please see the full changelog for more information: &lt;a href="https://hibernate.atlassian.net/secure/ReleaseNote.jspa?projectId=10031&amp;amp;version=16251"&gt;https://hibernate.atlassian.net/secure/ReleaseNote.jspa?projectId=10031&amp;amp;version=16251&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+JBoss Nexus: &lt;a href="https://repository.jboss.org/nexus/content/groups/public/org/hibernate"&gt;https://repository.jboss.org/nexus/content/groups/public/org/hibernate&lt;/a&gt;&lt;br/&gt;
+Maven Central: &lt;a href="http://repo1.maven.org/maven2/org/hibernate/hibernate-core"&gt;http://repo1.maven.org/maven2/org/hibernate/hibernate-core&lt;/a&gt; (should update in a couple of days)&lt;br/&gt;
+SourceForge: &lt;a href="https://sourceforge.net/projects/hibernate/files/hibernate4"&gt;https://sourceforge.net/projects/hibernate/files/hibernate4&lt;/a&gt;&lt;br/&gt;
+Downloads: &lt;a href="http://sourceforge.net/projects/hibernate/files/hibernate4/4.3.5.Final/hibernate-release-4.3.5.Final.zip/download"&gt;4.3.5.Final ZIP&lt;/a&gt;, &lt;a href="http://sourceforge.net/projects/hibernate/files/hibernate4/4.3.5.Final/hibernate-release-4.3.5.Final.tgz/download"&gt;4.3.5.Final TGZ&lt;/a&gt;&lt;/p&gt;</summary>
+    <dc:creator>Brett Meyer</dc:creator>
+    <dc:date>2014-04-02T15:28:33Z</dc:date>
+  </entry>
+  <entry>
+    <title>Hibernate ORM JIRA Policies and Clean-Up Tactics</title>
+    <link rel="alternate" href="http://in.relation.to/Bloggers/HibernateORMJIRAPoliciesAndCleanUpTactics" />
+    <author>
+      <name>Brett Meyer</name>
+    </author>
+    <id>http://in.relation.to/Bloggers/HibernateORMJIRAPoliciesAndCleanUpTactics</id>
+    <updated>2014-04-01T17:27:39Z</updated>
+    <published>2014-04-01T17:27:39Z</published>
+    <summary type="html">&lt;p class="wikiPara"&gt;
+What do you get from a 10+ year old open source framework, thousands of users within a wide range of roles, and complexity?  A JIRA instance with over 3,000 unresolved tickets ;).  Is that number indicative of low software quality?  Definitely not.  But therein lies the problem.  A vast majority of the tickets are no longer issues, no longer relevant, or duplicates.  Due to the quantity, it became nearly impossible to weed through them all.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+So, recently, I've given some effort towards attempting to clean things up.  This has been a combination of manual reviews of tickets, scripts identifying possible duplicates [1], and various forms of JIRA queries that attempt to show &lt;q&gt;stale&lt;/q&gt; issues.  So far, I've reduced the number of un-assigned, un-resolved tickets by almost 1k.  To date, only a few of those have turned up being issues that were still legitimate in ORM 4+.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+In addition, I've enacted a few policies that have helped (and will continue to help) tremendously, both for contributors and the community as a whole.  Most notably, any new BUG ticket that does not have a provided test case is immediately moved into an &lt;q&gt;Awaiting Test Case&lt;/q&gt; state.  If nothing is received within around 3 months, we've begun to automatically reject them.  Although most contributors generally appreciate reproducers that are either standalone or extend one of ORM's pre-existing unit tests (preferably), at least providing enough detail (entities, mappings, code snippets, etc.) is the bare minimum.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+Along the same lines, we've been discussing a possible tactic on the mailing list [2].  We'd like to push all ORM 3 tickets to the &lt;q&gt;Awaiting Test Case&lt;/q&gt; state and request a reproducer on ORM 4 or 5.  This would affect only BUGs with: 1.) affectsVersions set to ORM 3 only (not ORM 4/5) 2.) unassigned and 3.) not updated in the last 90 days.  Those would then fall under our policy of automatically rejecting if the ticket does not receive a test case within 3 months or so.  Please see the mailing list for the discussion, as well as the query that would be used.  If there are any opinions against giving that a shot, please say so.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+It's also worth re-iterating that JIRA should not be used instead of the user forums [3] or Q&amp;amp;A sites like StackOverflow.  Please create tickets only for concise issues w/ reproducing test cases (or, of course, new features and possible improvements).
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+If you're interested in more info about the steps I took during the actual cleanup, a somewhat detailed write-up is here: &lt;a href="http://www.3riverdev.com/blog/man-vs-jira-the-3000-issue-tracker-fight"&gt;http://www.3riverdev.com/blog/man-vs-jira-the-3000-issue-tracker-fight&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+If you have any questions or ideas, please contact me!  brmeyer on Freenode IRC is your best bet, as well as comments on this post.  Thanks!
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+[1] &lt;a href="https://github.com/3RiverDevelopment/bug-tracker-duplicate-utils"&gt;https://github.com/3RiverDevelopment/bug-tracker-duplicate-utils&lt;/a&gt;
+[2] &lt;a href="http://lists.jboss.org/pipermail/hibernate-dev/2014-March/011238.html"&gt;http://lists.jboss.org/pipermail/hibernate-dev/2014-March/011238.html&lt;/a&gt;
+[3] &lt;a href="https://forum.hibernate.org/viewforum.php?f=1"&gt;https://forum.hibernate.org/viewforum.php?f=1&lt;/a&gt;&lt;/p&gt;</summary>
+    <dc:creator>Brett Meyer</dc:creator>
+    <dc:date>2014-04-01T17:27:39Z</dc:date>
+  </entry>
+  <entry>
+    <title>JBoss Community Asylum - Catching a WildFly</title>
+    <link rel="alternate" href="http://in.relation.to/Bloggers/JBossCommunityAsylumCatchingAWildFly" />
+    <author>
+      <name>Max Andersen</name>
+    </author>
+    <id>http://in.relation.to/Bloggers/JBossCommunityAsylumCatchingAWildFly</id>
+    <updated>2014-03-18T08:30:02Z</updated>
+    <published>2014-03-18T08:30:02Z</published>
+    <summary type="html">&lt;img src="http://in.relation.to/service/File/13429" align="left" style="padding-right: 15px; width: 150px;"/&gt;
+
+&lt;p class="wikiPara"&gt;
+Last week we met up with Jason Greene and Brian Stansberry from the WildFly team.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+In this you get to hear about the WildFly rename, its recent release that includes new web subsystem called Undertow,
+new JavaEE 7 features and a core distribution. 
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+&lt;a href="http://jbosscommunityasylum.libsyn.com/podcast-33-catching-a-wildfly"&gt;Show notes and episode&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+Have fun!&lt;/p&gt;</summary>
+    <dc:creator>Max Andersen</dc:creator>
+    <dc:date>2014-03-18T08:30:02Z</dc:date>
+  </entry>
+  <entry>
+    <title>Hibernate ORM 4.2.11.Final Released</title>
+    <link rel="alternate" href="http://in.relation.to/Bloggers/HibernateORM4211FinalReleased" />
+    <author>
+      <name>Brett Meyer</name>
+    </author>
+    <id>http://in.relation.to/Bloggers/HibernateORM4211FinalReleased</id>
+    <updated>2014-03-17T21:45:48Z</updated>
+    <published>2014-03-17T21:45:48Z</published>
+    <summary type="html">&lt;p class="wikiPara"&gt;
+Hibernate ORM 4.2.11.Final was just released!  Please see the full changelog for more information: &lt;a href="https://hibernate.atlassian.net/secure/ReleaseNote.jspa?projectId=10031&amp;amp;version=16153"&gt;https://hibernate.atlassian.net/secure/ReleaseNote.jspa?projectId=10031&amp;amp;version=16153&lt;/a&gt;.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+This release was mainly to support the upcoming EAP 6.3.0 release.  As previously mentioned, 4.3.x is the new &lt;q&gt;stable&lt;/q&gt; version and we have shifted focus towards ORM 5.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+One commit of note is &lt;a href="https://hibernate.atlassian.net/browse/HHH-8440"&gt;HHH-8440&lt;/a&gt;, which added a new SQLServer2012Dialect that fully supports sequences.  The rest were minor bug fixes and docs improvements, mostly from community pull requests (thanks!).
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+JBoss Nexus: &lt;a href="https://repository.jboss.org/nexus/content/groups/public/org/hibernate"&gt;https://repository.jboss.org/nexus/content/groups/public/org/hibernate&lt;/a&gt;&lt;br/&gt;
+Maven Central: &lt;a href="http://repo1.maven.org/maven2/org/hibernate/hibernate-core"&gt;http://repo1.maven.org/maven2/org/hibernate/hibernate-core&lt;/a&gt; (should update in a couple of days)&lt;br/&gt;
+SourceForge: &lt;a href="https://sourceforge.net/projects/hibernate/files/hibernate4"&gt;https://sourceforge.net/projects/hibernate/files/hibernate4&lt;/a&gt;&lt;br/&gt;
+Downloads: &lt;a href="http://sourceforge.net/projects/hibernate/files/hibernate4/4.2.11.Final/hibernate-release-4.2.11.Final.zip/download"&gt;4.2.11.Final ZIP&lt;/a&gt;, &lt;a href="http://sourceforge.net/projects/hibernate/files/hibernate4/4.2.11.Final/hibernate-release-4.2.11.Final.tgz/download"&gt;4.2.11.Final TGZ&lt;/a&gt;&lt;/p&gt;</summary>
+    <dc:creator>Brett Meyer</dc:creator>
+    <dc:date>2014-03-17T21:45:48Z</dc:date>
+  </entry>
+  <entry>
+    <title>Second milestone towards Hibernate Search 5: introducing MoreLikeThis Queries</title>
+    <link rel="alternate" href="http://in.relation.to/Bloggers/SecondMilestoneTowardsHibernateSearch5IntroducingMoreLikeThisQueries" />
+    <author>
+      <name>Sanne Grinovero</name>
+    </author>
+    <id>http://in.relation.to/Bloggers/SecondMilestoneTowardsHibernateSearch5IntroducingMoreLikeThisQueries</id>
+    <updated>2014-03-05T14:39:21Z</updated>
+    <published>2014-03-05T14:39:21Z</published>
+    <summary type="html">&lt;p class="wikiPara"&gt;
+The release 5.0.0.Alpha2 is now &lt;a href="http://hibernate.org/search/downloads/"&gt;available on our shiny new website&lt;/a&gt;: as the alpha1 release also did, it integrates with Apache Lucene 4.6.1, but now we do it better ;-)
+&lt;/p&gt;
+
+&lt;pre class="wikiPreformatted brush: xml"&gt;&amp;lt;dependency&amp;gt;
+ &amp;lt;groupId&amp;gt;org.hibernate&amp;lt;/groupId&amp;gt;
+ &amp;lt;artifactId&amp;gt;hibernate-search-orm&amp;lt;/artifactId&amp;gt;
+ &amp;lt;version&amp;gt;5.0.0.Alpha2&amp;lt;/version&amp;gt;
+&amp;lt;/dependency&amp;gt;
+&lt;/pre&gt;
+
+
+&lt;h1 class="wikiHeadline1" id=""&gt;More Like This queries&lt;/h1&gt;
+&lt;p class="wikiPara"&gt;
+New features!
+A &lt;q&gt;More Like This&lt;/q&gt; query is a special kind of query which takes a model document as an input, rather than a traditional string. It has been available for you to use since a long time via Lucene's MoreLikeThis Query implementation, but this implementation was rather tricky to use on our richer entity based model. Hibernate Search now provides direct support for this functionality via our Query builder DSL, and in its simplest form looks like this:
+&lt;/p&gt;
+
+&lt;pre class="wikiPreformatted brush: java"&gt;Coffee exampleCoffee = ...
+
+QueryBuilder qb = fullTextSession.getSearchFactory()
+        .buildQueryBuilder()
+        .forEntity( Coffee.class )
+        .get();
+
+Query mltQuery = qb
+        .moreLikeThis()
+            .comparingAllFields()
+            .toEntity( modelEntity )
+            .createQuery();
+
+List&amp;lt;Object[]&amp;gt; results = (List&amp;lt;Object[]&amp;gt;) fullTextSession
+        .createFullTextQuery( mltQuery, Coffee.class )
+        .list();
+&lt;/pre&gt;
+
+
+&lt;p class="wikiPara"&gt;
+What does it do? It returns a list of Coffee instances which are similar to the &lt;i class="wikiEmphasis"&gt;exampleCoffee&lt;/i&gt; instance. The definition of &lt;q&gt;similar&lt;/q&gt; is as usual controlled by the analyzers and indexing options you choose. By default the list is of course ordered according to the scoring model, so the top match would be the example entity itself (this might be surprising but is often useful in practice).
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+A more extensive blogpost about this will follow, but if you can't wait to learn more see all details in the &lt;a href="http://docs.jboss.org/hibernate/search/5.0/reference/en-US/html/search-query.html#section-building-lucene-queries"&gt;Building queries&lt;/a&gt; chapter.
+&lt;/p&gt;
+
+&lt;h1 class="wikiHeadline1" id=""&gt;Faceting improvements&lt;/h1&gt;
+&lt;p class="wikiPara"&gt;
+One of the highest voted improvement requests on JIRA, it is now finally possible to facet on embedded collections. Hardy also started exploring possible performance improvements, and how to use the new Lucene 4 features: feedback, use cases or patches would be very welcome as we're eager to improve faceting more.
+&lt;/p&gt;
+
+&lt;h1 class="wikiHeadline1" id=""&gt;Watch the migration guide&lt;/h1&gt;
+&lt;p class="wikiPara"&gt;
+If you're updating an application from previous versions of Hibernate Search, we highly recommend to keep an eye on the &lt;a href="https://community.jboss.org/wiki/HibernateSearchMigrationGuide#jive_content_id_Hibernate_Search_500Alpha2"&gt;Migration Guide&lt;/a&gt; as the changes in the Lucene API are significant and not always self-documenting. Suggestions for the migration guide are also very welcome.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+The &lt;a href="http://lucene.apache.org/core/4_6_1/MIGRATE.html"&gt;Apache Lucene Migration Guide&lt;/a&gt; might also be useful, but we applied most of it already to the internal engine for you to use transparently.
+&lt;/p&gt;
+
+&lt;h1 class="wikiHeadline1" id=""&gt;The hibernate-search-analyzers module is removed&lt;/h1&gt;
+&lt;p class="wikiPara"&gt;
+This module  was created years ago when we had to fork some Lucene code to allow an easy migration path, but is now since long an empty module just depending on various commonly used analyzers. It's time for spring cleaning of dependencies, so the no longer needed module is removed: if you where using it, just remove it from your project and include a direct dependency to the analyzers you need from the Apache Lucene ecosystem.
+&lt;/p&gt;
+
+&lt;h1 class="wikiHeadline1" id=""&gt;What's next?&lt;/h1&gt;
+&lt;p class="wikiPara"&gt;
+You can find an high level overview on our &lt;a href="http://hibernate.org/search/roadmap/"&gt;Roadmap page&lt;/a&gt;, or check the fine grained break down on &lt;a href="https://hibernate.atlassian.net/issues/?filter=12266"&gt;this JIRA filter&lt;/a&gt;. Essentially we're aiming now at OSGi compability and at usability improvements which had to be postponed to a major release.
+&lt;/p&gt;
+
+&lt;h2 class="wikiHeadline2" id=""&gt;Useful links&lt;/h2&gt;
+&lt;ul class="wikiUnorderedList"&gt;
+&lt;li class="wikiUnorderedListItem"&gt; &lt;a href="http://hibernate.org/search/downloads/"&gt;Downloads&lt;/a&gt;&lt;/li&gt;
+&lt;li class="wikiUnorderedListItem"&gt; &lt;a href="http://docs.jboss.org/hibernate/search/5.0/reference/en-US/html_single/"&gt;Documentation&lt;/a&gt;&lt;/li&gt;
+&lt;li class="wikiUnorderedListItem"&gt; &lt;a href="https://community.jboss.org/wiki/HibernateSearchMigrationGuide#jive_content_id_Hibernate_Search_500Alpha2"&gt;Migration guide&lt;/a&gt;&lt;/li&gt;
+&lt;li class="wikiUnorderedListItem"&gt; &lt;a href="https://hibernate.atlassian.net/browse/HSEARCH"&gt;JIRA&lt;/a&gt;&lt;/li&gt;
+&lt;li class="wikiUnorderedListItem"&gt; &lt;a href="https://forum.hibernate.org/viewforum.php?f=9"&gt;Forums&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    <dc:creator>Sanne Grinovero</dc:creator>
+    <dc:date>2014-03-05T14:39:21Z</dc:date>
+  </entry>
+  <entry>
+    <title>Don't wait, upgrade - Hibernate Validator 5.1.0.Final is out!</title>
+    <link rel="alternate" href="http://in.relation.to/Bloggers/DontWaitUpgradeHibernateValidator510FinalIsOut" />
+    <author>
+      <name>Hardy Ferentschik</name>
+    </author>
+    <id>http://in.relation.to/Bloggers/DontWaitUpgradeHibernateValidator510FinalIsOut</id>
+    <updated>2014-03-03T20:00:13Z</updated>
+    <published>2014-03-03T20:00:13Z</published>
+    <summary type="html">&lt;img src="http://in.relation.to/service/File/24976" align="left" style="margin-right:20px"/&gt;
+
+&lt;p class="wikiPara"&gt;
+May I present, fresh from the roaster, steaming hot and full of flavor - Hibernate Validator 5.1.0.Final. 
+Validator 5.0 to 5.1 was a slow roast, outspread over several releases, but as you know, 
+slow roasting enhances the flavor ;-)
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+The &lt;a href="http://in.relation.to/tag/hv51"&gt;individual release blog entries&lt;/a&gt; highlighted the various changes for each release. 
+Here is just a short summary with pointers to refresh your memory.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+The main goal of Hibernate Validator 5.1 was to improve performance and memory footprint after releasing the
+initial reference implementation for Bean Validation 1.1. We achieved both
+and squashed several bugs along the way. If you want to know more have a look at 
+&lt;a href="https://hibernate.atlassian.net/browse/HV-589"&gt;HV-589&lt;/a&gt;, &lt;a href="https://hibernate.atlassian.net/browse/HV-637"&gt;HV-637&lt;/a&gt;, 
+&lt;a href="https://hibernate.atlassian.net/browse/HV-838"&gt;HV-838&lt;/a&gt; and &lt;a href="https://hibernate.atlassian.net/browse/HV-842"&gt;HV-842&lt;/a&gt;.
+In particular the CDI integration (&lt;i class="wikiEmphasis"&gt;hibernate-validator-cdi&lt;/i&gt;) got an overhaul. As per specification, it should be
+possible to use multiple Bean Validation providers within CDI, selecting between them using qualifiers.
+In particular something like this should be possible: &lt;pre class="wikiPreformatted brush:java"&gt;...
+@HibernateValidator
+@Inject
+Validator validator;
+
+@Inject
+Validator defaultValidator;
+...
+&lt;/pre&gt;
+
+where the default &lt;tt&gt;Validator&lt;/tt&gt; instance is not Hibernate Validator, but an explicitly via &lt;tt&gt;validation.xml&lt;/tt&gt; configured provider:&lt;pre class="wikiPreformatted brush:xml"&gt;&amp;lt;validation-config xmlns=&amp;quot;http://jboss.org/xml/ns/javax/validation/configuration&amp;quot;
+                   xsi:schemaLocation=&amp;quot;http://jboss.org/xml/ns/javax/validation/configuration validation-configuration-1.1.xsd&amp;quot;
+                   xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;&amp;gt;
+    &amp;lt;default-provider&amp;gt;com.acme.ValidationProvider&amp;lt;/default-provider&amp;gt;
+&amp;lt;/validation-config&amp;gt;
+&lt;/pre&gt;
+
+Due to a bug this was not working, but now it is :-) See 
+&lt;a href="https://hibernate.atlassian.net/browse/HV-858"&gt;HV-858&lt;/a&gt; and &lt;a href="https://hibernate.atlassian.net/browse/HV-865"&gt;HV-865&lt;/a&gt; for
+more information.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+We also added a couple of new features. The most important one is the introduction of
+the &lt;tt&gt;ValidatedValueUnwrapper&lt;/tt&gt; SPI. Refer to the &lt;a href="http://in.relation.to/24788.lace"&gt;Beta1 blog entry&lt;/a&gt; for more details.
+There are also a few new constraints. You can now make use of &lt;tt&gt;@Mod10Check&lt;/tt&gt;, &lt;tt&gt;@Mod11Check&lt;/tt&gt; (which are effectively
+replacing the now deprecated &lt;tt&gt;@ModCheck&lt;/tt&gt; constraint) and &lt;tt&gt;@EAN&lt;/tt&gt; 
+(see &lt;a href="http://in.relation.to/24874.lace"&gt;CR1 blog entry&lt;/a&gt;).
+A feature related to the &lt;tt&gt;ParameterNameProvider&lt;/tt&gt; introduced by Bean Validation 1.1 is the ability
+to use &lt;a href="http://paranamer.codehaus.org"&gt;ParaNamer&lt;/a&gt; as parameter name provider 
+(see &lt;a href="https://hibernate.atlassian.net/browse/HV-802"&gt;HV-802&lt;/a&gt;).
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+Maven artifacts are as usual on the JBoss Maven repository under the GAV &lt;a href="https://repository.jboss.org/nexus/index.html#nexus-search;gav~org.hibernate~hibernate-validator~5.1.0.Final~~"&gt;org.hibernate:hibernate-validator:5.1.0.Final&lt;/a&gt; and &lt;a href="https://sourceforge.net/projects/hibernate/files/hibernate-validator/5.1.0.Final/"&gt;distribution bundles&lt;/a&gt; are available on SourceForge.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+Feedback and questions are welcome via the Hibernate Validator &lt;a href="https://forum.hibernate.org/viewforum.php?f=9"&gt;forum&lt;/a&gt;
+or on stackoverflow using the &lt;a href="http://stackoverflow.com/questions/tagged/hibernate-validator"&gt;hibernate-validator&lt;/a&gt; tag. If you want to know where we are heading next, check out the &lt;a href="http://hibernate.org/validator/roadmap"&gt;Hibernate Validator Roadmap&lt;/a&gt;.
+&lt;/p&gt;
+
+
+&lt;b&gt;Don't wait, upgrade!&lt;/b&gt;</summary>
+    <dc:creator>Hardy Ferentschik</dc:creator>
+    <dc:date>2014-03-03T20:00:13Z</dc:date>
+  </entry>
+  <entry>
+    <title>Hibernate ORM 4.3.4.Final &amp; 4.2.10.Final Released</title>
+    <link rel="alternate" href="http://in.relation.to/Bloggers/HibernateORM434Final4210FinalReleased" />
+    <author>
+      <name>Brett Meyer</name>
+    </author>
+    <id>http://in.relation.to/Bloggers/HibernateORM434Final4210FinalReleased</id>
+    <updated>2014-03-03T16:15:17Z</updated>
+    <published>2014-03-03T16:15:17Z</published>
+    <summary type="html">&lt;p class="wikiPara"&gt;
+Shortly after releasing ORM, 4.3.2.Final and 4.2.9.Final a critical regression was found, caused by &lt;a href="https://hibernate.atlassian.net/browse/HHH-8961"&gt;HHH-8961&lt;/a&gt; and reverted/corrected by &lt;a href="https://hibernate.atlassian.net/browse/HHH-9010"&gt;HHH-9010&lt;/a&gt;.  Instead of creating service-pack builds, we decided to simply release the next versions.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+What happened to 4.3.3?  Technically and unfortunately, 4.3.2 == 4.3.3 in Nexus and Central (directly my fault -- long story).
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+TL;DR: Avoid 4.2.9.Final, 4.3.2.Final, and 4.3.3.Final.  Instead, upgrade to 4.2.10.Final or 4.3.4.Final.  Apologies for the confusion this has already caused!
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+JBoss Nexus: &lt;a href="https://repository.jboss.org/nexus/content/groups/public/org/hibernate"&gt;https://repository.jboss.org/nexus/content/groups/public/org/hibernate&lt;/a&gt;&lt;br/&gt;
+Maven Central: &lt;a href="http://repo1.maven.org/maven2/org/hibernate/hibernate-core"&gt;http://repo1.maven.org/maven2/org/hibernate/hibernate-core&lt;/a&gt; (should update in a couple of days)&lt;br/&gt;
+SourceForge: &lt;a href="https://sourceforge.net/projects/hibernate/files/hibernate4"&gt;https://sourceforge.net/projects/hibernate/files/hibernate4&lt;/a&gt;&lt;br/&gt;
+Downloads: &lt;a href="http://sourceforge.net/projects/hibernate/files/hibernate4/4.3.4.Final/hibernate-release-4.3.4.Final.zip/download"&gt;4.3.4.Final ZIP&lt;/a&gt;, &lt;a href="http://sourceforge.net/projects/hibernate/files/hibernate4/4.3.4.Final/hibernate-release-4.3.4.Final.tgz/download"&gt;4.3.4.Final TGZ&lt;/a&gt;, &lt;a href="http://sourceforge.net/projects/hibernate/files/hibernate4/4.2.10.Final/hibernate-release-4.2.10.Final.zip/download"&gt;4.2.10.Final ZIP&lt;/a&gt;, &lt;a href="http://sourceforge.net/projects/hibernate/files/hibernate4/4.2.10.Final/hibernate-release-4.2.10.Final.tgz/download"&gt;4.2.10.Final TGZ&lt;/a&gt;&lt;/p&gt;</summary>
+    <dc:creator>Brett Meyer</dc:creator>
+    <dc:date>2014-03-03T16:15:17Z</dc:date>
+  </entry>
+  <entry>
+    <title>Hibernate ORM 4.3.2.Final Released</title>
+    <link rel="alternate" href="http://in.relation.to/Bloggers/HibernateORM432FinalReleased" />
+    <author>
+      <name>Brett Meyer</name>
+    </author>
+    <id>http://in.relation.to/Bloggers/HibernateORM432FinalReleased</id>
+    <updated>2014-02-27T21:21:13Z</updated>
+    <published>2014-02-27T21:21:13Z</published>
+    <summary type="html">&lt;p class="wikiPara"&gt;
+It's been a busy day in Hibernate land.  In addition to 4.2.9.Final last night, we just released Hibernate ORM 4.3.2.Final!  Please see the full changelog for more information: &lt;a href="https://hibernate.atlassian.net/secure/ReleaseNote.jspa?projectId=10031&amp;amp;version=15650"&gt;https://hibernate.atlassian.net/secure/ReleaseNote.jspa?projectId=10031&amp;amp;version=15650&lt;/a&gt;.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+In addition to dozens of bug fixes, both 4.2.9 and 4.3.2 were heavily focused on benchmark-driven performance improvements.  Multiple CPU hotspots were mitigated and memory allocations reduced.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+JBoss Nexus: &lt;a href="https://repository.jboss.org/nexus/content/groups/public/org/hibernate"&gt;https://repository.jboss.org/nexus/content/groups/public/org/hibernate&lt;/a&gt;&lt;br/&gt;
+Maven Central: &lt;a href="http://repo1.maven.org/maven2/org/hibernate/hibernate-core"&gt;http://repo1.maven.org/maven2/org/hibernate/hibernate-core&lt;/a&gt; (should update in a couple of days)&lt;br/&gt;
+SourceForge: &lt;a href="https://sourceforge.net/projects/hibernate/files/hibernate4"&gt;https://sourceforge.net/projects/hibernate/files/hibernate4&lt;/a&gt;&lt;br/&gt;
+Downloads: &lt;a href="http://sourceforge.net/projects/hibernate/files/hibernate4/4.3.2.Final/hibernate-release-4.3.2.Final.zip/download"&gt;4.3.2.Final ZIP&lt;/a&gt;, &lt;a href="http://sourceforge.net/projects/hibernate/files/hibernate4/4.3.2.Final/hibernate-release-4.3.2.Final.tgz/download"&gt;4.3.2.Final TGZ&lt;/a&gt;&lt;/p&gt;</summary>
+    <dc:creator>Brett Meyer</dc:creator>
+    <dc:date>2014-02-27T21:21:13Z</dc:date>
+  </entry>
+  <entry>
+    <title>Hibernate ORM 4.2.9.Final Released</title>
+    <link rel="alternate" href="http://in.relation.to/Bloggers/HibernateORM429FinalReleased" />
+    <author>
+      <name>Brett Meyer</name>
+    </author>
+    <id>http://in.relation.to/Bloggers/HibernateORM429FinalReleased</id>
+    <updated>2014-02-27T03:03:05Z</updated>
+    <published>2014-02-27T03:03:05Z</published>
+    <summary type="html">&lt;p class="wikiPara"&gt;
+Hibernate ORM 4.2.9.Final was released this evening with almost 50 fixes!  Please see the full changelog for more information: &lt;a href="https://hibernate.atlassian.net/secure/ReleaseNote.jspa?projectId=10031&amp;amp;version=15350"&gt;https://hibernate.atlassian.net/secure/ReleaseNote.jspa?projectId=10031&amp;amp;version=15350&lt;/a&gt;.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+This should be considered the final 4.2.x release.  There's a chance 4.2.10 will be necessary to coincide with upcoming EAP/Wildfly releases.  Regardless, 4.3.x is the new &lt;q&gt;stable&lt;/q&gt; version while we shift focus towards ORM 5.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+JBoss Nexus: &lt;a href="https://repository.jboss.org/nexus/content/groups/public/org/hibernate"&gt;https://repository.jboss.org/nexus/content/groups/public/org/hibernate&lt;/a&gt;&lt;br/&gt;
+Maven Central: &lt;a href="http://repo1.maven.org/maven2/org/hibernate/hibernate-core"&gt;http://repo1.maven.org/maven2/org/hibernate/hibernate-core&lt;/a&gt; (should update in a couple of days)&lt;br/&gt;
+SourceForge: &lt;a href="https://sourceforge.net/projects/hibernate/files/hibernate4"&gt;https://sourceforge.net/projects/hibernate/files/hibernate4&lt;/a&gt;&lt;br/&gt;
+Downloads: &lt;a href="http://sourceforge.net/projects/hibernate/files/hibernate4/4.2.9.Final/hibernate-release-4.2.9.Final.zip/download"&gt;4.2.9.Final ZIP&lt;/a&gt;, &lt;a href="http://sourceforge.net/projects/hibernate/files/hibernate4/4.2.9.Final/hibernate-release-4.2.9.Final.tgz/download"&gt;4.2.9.Final TGZ&lt;/a&gt;&lt;/p&gt;</summary>
+    <dc:creator>Brett Meyer</dc:creator>
+    <dc:date>2014-02-27T03:03:05Z</dc:date>
+  </entry>
+  <entry>
+    <title>Addon development with Forge 2 - A Basic Primer</title>
+    <link rel="alternate" href="http://in.relation.to/Bloggers/AddonDevelopmentWithForge2ABasicPrimer" />
+    <author>
+      <name>Shane Bryzak</name>
+    </author>
+    <id>http://in.relation.to/Bloggers/AddonDevelopmentWithForge2ABasicPrimer</id>
+    <updated>2014-02-21T01:24:03Z</updated>
+    <published>2014-02-21T01:24:03Z</published>
+    <summary type="html">&lt;img src="http://in.relation.to/service/File/24897" align="right" style="margin-left:20px"/&gt;
+
+&lt;p class="wikiPara"&gt;
+I had the privilege today of receiving some expert tutelage on Forge Addon development in Eclipse from the Forge Team’s George Gastaldi, and I was so impressed by how easy it was that I’m going to describe the process step by step so that you too can experience the pleasure of writing a Forge addon!  This guide is written from the perspective of a complete Forge noob, so you can rest assured that it has made a very strong attempt to capture all the little important details.  Also, while the addon itself won’t actually do that much, we’ll try to cover all the basics which will hopefully provide the solid foundation you need to be able to implement more complex features.
+&lt;/p&gt;
+
+&lt;h1 class="wikiHeadline1" id=""&gt;Setting up your environment&lt;/h1&gt;
+
+&lt;p class="wikiPara"&gt;
+I strongly recommend that you work with the latest trunk of Forge, so fire up your terminal window and start by cloning the following repositories from GitHub:
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+&lt;a href="https://github.com/forge/furnace"&gt;https://github.com/forge/furnace&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+&lt;a href="https://github.com/forge/furnace-cdi"&gt;https://github.com/forge/furnace-cdi&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+&lt;a href="https://github.com/forge/forge-core"&gt;https://github.com/forge/forge-core&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+&lt;a href="https://github.com/jbosstools/jbosstools-forge"&gt;https://github.com/jbosstools/jbosstools-forge&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;img src="http://in.relation.to/service/File/24898"/&gt;
+
+&lt;p class="wikiPara"&gt;
+Once you have them all build each of them using &lt;a href="http://maven.apache.org/"&gt;Maven&lt;/a&gt;, making sure to skip the tests.  You’ll need Maven 3.1 or higher for this step:
+&lt;/p&gt;
+
+
+
+&lt;pre class="wikiPreformatted"&gt;cd furnace
+mvn clean install -Dmaven.test.skip=true&lt;/pre&gt;
+
+
+
+
+&lt;img src="http://in.relation.to/service/File/24899"/&gt;
+
+&lt;p class="wikiPara"&gt;
+If all goes well you’ll get a &lt;tt&gt;BUILD SUCCESS&lt;/tt&gt; message at the end:
+&lt;/p&gt;
+
+&lt;img src="http://in.relation.to/service/File/24900"/&gt;
+
+&lt;p class="wikiPara"&gt;
+Continue by building the other three projects (&lt;tt&gt;furnace-cdi&lt;/tt&gt;, &lt;tt&gt;forge-code&lt;/tt&gt; and &lt;tt&gt;jbosstools-forge&lt;/tt&gt;) in order using the same Maven command.
+&lt;/p&gt;
+
+&lt;h1 class="wikiHeadline1" id=""&gt;Installing Forge&lt;/h1&gt;
+
+&lt;p class="wikiPara"&gt;
+Once everything has built successfully, it’s time to install Forge.  Open the &lt;tt&gt;forge-core/dist/target&lt;/tt&gt; directory where you’ll find some zip files containing the Forge distribution:
+&lt;/p&gt;
+
+&lt;img src="http://in.relation.to/service/File/24901"/&gt;
+
+&lt;p class="wikiPara"&gt;
+You have a choice here, you can either use the (smaller) distribution zip which doesn’t come pre-packaged with all of the core addons, or you can use the larger offline distribution which has the addons packaged also.  For now, I recommend you use the offline distribution, so extract it to its own folder somewhere.  I generally like to install tools like this into a dedicated apps folder, and if you’re on a *nix based OS I recommend creating a symbolic link also:
+&lt;/p&gt;
+
+&lt;img src="http://in.relation.to/service/File/24902"/&gt;
+
+&lt;p class="wikiPara"&gt;
+Once that’s done, you need to create a &lt;tt&gt;FORGE_HOME&lt;/tt&gt; environment variable pointing to this directory, and add the &lt;tt&gt;$FORGE_HOME/bin&lt;/tt&gt; directory to your path (this will allow you to execute the forge shell from anywhere).  This is an OS-specific step so it’s up to you to complete this by yourself.  When that’s done, run the &lt;tt&gt;forge&lt;/tt&gt; command from a command prompt.  
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+(Note: If you didn’t install the offline distribution, you’ll be prompted to install the core addons.  When you start forge, it will attempt to install the latest released versions, however in our case we want to install the artifacts that we just built ourselves, so to do that we must first run &lt;tt&gt;forge -i core,2.0.1-SNAPSHOT&lt;/tt&gt; - alternatively just use the offline distribution and save yourself a lot of trouble.)
+&lt;/p&gt;
+
+&lt;img src="http://in.relation.to/service/File/24903"/&gt;
+
+&lt;p class="wikiPara"&gt;
+Forge will download a bunch of stuff and then prompt you to confirm the installation, so select &lt;tt&gt;Y&lt;/tt&gt; and press &lt;tt&gt;Enter&lt;/tt&gt; again.
+&lt;/p&gt;
+
+&lt;img src="http://in.relation.to/service/File/24904"/&gt;
+
+&lt;p class="wikiPara"&gt;
+Eventually the installation will complete and you’ll be sitting at the Forge command prompt:
+&lt;/p&gt;
+
+&lt;img src="http://in.relation.to/service/File/24905"/&gt;
+
+&lt;p class="wikiPara"&gt;
+From here you can press the &lt;tt&gt;tab&lt;/tt&gt; key to see the available commands:
+&lt;/p&gt;
+
+&lt;img src="http://in.relation.to/service/File/24906"/&gt;
+
+&lt;p class="wikiPara"&gt;
+We’ve successfully set up the Forge shell!  Let’s quit out for now by typing &lt;tt&gt;exit&lt;/tt&gt; then pressing enter and we’ll go through the steps to install the JBoss Tools Forge plugin in Eclipse.
+&lt;/p&gt;
+
+&lt;h1 class="wikiHeadline1" id=""&gt;Installing the Forge Eclipse Plugin&lt;/h1&gt;
+
+&lt;p class="wikiPara"&gt;
+At the time of writing I’m using the latest release version of Eclipse, Kepler SR1.  If you are using an older version of Eclipse then I recommend that you update to the latest, otherwise results might be unpredictable.  The first step in installing the Eclipse plugin is to start up Eclipse, then go to the &lt;i class="wikiEmphasis"&gt;Help -&amp;gt; Install New Software…&lt;/i&gt; menu option:
+&lt;/p&gt;
+
+&lt;img src="http://in.relation.to/service/File/24907"/&gt;
+
+&lt;p class="wikiPara"&gt;
+Then click the &lt;i class="wikiEmphasis"&gt;Add&lt;/i&gt; button, then in the popup window click &lt;i class="wikiEmphasis"&gt;Archive&lt;/i&gt;:
+&lt;/p&gt;
+
+&lt;img src="http://in.relation.to/service/File/24908"/&gt;
+
+&lt;p class="wikiPara"&gt;
+Browse to the &lt;tt&gt;jbosstools-forge/site/target&lt;/tt&gt; directory, select the &lt;tt&gt;forge.site.XXX&lt;/tt&gt; zip file and click OK:
+&lt;/p&gt;
+
+&lt;img src="http://in.relation.to/service/File/24909"/&gt;
+
+&lt;p class="wikiPara"&gt;
+Click OK again in the &lt;i class="wikiEmphasis"&gt;Add Repository&lt;/i&gt; window, then select the checkbox next to &lt;i class="wikiEmphasis"&gt;JBoss Tools Forge Nightly Build Update Site&lt;/i&gt;, then click the &lt;i class="wikiEmphasis"&gt;Next&lt;/i&gt; button:
+&lt;/p&gt;
+
+&lt;img src="http://in.relation.to/service/File/24910"/&gt;
+
+&lt;p class="wikiPara"&gt;
+You’ll be prompted to review the install details, so click the &lt;i class="wikiEmphasis"&gt;Next&lt;/i&gt; button again.  You’ll be asked to review and accept the terms of the license agreement, so after accepting them click the &lt;i class="wikiEmphasis"&gt;Finish&lt;/i&gt; button and Eclipse will go ahead and install the plugin.  If you get a security warning about unsigned content don’t panic; it’s just a warning and it's fine to click OK here.  Once finished, Eclipse will inform you that it needs to be restarted so go ahead and click the Yes button.  After Eclipse has restarted you can confirm that the Forge plugin has been successfully installed by pressing Ctrl + 5, which will present you with the following popup window:
+&lt;/p&gt;
+
+&lt;img src="http://in.relation.to/service/File/24911"/&gt;
+
+&lt;p class="wikiPara"&gt;
+If you can see the Forge command window after pressing Ctrl + 5, then congratulations on making it this far!  Next we’ll go ahead and create our Forge Addon project.
+&lt;/p&gt;
+
+&lt;h1 class="wikiHeadline1" id=""&gt;Creating a Forge Addon Project&lt;/h1&gt;
+
+&lt;p class="wikiPara"&gt;
+Forge does a great job of doing the heavy lifting when it comes to creating a new Addon.  Let’s create the initial project structure for our addon by opening the Forge command window in Eclipse with Ctrl + 5, then scrolling down until we find the &lt;i class="wikiEmphasis"&gt;Project/Generation - Project: New&lt;/i&gt; option:
+&lt;/p&gt;
+
+&lt;img src="http://in.relation.to/service/File/24912"/&gt;
+
+&lt;p class="wikiPara"&gt;
+Clicking on the &lt;i class="wikiEmphasis"&gt;Project: New&lt;/i&gt; option gives us a dialog window that lets us enter some basic details for our addon project.  Fill in the details for the project name, top level package, version, final name and project location.  Select &lt;i class="wikiEmphasis"&gt;Forge Addon&lt;/i&gt; for the project type and leave the Build system default of Maven, then click Next.  
+&lt;/p&gt;
+
+&lt;img src="http://in.relation.to/service/File/24913"/&gt;
+
+&lt;p class="wikiPara"&gt;
+On the next screen, click the checkbox next to &lt;i class="wikiEmphasis"&gt;Create API, Impl, SPI, Tests and Addon modules&lt;/i&gt; and select the following addons from the addon list:
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+&lt;tt&gt;org.jboss.forge.addon:projects&lt;/tt&gt;
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+&lt;tt&gt;org.jboss.forge.addon:ui&lt;/tt&gt;
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+&lt;tt&gt;org.jboss.forge.furnace.container:cdi&lt;/tt&gt;
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+After you’ve selected these addons, click the &lt;i class="wikiEmphasis"&gt;Finish&lt;/i&gt; button to generate the new project.
+&lt;/p&gt;
+
+&lt;img src="http://in.relation.to/service/File/24914"/&gt;
+
+&lt;p class="wikiPara"&gt;
+After grinding away for a few seconds you should see the following new projects in the Eclipse project explorer:
+&lt;/p&gt;
+
+&lt;img src="http://in.relation.to/service/File/24915"/&gt;
+
+&lt;p class="wikiPara"&gt;
+Our new addon project is created!  Next we’ll start adding some basic functionality.
+&lt;/p&gt;
+
+&lt;h1 class="wikiHeadline1" id=""&gt;Making the Addon do something&lt;/h1&gt;
+
+&lt;p class="wikiPara"&gt;
+This is where we get into the exciting stuff.  Let’s start off by creating a new class in the &lt;tt&gt;impl&lt;/tt&gt; project, under the &lt;tt&gt;com.acme.helloworld.ui&lt;/tt&gt; package called &lt;tt&gt;HelloWorldUICommand&lt;/tt&gt;.  Once you’ve created this class, edit its code and make it extend &lt;tt&gt;AbstractUICommand&lt;/tt&gt;:
+&lt;/p&gt;
+
+
+&lt;pre class="wikiPreformatted brush: java; gutter: true;"&gt;package com.acme.helloworld.ui;
+
+import org.jboss.forge.addon.ui.command.AbstractUICommand;
+
+public class HelloWorldUICommand extends AbstractUICommand {
+
+}&lt;/pre&gt;
+
+
+
+
+
+&lt;p class="wikiPara"&gt;
+Once that’s done, tell Eclipse to add the unimplemented methods:
+&lt;/p&gt;
+
+
+
+&lt;pre class="wikiPreformatted brush: java; gutter: true;"&gt;package com.acme.helloworld.ui;
+
+import org.jboss.forge.addon.ui.command.AbstractUICommand;
+import org.jboss.forge.addon.ui.context.UIBuilder;
+import org.jboss.forge.addon.ui.context.UIExecutionContext;
+import org.jboss.forge.addon.ui.result.Result;
+
+public class HelloWorldUICommand extends AbstractUICommand {
+
+    @Override
+    public void initializeUI(UIBuilder builder) throws Exception {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public Result execute(UIExecutionContext context) throws Exception {
+        // TODO Auto-generated method stub
+
+    }
+
+}&lt;/pre&gt;
+
+
+
+
+&lt;p class="wikiPara"&gt;
+Let’s write a bare minimum amount of code so that we can install our plugin and try it out.  Implement the &lt;tt&gt;execute()&lt;/tt&gt; method by adding the following code:
+&lt;/p&gt;
+
+
+
+&lt;pre class="wikiPreformatted brush: java; gutter: true;"&gt;package com.acme.helloworld.ui;
+
+import org.jboss.forge.addon.ui.command.AbstractUICommand;
+import org.jboss.forge.addon.ui.context.UIBuilder;
+import org.jboss.forge.addon.ui.context.UIExecutionContext;
+import org.jboss.forge.addon.ui.result.Result;
+import org.jboss.forge.addon.ui.result.Results;
+
+public class HelloWorldUICommand extends AbstractUICommand {
+
+    @Override
+    public void initializeUI(UIBuilder builder) throws Exception {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public Result execute(UIExecutionContext context) throws Exception {
+        return Results.success(&amp;quot;Hello World&amp;quot;);
+    }
+
+}&lt;/pre&gt;
+
+
+
+
+&lt;p class="wikiPara"&gt;
+Once that’s done, save the class and build the project by running &lt;tt&gt;mvn clean install&lt;/tt&gt; in the parent folder of your &lt;tt&gt;addon&lt;/tt&gt; project:
+&lt;/p&gt;
+
+&lt;img src="http://in.relation.to/service/File/24919"/&gt;
+
+&lt;p class="wikiPara"&gt;
+Then in Eclipse, select the &lt;tt&gt;helloworld-addon&lt;/tt&gt; project (or whatever you have called it), press Ctrl + 5 to display the Forge command window and select the &lt;i class="wikiEmphasis"&gt;Addon/Manage - Install an Addon&lt;/i&gt; command:
+&lt;/p&gt;
+
+&lt;img src="http://in.relation.to/service/File/24920"/&gt;
+
+&lt;p class="wikiPara"&gt;
+Leave the default values in the &lt;i class="wikiEmphasis"&gt;Install an Addon&lt;/i&gt; window unchanged and click the &lt;i class="wikiEmphasis"&gt;Finish&lt;/i&gt; button:
+&lt;/p&gt;
+
+&lt;img src="http://in.relation.to/service/File/24921"/&gt;
+
+&lt;p class="wikiPara"&gt;
+If everything has gone to plan, you should notice a little popup window in the bottom right corner of the screen confirming that the addon was successfully installed.  We can test our new addon immediately by pressing Ctrl + 5 and scrolling down until we find our new command:
+&lt;/p&gt;
+
+&lt;img src="http://in.relation.to/service/File/24922"/&gt;
+
+
+&lt;p class="wikiPara"&gt;
+Clicking on the command should give us another popup window that displays our hello world message:
+&lt;/p&gt;
+
+&lt;img src="http://in.relation.to/service/File/24923"/&gt;
+
+&lt;h1 class="wikiHeadline1" id=""&gt;Creating User Interface Elements&lt;/h1&gt;
+
+&lt;p class="wikiPara"&gt;
+The next step is to create some user interface elements that prompt the user for input.  We’ll start simple by injecting a simple text input control and adding it to the dialog screen for our addon - here’s a complete code listing:
+&lt;/p&gt;
+
+
+
+&lt;pre class="wikiPreformatted brush: java; gutter: true;"&gt;package com.acme.helloworld.ui;
+
+import javax.inject.Inject;
+
+import org.jboss.forge.addon.ui.command.AbstractUICommand;
+import org.jboss.forge.addon.ui.context.UIBuilder;
+import org.jboss.forge.addon.ui.context.UIExecutionContext;
+import org.jboss.forge.addon.ui.input.UIInput;
+import org.jboss.forge.addon.ui.result.Result;
+import org.jboss.forge.addon.ui.result.Results;
+
+public class HelloWorldUICommand extends AbstractUICommand {
+
+    @Inject UIInput&amp;lt;String&amp;gt; input;
+    
+    @Override
+    public void initializeUI(UIBuilder builder) throws Exception {
+        builder.add(input);
+    }
+
+    @Override
+    public Result execute(UIExecutionContext context) throws Exception {
+        return Results.success(&amp;quot;Hello World&amp;quot;);
+    }
+
+}&lt;/pre&gt;
+
+
+
+
+&lt;p class="wikiPara"&gt;
+Rebuild the project the same way as before, and reinstall the addon from the Forge command screen (Ctrl + 5 and select &lt;i class="wikiEmphasis"&gt;Addon/Manage : Install an Addon&lt;/i&gt;).  Press Ctrl + 5 again and select &lt;tt&gt;HelloWorldUICommand&lt;/tt&gt;, and you should now see the following dialog window:
+&lt;/p&gt;
+
+&lt;img src="http://in.relation.to/service/File/24924"/&gt;
+
+&lt;p class="wikiPara"&gt;
+We can customize our input control further by adding a &lt;tt&gt;@WithAttributes&lt;/tt&gt; annotation - add the following import:
+&lt;/p&gt;
+
+
+
+&lt;pre class="wikiPreformatted brush: java; gutter: true;"&gt;import org.jboss.forge.addon.ui.metadata.WithAttributes;&lt;/pre&gt;
+
+
+
+
+&lt;p class="wikiPara"&gt;
+Then add the &lt;tt&gt;@WithAttributes&lt;/tt&gt; annotation to the UIInput:
+&lt;/p&gt;
+
+
+
+&lt;pre class="wikiPreformatted brush: java; gutter: true;"&gt;@Inject @WithAttributes(label = &amp;quot;Name&amp;quot;, required = true, description = &amp;quot;Enter your name&amp;quot;)  
+    UIInput&amp;lt;String&amp;gt; input;&lt;/pre&gt;
+
+
+
+
+&lt;p class="wikiPara"&gt;
+The control can be customized by setting the various member values:
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+&lt;tt&gt;label&lt;/tt&gt; - The label for the input
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+&lt;tt&gt;required&lt;/tt&gt; - Make the input a required field
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+&lt;tt&gt;description&lt;/tt&gt; - The description when you mouse over the field.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+Save your class, then build and reinstall the addon following the same steps as before.  Execute the addon command using Ctrl + 5 and you should now see this:
+&lt;/p&gt;
+
+&lt;img src="http://in.relation.to/service/File/24925"/&gt;
+
+&lt;p class="wikiPara"&gt;
+We can now begin to see how simple it is to build a user interface for our addon.  Let’s extend it further by adding a select control that allows you to select a Maven dependency.  In this example I’ll use the PicketLink project as our guinea pig.  We’ll need to &lt;tt&gt;@Inject&lt;/tt&gt; a &lt;tt&gt;DependencyResolver&lt;/tt&gt; to locate the dependencies that we’re interested in, and a &lt;tt&gt;UISelectOne&lt;/tt&gt; control to allow the user to select one of the dependencies.  Add this code to your class:
+&lt;/p&gt;
+
+
+
+&lt;pre class="wikiPreformatted brush: java; gutter: true;"&gt;@Inject DependencyResolver dependencyResolver;    
+    
+@Inject @WithAttributes(label = &amp;quot;Version&amp;quot;, required = true, description = &amp;quot;Select the version of PicketLink&amp;quot;) 
+private UISelectOne&amp;lt;Coordinate&amp;gt; version;    
+    
+@Override
+public void initializeUI(UIBuilder builder) throws Exception {
+    builder.add(input);
+        
+    DependencyQuery query = DependencyQueryBuilder
+            .create(&amp;quot;org.picketlink:picketlink-api&amp;quot;)
+            .setFilter(new NonSnapshotDependencyFilter());
+
+    List&amp;lt;Coordinate&amp;gt; coordinates = dependencyResolver.resolveVersions(query);
+    version.setValueChoices(coordinates);
+    builder.add(version);        
+}&lt;/pre&gt;
+
+
+
+
+&lt;p class="wikiPara"&gt;
+The &lt;tt&gt;DependencyQuery&lt;/tt&gt; is used to to declare the criteria that we’ll use to locate the dependencies we want, and the &lt;tt&gt;NonSnapshotDependencyFilter&lt;/tt&gt; parameter tells the query that we’re only interested in non SNAPSHOT releases.   The Coordinate class is used to represent a specific Maven dependency and contains property values for the dependency’s &lt;tt&gt;groupId&lt;/tt&gt;, &lt;tt&gt;artifactId&lt;/tt&gt; and so forth.  We populate the select control with our list of Coordinates and finally add the control to the form via the &lt;tt&gt;builder.add()&lt;/tt&gt; method.  Once you’re done the complete code listing should look like this:
+&lt;/p&gt;
+
+
+
+&lt;pre class="wikiPreformatted brush: java; gutter: true;"&gt;package com.acme.helloworld.ui;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.jboss.forge.addon.dependencies.Coordinate;
+import org.jboss.forge.addon.dependencies.DependencyQuery;
+import org.jboss.forge.addon.dependencies.DependencyResolver;
+import org.jboss.forge.addon.dependencies.builder.DependencyQueryBuilder;
+import org.jboss.forge.addon.dependencies.util.NonSnapshotDependencyFilter;
+import org.jboss.forge.addon.ui.command.AbstractUICommand;
+import org.jboss.forge.addon.ui.context.UIBuilder;
+import org.jboss.forge.addon.ui.context.UIExecutionContext;
+import org.jboss.forge.addon.ui.input.UIInput;
+import org.jboss.forge.addon.ui.input.UISelectOne;
+import org.jboss.forge.addon.ui.metadata.WithAttributes;
+import org.jboss.forge.addon.ui.result.Result;
+import org.jboss.forge.addon.ui.result.Results;
+
+public class HelloWorldUICommand extends AbstractUICommand {
+    @Inject @WithAttributes(label = &amp;quot;Name&amp;quot;, required = true, description = &amp;quot;Enter your name&amp;quot;)  
+    UIInput&amp;lt;String&amp;gt; input;
+
+    @Inject DependencyResolver dependencyResolver;    
+    
+    @Inject @WithAttributes(label = &amp;quot;Version&amp;quot;, required = true, description = &amp;quot;Select the version of PicketLink&amp;quot;) 
+    private UISelectOne&amp;lt;Coordinate&amp;gt; version;    
+    
+    @Override
+    public void initializeUI(UIBuilder builder) throws Exception {
+        builder.add(input);
+        
+        DependencyQuery query = DependencyQueryBuilder
+                .create(&amp;quot;org.picketlink:picketlink-api&amp;quot;)
+                .setFilter(new NonSnapshotDependencyFilter());
+
+        List&amp;lt;Coordinate&amp;gt; coordinates = dependencyResolver.resolveVersions(query);
+        version.setValueChoices(coordinates);
+        builder.add(version);        
+    }
+
+    @Override
+    public Result execute(UIExecutionContext context) throws Exception {
+        return Results.success(&amp;quot;Hello World&amp;quot;);
+    }
+}&lt;/pre&gt;
+
+
+
+
+&lt;p class="wikiPara"&gt;
+Rebuild and reinstall the addon, then invoke it from the Forge command window - you should see something that looks like this:
+&lt;/p&gt;
+
+&lt;img src="http://in.relation.to/service/File/24926"/&gt;
+
+&lt;p class="wikiPara"&gt;
+We can use these newfound powers to make changes to an actual project.  Let’s start by modifying our addon class so that it extends &lt;tt&gt;AbstractProjectCommand&lt;/tt&gt; instead of &lt;tt&gt;AbstractUICommand&lt;/tt&gt;:
+&lt;/p&gt;
+
+
+
+
+&lt;pre class="wikiPreformatted brush: java; gutter: true;"&gt;public class HelloWorldUICommand extends AbstractProjectCommand {&lt;/pre&gt;
+
+
+
+
+
+&lt;p class="wikiPara"&gt;
+This will cause Eclipse to complain about unimplemented methods, so use Eclipse to generate them:
+&lt;/p&gt;
+
+
+
+&lt;pre class="wikiPreformatted brush: java; gutter: true;"&gt;    @Override
+    protected boolean isProjectRequired() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    protected ProjectFactory getProjectFactory() {
+        // TODO Auto-generated method stub
+        return null;
+    }&lt;/pre&gt;
+
+
+
+
+
+&lt;p class="wikiPara"&gt;
+The &lt;tt&gt;isProjectRequired()&lt;/tt&gt; method is used to determine whether this addon requires a project to execute.  Since this is what we actually want, we’re going to return a value of true here:
+&lt;/p&gt;
+
+
+
+&lt;pre class="wikiPreformatted brush: java; gutter: true;"&gt;    @Override
+    protected boolean isProjectRequired() {
+        return true;
+    }&lt;/pre&gt;
+
+
+
+
+
+&lt;p class="wikiPara"&gt;
+The &lt;tt&gt;getProjectFactory()&lt;/tt&gt; method provides a reference to the currently selected project.  To implement this method we first need to &lt;tt&gt;@Inject&lt;/tt&gt; a &lt;tt&gt;ProjectFactory&lt;/tt&gt; object into our addon class:
+&lt;/p&gt;
+
+
+
+&lt;pre class="wikiPreformatted brush: java; gutter: true;"&gt;@Inject ProjectFactory projectFactory;&lt;/pre&gt;
+
+
+
+
+&lt;p class="wikiPara"&gt;
+Then we simply return this value in the method body:
+&lt;/p&gt;
+
+
+
+&lt;pre class="wikiPreformatted brush: java; gutter: true;"&gt;    @Override
+    protected ProjectFactory getProjectFactory() {
+        return projectFactory;
+    }&lt;/pre&gt;
+
+
+
+
+
+&lt;p class="wikiPara"&gt;
+So far so good!  Now, since our goal is to add some dependencies to our project we need to somehow take the selected Coordinate value from our &lt;tt&gt;UISelectOne&lt;/tt&gt; control and use it to add a dependency to the current project.  Lucky for us Forge provides all of the tools to make this happen - first of all we’re going to inject a &lt;tt&gt;DependencyInstaller&lt;/tt&gt; into our class:
+&lt;/p&gt;
+
+
+
+&lt;pre class="wikiPreformatted brush: java; gutter: true;"&gt;@Inject DependencyInstaller dependencyInstaller;&lt;/pre&gt;
+
+
+
+
+&lt;p class="wikiPara"&gt;
+Then, in the &lt;tt&gt;execute()&lt;/tt&gt; method we’re going to use a &lt;tt&gt;DependencyBuilder&lt;/tt&gt; to create a reference to the &lt;tt&gt;Dependency&lt;/tt&gt; based on the &lt;tt&gt;Coordinate&lt;/tt&gt; value contained in the &lt;tt&gt;UISelectOne&lt;/tt&gt; control, after which we’ll tell the &lt;tt&gt;DependencyInstaller&lt;/tt&gt; to install that &lt;tt&gt;Dependency&lt;/tt&gt; into the selected project:
+&lt;/p&gt;
+
+
+
+&lt;pre class="wikiPreformatted brush: java; gutter: true;"&gt;DependencyBuilder builder = DependencyBuilder.create();
+builder.setCoordinate(version.getValue());
+
+dependencyInstaller.install(getSelectedProject(context), builder);&lt;/pre&gt;
+
+
+
+
+&lt;p class="wikiPara"&gt;
+The complete code listing should now look like this:
+&lt;/p&gt;
+
+
+
+&lt;pre class="wikiPreformatted brush: java; gutter: true;"&gt;package com.acme.helloworld.ui;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.jboss.forge.addon.dependencies.Coordinate;
+import org.jboss.forge.addon.dependencies.DependencyQuery;
+import org.jboss.forge.addon.dependencies.DependencyResolver;
+import org.jboss.forge.addon.dependencies.builder.DependencyBuilder;
+import org.jboss.forge.addon.dependencies.builder.DependencyQueryBuilder;
+import org.jboss.forge.addon.dependencies.util.NonSnapshotDependencyFilter;
+import org.jboss.forge.addon.projects.ProjectFactory;
+import org.jboss.forge.addon.projects.dependencies.DependencyInstaller;
+import org.jboss.forge.addon.projects.ui.AbstractProjectCommand;
+import org.jboss.forge.addon.ui.context.UIBuilder;
+import org.jboss.forge.addon.ui.context.UIExecutionContext;
+import org.jboss.forge.addon.ui.input.UIInput;
+import org.jboss.forge.addon.ui.input.UISelectOne;
+import org.jboss.forge.addon.ui.metadata.WithAttributes;
+import org.jboss.forge.addon.ui.result.Result;
+import org.jboss.forge.addon.ui.result.Results;
+
+public class HelloWorldUICommand extends AbstractProjectCommand {
+    
+    @Inject ProjectFactory projectFactory;
+
+    @Inject @WithAttributes(label = &amp;quot;Name&amp;quot;, required = true, description = &amp;quot;Enter your name&amp;quot;)  
+    UIInput&amp;lt;String&amp;gt; input;
+    
+    @Inject DependencyInstaller dependencyInstaller;
+
+    @Inject DependencyResolver dependencyResolver;    
+    
+    @Inject @WithAttributes(label = &amp;quot;Version&amp;quot;, required = true, description = &amp;quot;Select the version of PicketLink&amp;quot;) 
+    private UISelectOne&amp;lt;Coordinate&amp;gt; version;    
+    
+    @Override
+    public void initializeUI(UIBuilder builder) throws Exception {
+        builder.add(input);
+        
+        DependencyQuery query = DependencyQueryBuilder
+                .create(&amp;quot;org.picketlink:picketlink-api&amp;quot;)
+                .setFilter(new NonSnapshotDependencyFilter());
+
+        List&amp;lt;Coordinate&amp;gt; coordinates = dependencyResolver.resolveVersions(query);
+        version.setValueChoices(coordinates);
+        builder.add(version);        
+    }
+
+    @Override
+    public Result execute(UIExecutionContext context) throws Exception {
+        DependencyBuilder builder = DependencyBuilder.create();
+        builder.setCoordinate(version.getValue());
+
+        dependencyInstaller.install(getSelectedProject(context), builder);
+        
+        return Results.success(&amp;quot;Hello World&amp;quot;);
+    }
+
+    @Override
+    protected boolean isProjectRequired() {
+        return true;
+    }
+
+    @Override
+    protected ProjectFactory getProjectFactory() {
+        return projectFactory;
+    }
+}&lt;/pre&gt;
+
+
+
+
+
+
+&lt;p class="wikiPara"&gt;
+Rebuild and reinstall your addon, then select a project in Eclipse and invoke our addon from the Forge command window.  Keep in mind that we’ll be adding some new dependencies to the project you select so make sure it’s not something too important!  I suggest you use the addon project itself as it is quite easy to remove the dependencies afterwards.  Enter any value for the Name field (since we’ve marked it as required we’re forced to at least enter something) and select one of the dependencies from the Version control:
+&lt;/p&gt;
+
+&lt;img src="http://in.relation.to/service/File/24927"/&gt;
+
+
+&lt;p class="wikiPara"&gt;
+Click the Finish button and you should see the Hello World popup window appear briefly confirming that our addon ran successfully.  To check it actually did something, open the project’s &lt;tt&gt;pom.xml&lt;/tt&gt; in an editor and you should notice that Forge has added the selected dependency by declaring it in the &lt;tt&gt;&amp;lt;dependencyManagement&amp;gt;&lt;/tt&gt; section:
+&lt;/p&gt;
+
+&lt;img src="http://in.relation.to/service/File/24928"/&gt;
+
+&lt;p class="wikiPara"&gt;
+And also adding the dependency itself to the &lt;tt&gt;&amp;lt;dependencies&amp;gt;&lt;/tt&gt; section:
+&lt;/p&gt;
+
+&lt;img src="http://in.relation.to/service/File/24929"/&gt;
+
+&lt;p class="wikiPara"&gt;
+Congratulations, you’ve made it to the end!  You’ve now created your first useful Forge addon that can add dependencies to an existing project.  Hopefully this guide has helped by providing a high level overview of the Forge Addon architecture and a beginner’s primer on creating a new Forge Addon.
+&lt;/p&gt;
+
+&lt;h1 class="wikiHeadline1" id=""&gt;Summary&lt;/h1&gt;
+
+&lt;p class="wikiPara"&gt;
+In this guide we went through the steps to build and install both the Forge Shell and Forge Eclipse Plugin, then learned how to create a new Forge Addon project.  We also learned how to build and install our Addon, create custom dialog windows and have our Addon make changes to an existing project.  If you’d like to learn more about Forge, then the following resources are available:
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+Forge web site: &lt;a href="http://forge.jboss.org/"&gt;http://forge.jboss.org/&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+Documentation: &lt;a href="http://forge.jboss.org/docs/index.html"&gt;http://forge.jboss.org/docs/index.html&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+Source code: &lt;a href="https://github.com/forge"&gt;https://github.com/forge&lt;/a&gt;
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+Thanks for reading!&lt;/p&gt;</summary>
+    <dc:creator>Shane Bryzak</dc:creator>
+    <dc:date>2014-02-21T01:24:03Z</dc:date>
+  </entry>
+  <entry>
+    <title>Hibernate OGM 4.1.0.Beta1 is out</title>
+    <link rel="alternate" href="http://in.relation.to/Bloggers/HibernateOGM410Beta1IsOut" />
+    <author>
+      <name>Gunnar Morling</name>
+    </author>
+    <id>http://in.relation.to/Bloggers/HibernateOGM410Beta1IsOut</id>
+    <updated>2014-02-19T19:59:33Z</updated>
+    <published>2014-02-19T19:59:33Z</published>
+    <summary type="html">&lt;p class="wikiPara"&gt;
+It's my great pleasure to announce the release of Hibernate OGM 4.1.0.Beta1! This version shines with:
+&lt;/p&gt;
+
+&lt;ul class="wikiUnorderedList"&gt;
+&lt;li class="wikiUnorderedListItem"&gt; support for CouchDB&lt;/li&gt;
+&lt;li class="wikiUnorderedListItem"&gt; query execution via JPA&lt;/li&gt;
+&lt;li class="wikiUnorderedListItem"&gt; new Option API&lt;/li&gt;
+&lt;li class="wikiUnorderedListItem"&gt; and much more, including a version bump&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p class="wikiPara"&gt;
+But wait, hasn't the last released version been 4.0.0.Beta4? That's true indeed, and in case you were wondering, we did not forget to do a final release of the 4.0 line. The reason for the version bump is that Hibernate OGM is now &lt;u&gt;compatible with JPA 2.1 and Hibernate ORM 4.3&lt;/u&gt;. To reflect this we thought it'd be a good idea to jump to a new minor version as well.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+As usual, you can get the release from &lt;a href="http://sourceforge.net/projects/hibernate/files/hibernate-ogm/4.1.0.Beta1/"&gt;SourceForge&lt;/a&gt; (ZIP, TAR.GZ) or retrieve it from the JBoss Nexus &lt;a href="https://repository.jboss.org/nexus/content/groups/public/org/hibernate/ogm/"&gt;repository server&lt;/a&gt; using your favorite dependency management tool. The GAV coordinates are:
+&lt;/p&gt;
+
+&lt;ul class="wikiUnorderedList"&gt;
+&lt;li class="wikiUnorderedListItem"&gt; &lt;i class="wikiEmphasis"&gt;org.hibernate.ogm:hibernate-ogm-core:4.1.0.Beta1&lt;/i&gt; for the OGM engine and &lt;/li&gt;
+&lt;li class="wikiUnorderedListItem"&gt; &lt;i class="wikiEmphasis"&gt;org.hibernate.ogm:hibernate-ogm-&amp;lt;datastore&amp;gt;:4.1.0.Beta1&lt;/i&gt;, depending on the backend you want to use.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p class="wikiPara"&gt;
+Note that we did move some packages around, so make sure to look at our &lt;a href="https://community.jboss.org/wiki/HibernateOGMMigrationNotes"&gt;migration guide&lt;/a&gt;.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+Enough of the introductory words, let's have a closer look at some of the new features.
+&lt;/p&gt;
+
+&lt;h1 class="wikiHeadline1" id=""&gt;Support for CouchDB&lt;/h1&gt;
+
+&lt;p class="wikiPara"&gt;
+Based on a huge contribution of community member &lt;a href="https://github.com/dreab8"&gt;Andrea Boriero&lt;/a&gt; (thanks again, Andrea!), Hibernate OGM comes now with support for &lt;a href="https://couchdb.apache.org/"&gt;Apache CouchDB&lt;/a&gt;. CouchDB is a scalable document datastore which persists data as JSON documents and offers an HTTP API, fully embracing REST principles.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+The storage strategy of the new dialect resembles that used for MongoDB. In particular we aimed for a very natural mapping of entities to documents in the datastore. E.g. properties are mapped as document fields, embeddables are mapped as nested documents etc. We're also leveraging CouchDB's built-in optimistic locking mechanism to detect concurrent updates, just as you would expect it.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+The listing belows shows an entity and how it is represented as JSON document in CouchDB:
+&lt;/p&gt;
+
+&lt;pre class="wikiPreformatted brush: java"&gt;@Entity
+public class News {
+
+    @Id
+    private String id;
+
+    @Version
+    @Generated
+    @Column(name=&amp;quot;_rev&amp;quot;)
+    private String revision;
+
+    private String title;
+
+    @Column(name=&amp;quot;desc&amp;quot;)
+    private String description;
+
+    //getters, setters ...
+}
+
+# JSON document
+{
+    &amp;quot;_id&amp;quot;: &amp;quot;News:id_:news-1_&amp;quot;,
+    &amp;quot;_rev&amp;quot;: &amp;quot;1-d1cd3b00a677a2e31cd0480a796e8480&amp;quot;,
+    &amp;quot;$type&amp;quot;: &amp;quot;entity&amp;quot;,
+    &amp;quot;$table&amp;quot;: &amp;quot;News&amp;quot;,
+    &amp;quot;title&amp;quot;: &amp;quot;On the merits of NoSQL&amp;quot;,
+    &amp;quot;desc&amp;quot;: &amp;quot;This paper discuss why NoSQL will save the world for good&amp;quot;
+}&lt;/pre&gt;
+
+
+&lt;p class="wikiPara"&gt;
+As you can see, the &lt;tt&gt;@Id&lt;/tt&gt; attribute is mapped to CouchDB's reserved &lt;tt&gt;_id&lt;/tt&gt; field, the same applies for the revision attribute which is mapped to &lt;tt&gt;_rev&lt;/tt&gt;. The &lt;tt&gt;@Version&lt;/tt&gt; and &lt;tt&gt;@Generated&lt;/tt&gt; annotations advice OGM to handle the revision property as version attribute and use it for optimistic concurrency control. The &lt;tt&gt;@Column&lt;/tt&gt; annotation can be used to map a property to a document field with another name.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+To learn more about the CouchDB dialect and how to use it, refer to the reference guide. Note that the dialect is considered experimental at this time, so don't expect everything to work perfectly yet. Of course any feedback is highly welcome; maybe you even want to tackle one of the &lt;a href="https://hibernate.atlassian.net/issues/?jql=project%20%3D%20OGM%20AND%20status%20%3D%20Open%20AND%20text%20~%20%22couchdb%22%20ORDER%20BY%20status%20DESC%2C%20priority%20DESC"&gt;open issues&lt;/a&gt;) in this field?
+&lt;/p&gt;
+
+&lt;h1 class="wikiHeadline1" id=""&gt;Query improvements&lt;/h1&gt;
+
+&lt;p class="wikiPara"&gt;
+We're very pleased to have progressed in the field of queries, addressing several long standing feature requests.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+It's possible now to issue &lt;u&gt;JP-QL queries via the EntityManager API&lt;/u&gt; which is great news for you if you're preferring JPA over using the native Hibernate API:
+&lt;/p&gt;
+
+&lt;pre class="wikiPreformatted brush: java"&gt;EntityManager em = ...;
+List&amp;lt;Animal&amp;gt; giraffes = em.createQuery( &amp;quot;FROM Animal WHERE species = :species&amp;quot; )
+    .setParameter( &amp;quot;species&amp;quot;, &amp;quot;Giraffe&amp;quot; )
+    .getResultList();&lt;/pre&gt;
+
+
+&lt;p class="wikiPara"&gt;
+You also can work with &lt;i class="wikiEmphasis"&gt;named queries&lt;/i&gt; now:
+&lt;/p&gt;
+
+&lt;pre class="wikiPreformatted"&gt;@Entity
+@NamedQuery(name = AnimalQueries.BY_SPECIES, query = &amp;quot;FROM Animal WHERE species = :species&amp;quot;)
+public class Animal { ... }
+
+EntityManager em = ...;
+List&amp;lt;Animal&amp;gt; giraffes = em.createNamedQuery( AnimalQueries.BY_SPECIES, Animal.class )
+    .setParameter( &amp;quot;species&amp;quot;, &amp;quot;Giraffe&amp;quot; )
+    .getResultList();&lt;/pre&gt;
+
+
+&lt;p class="wikiPara"&gt;
+Depending on the chosen backend, these queries will either be translated into Lucene Queries via Hibernate Search or into native queries of the backend (currently the case for MongoDB).
+&lt;/p&gt;
+
+&lt;h1 class="wikiHeadline1" id=""&gt;Option API&lt;/h1&gt;
+
+&lt;p class="wikiPara"&gt;
+One big challenge Hibernate OGM has to deal with is how to &lt;u&gt;expose store-specific functionality and configuration options&lt;/u&gt; in case the JPA semantics are not sufficient. Taking MongoDB as example, you might want to configure the &lt;u&gt;write concern&lt;/u&gt; or a strategy for persisting association information.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+Hibernate OGM now provides an extendible, type-safe and comprehensible mechanism for declaring such options. You can use &lt;u&gt;annotations and a programmatic API&lt;/u&gt;. Dialect authors can plug in store-specific configuration options very easily, allowing users to specify these options in an intuitive and type-safe fashion. The following shows an example:
+&lt;/p&gt;
+
+&lt;pre class="wikiPreformatted brush: java"&gt;@Entity
+@AssociationStorage(AssociationStorageType.ASSOCIATION_DOCUMENT)
+public class Zoo {
+
+    @OneToMany
+    private Set&amp;lt;Animal&amp;gt; animals;
+
+    @OneToMany
+    private Set&amp;lt;Person&amp;gt; employees;
+
+    @OneToMany
+    @AssociationStorage(AssociationStorageType.IN_ENTITY)
+    private Set&amp;lt;Person&amp;gt; visitors;
+
+    //...
+}&lt;/pre&gt;
+
+
+&lt;p class="wikiPara"&gt;
+The &lt;tt&gt;@AssociationStorage&lt;/tt&gt; annotation on the entity level expresses that all associations of the &lt;tt&gt;Zoo&lt;/tt&gt; class should be persisted as separate association documents. Only the &lt;tt&gt;visitors&lt;/tt&gt; association will be stored embedded within the corresponding &lt;tt&gt;Zoo&lt;/tt&gt; document, as the local &lt;tt&gt;@AssociationStorage&lt;/tt&gt; annotation takes precedence.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+We try to share such configuration options between stores of one kind where feasible. E.g. the &lt;tt&gt;@AssocationStorage&lt;/tt&gt; annotation is applicable to all document datastores (while e.g. an option such as &lt;tt&gt;@WriteConcern&lt;/tt&gt; would be specific to MongoDB), simplifying the migration between stores. Neat, isn't it?
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+Now let's have a look at how you'd apply the same configuration using the programmatic API:
+&lt;/p&gt;
+
+&lt;pre class="wikiPreformatted brush: java"&gt;public class MyOptionConfigurator extends OptionConfigurator {
+
+    @Override
+    public void configure(Configurable configurable) {
+        configurable.configureOptionsFor( MongoDB.class )
+            .associationStorage( AssociationStorageType.ASSOCIATION_DOCUMENT )
+            .entity( Zoo.class )
+                .associationStorage( AssociationStorageType.IN_ENTITY )
+                .property( &amp;quot;visitors&amp;quot;, ElementType.FIELD )
+                    .associationStorage( AssociationStorageType.ASSOCIATION_DOCUMENT );
+    }
+}&lt;/pre&gt;
+
+
+&lt;p class="wikiPara"&gt;
+All you need to do is to create an &lt;tt&gt;OptionConfigurator&lt;/tt&gt; implementation, which provides access to the fluent configuration API. You can apply settings on a global level and then use &lt;tt&gt;entity()&lt;/tt&gt; and &lt;tt&gt;property()&lt;/tt&gt; to navigate to single entities and properties and apply options to the same. Again you can declare options specific to the store as well as options common to the family of store. Just don't forget to register your configurator when bootstrapping Hibernate OGM.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+The work on options has been mainly behind the scenes in this release, with the shown options only being the first few examples for leveraging this new mechanism. You can expect to see more options specific to single stores or store families in future releases, providing you with all the flexibility you need to configure your datastore.
+&lt;/p&gt;
+
+&lt;h1 class="wikiHeadline1" id=""&gt;Streamlined configuration properties&lt;/h1&gt;
+
+&lt;p class="wikiPara"&gt;
+The new option mechanism is an elegant way for specifying many options in a type-safe way. But plain properties in &lt;u&gt;persistence.xml&lt;/u&gt; are just more appropriate for settings such as the host name of the store, user name etc. When working on the option API, it became apparent that several of our backend modules had the same or very similar configuration properties, but partly with different names and adhering to different naming conventions. So we took the chance to clean up the mess and &lt;i class="wikiEmphasis"&gt;re-organized the properties&lt;/i&gt;.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+Properties common to all/most stores are named &lt;tt&gt;hibernate.ogm.datastore.*&lt;/tt&gt; now, so e.g. there is &lt;tt&gt;hibernate.ogm.datastore.host&lt;/tt&gt;, &lt;tt&gt;hibernate.ogm.datastore.username&lt;/tt&gt;, &lt;tt&gt;hibernate.ogm.datastore.database&lt;/tt&gt; etc. Properties specific to a single store are named &lt;tt&gt;hibernate.ogm.&amp;lt;datastore&amp;gt;.*&lt;/tt&gt;, e.g. &lt;tt&gt;hibernate.ogm.mongodb.connection_timeout&lt;/tt&gt;. Note that when programmatically bootstrapping a session factory or entity manager factory, you should refer to the properties using the constants declared on &lt;tt&gt;OgmProperties&lt;/tt&gt;, &lt;tt&gt;InfinispanProperties&lt;/tt&gt; etc.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+While this change greatly increases consistency and removes redundancies, it requires existing applications to be adapted. So check out the &lt;a href="https://docs.jboss.org/hibernate/ogm/4.0/reference/en-US/html_single/#ogm-datastore-providers"&gt;reference guide&lt;/a&gt; to make sure you use the right names. 
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+As always, your feedback around the new release is highly welcome. The complete change log can be found &lt;a href="https://hibernate.atlassian.net/secure/ReleaseNote.jspa?projectId=10160&amp;amp;version=12360"&gt;here&lt;/a&gt;. You can file bugs or feature requests in the &lt;a href="https://hibernate.atlassian.net/browse/OGM"&gt;issue tracker&lt;/a&gt;, ask questions in the &lt;a href="https://forum.hibernate.org/viewforum.php?f=31"&gt;forum&lt;/a&gt; or discuss ideas around the development of Hibernate OGM on our &lt;a href="http://lists.jboss.org/pipermail/hibernate-dev/"&gt;mailing list&lt;/a&gt;.
+&lt;/p&gt;</summary>
+    <dc:creator>Gunnar Morling</dc:creator>
+    <dc:date>2014-02-19T19:59:33Z</dc:date>
+  </entry>
+  <entry>
+    <title>Almost there - Hibernate Validator 5.1.0.CR1</title>
+    <link rel="alternate" href="http://in.relation.to/Bloggers/AlmostThereHibernateValidator510CR1" />
+    <author>
+      <name>Hardy Ferentschik</name>
+    </author>
+    <id>http://in.relation.to/Bloggers/AlmostThereHibernateValidator510CR1</id>
+    <updated>2014-02-17T12:42:07Z</updated>
+    <published>2014-02-17T12:42:07Z</published>
+    <summary type="html">&lt;p class="wikiPara"&gt;
+I am happy to announce Hibernate Validator 5.1.0.CR1, hopefully (fingers crossed) the last release prior Final.
+We used the release for last adjustments and some bug fixes.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+On the bug fix side, we addressed issues with the CDI integration (&lt;a href="https://hibernate.atlassian.net/browse/HV-858"&gt;HV-858&lt;/a&gt;),
+EL message interpolation (&lt;a href="https://hibernate.atlassian.net/browse/HV-834"&gt;HV-834&lt;/a&gt;) and validated
+value unwrapping in conjunction with &lt;tt&gt;Validator#validateValue&lt;/tt&gt; and &lt;tt&gt;Validator#validateProperty&lt;/tt&gt; 
+(&lt;a href="https://hibernate.atlassian.net/browse/HV-860"&gt;HV-860&lt;/a&gt;).
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+We also gave &lt;a href="http://docs.jboss.org/hibernate/validator/5.1/api/org/hibernate/validator/constraints/Mod10Check.html"&gt;@Mod10Check&lt;/a&gt; 
+and &lt;a href="http://docs.jboss.org/hibernate/validator/5.1/api/org/hibernate/validator/constraints/Mod11Check.html"&gt;@Mod11Check&lt;/a&gt; a final overhaul and made the parameter
+naming more consistent and changed the semantics of &lt;tt&gt;startIndex&lt;/tt&gt;, &lt;tt&gt;endIndex&lt;/tt&gt; and &lt;tt&gt;checkDigitIndex&lt;/tt&gt;. 
+They are now all inclusive and always relative to the original validated value, indepent of &lt;tt&gt;ignoreNonDigitCharacters&lt;/tt&gt;.
+If you are already using these new constraints, I recommend you review the linked Javadocs to understand
+the updated semantics. 
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+Last but not least, we added yet another checksum related constraint - &lt;tt&gt;@EAN&lt;/tt&gt;. It allows
+you to validate &lt;a href="http://en.wikipedia.org/wiki/International_Article_Number_%28EAN%29"&gt;International Article Numbers&lt;/a&gt; (EAN-13 and EAN-8).
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+The full change log can be found &lt;a href="https://hibernate.atlassian.net/secure/ReleaseNote.jspa?projectId=10060&amp;amp;version=15550"&gt;here&lt;/a&gt;. Maven artefacts are on the JBoss Maven repository under the GAV &lt;a href="https://repository.jboss.org/nexus/index.html#nexus-search;gav~org.hibernate~hibernate-validator~5.1.0.CR1~~"&gt;org.hibernate:hibernate-validator:5.1.0.CR1&lt;/a&gt; and &lt;a href="https://sourceforge.net/projects/hibernate/files/hibernate-validator/5.1.0.CR1/"&gt;distribution bundles&lt;/a&gt; are available on SourceForge.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+Feedback and questions are always welcome via the Hibernate Validator &lt;a href="https://forum.hibernate.org/viewforum.php?f=9"&gt;forum&lt;/a&gt; or 
+on stackoverflow using the &lt;a href="http://stackoverflow.com/questions/tagged/hibernate-validator"&gt;hibernate-validator&lt;/a&gt; tag.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+Enjoy!&lt;/p&gt;</summary>
+    <dc:creator>Hardy Ferentschik</dc:creator>
+    <dc:date>2014-02-17T12:42:07Z</dc:date>
+  </entry>
+  <entry>
+    <title>Hibernate Search migrating to Apache Lucene 4.6</title>
+    <link rel="alternate" href="http://in.relation.to/Bloggers/HibernateSearchMigratingToApacheLucene46" />
+    <author>
+      <name>Sanne Grinovero</name>
+    </author>
+    <id>http://in.relation.to/Bloggers/HibernateSearchMigratingToApacheLucene46</id>
+    <updated>2014-02-14T14:56:26Z</updated>
+    <published>2014-02-14T14:56:26Z</published>
+    <summary type="html">&lt;p class="wikiPara"&gt;
+The first milestone using the latest Apache Lucene is &lt;a href="http://hibernate.org/search/downloads/"&gt;now available&lt;/a&gt;, having version 5.0.0.Alpha1.
+&lt;/p&gt;
+
+&lt;pre class="wikiPreformatted brush: xml"&gt;&amp;lt;dependency&amp;gt;
+ &amp;lt;groupId&amp;gt;org.hibernate&amp;lt;/groupId&amp;gt;
+ &amp;lt;artifactId&amp;gt;hibernate-search-orm&amp;lt;/artifactId&amp;gt;
+ &amp;lt;version&amp;gt;5.0.0.Alpha1&amp;lt;/version&amp;gt;
+&amp;lt;/dependency&amp;gt;
+&lt;/pre&gt;
+
+
+&lt;h1 class="wikiHeadline1" id=""&gt;Not just an Alpha release&lt;/h1&gt;
+&lt;p class="wikiPara"&gt;
+Since this is the starting point of a new major release 5.0, we will be making many API improvements too. But since migrating to Lucene 4 is not a simple drop-in replacement, this will probably force you to make several changes in code using Lucene APIs directly. For this reason, during this initial Alpha1 milestone we intentionally avoided making any change in the Hibernate Search APIs so that you can use this version as a safe harbor milestone to simplify your migration.
+&lt;/p&gt;
+
+&lt;h1 class="wikiHeadline1" id=""&gt;You'll need the migration guide&lt;/h1&gt;
+&lt;p class="wikiPara"&gt;
+As always our &lt;a href="https://community.jboss.org/wiki/HibernateSearchMigrationGuide#jive_content_id_Hibernate_Search_500Alpha1"&gt;Migration Guide&lt;/a&gt; was updated; you're probably going to need it. If I've missed to document some needed change, or if any aspect is unclear, please let us know we'll be happy to evolve the guide.
+&lt;/p&gt;
+
+&lt;p class="wikiPara"&gt;
+The &lt;a href="http://lucene.apache.org/core/4_6_1/MIGRATE.html"&gt;Apache Lucene Migration Guide&lt;/a&gt; might also be useful, but we applied most of it already to the internal engine for you to use transparently.
+&lt;/p&gt;
+
+&lt;h1 class="wikiHeadline1" id=""&gt;No longer depending on Apache Solr&lt;/h1&gt;
+&lt;p class="wikiPara"&gt;
+We never used much from Solr, other than taking advantage of its powerfull and extensive collection of Analyzer helpers. These are now all moved into Apache Lucene, a welcome cleanup of our dependency tree.
+&lt;/p&gt;
+
+&lt;h1 class="wikiHeadline1" id=""&gt;What's next?&lt;/h1&gt;
+&lt;p class="wikiPara"&gt;
+We will now start adapting our APIs to make sure to make the most of the new Lucene's capabilities.
+As usual refer to &lt;a href="https://hibernate.atlassian.net/browse/HSEARCH"&gt;JIRA&lt;/a&gt; and our &lt;a href="http://hibernate.org/search/roadmap/"&gt;Roadmap&lt;/a&gt;, and feel free to make suggestions.
+&lt;/p&gt;
+
+&lt;h2 class="wikiHeadline2" id=""&gt;Useful links&lt;/h2&gt;
+&lt;ul class="wikiUnorderedList"&gt;
+&lt;li class="wikiUnorderedListItem"&gt; &lt;a href="http://hibernate.org/search/downloads/"&gt;Downloads&lt;/a&gt;&lt;/li&gt;
+&lt;li class="wikiUnorderedListItem"&gt; &lt;a href="https://community.jboss.org/wiki/HibernateSearchMigrationGuide#jive_content_id_Hibernate_Search_500Alpha1"&gt;Migration guide&lt;/a&gt;&lt;/li&gt;
+&lt;li class="wikiUnorderedListItem"&gt; &lt;a href="https://hibernate.atlassian.net/browse/HSEARCH"&gt;JIRA&lt;/a&gt;&lt;/li&gt;
+&lt;li class="wikiUnorderedListItem"&gt; &lt;a href="https://forum.hibernate.org/viewforum.php?f=9"&gt;Forums&lt;/a&gt;&lt;/li&gt;
+&lt;li class="wikiUnorderedListItem"&gt; &lt;a href="http://docs.jboss.org/hibernate/search/5.0/reference/en-US/html_single/"&gt;Documentation&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    <dc:creator>Sanne Grinovero</dc:creator>
+    <dc:date>2014-02-14T14:56:26Z</dc:date>
+  </entry>
+</feed>
+

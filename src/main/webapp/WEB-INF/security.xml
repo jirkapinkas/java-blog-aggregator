@@ -11,9 +11,11 @@
 	<http use-expressions="true">
 		<intercept-url pattern="/users**" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/users/**" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/items/toggle-enabled/**" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/account**" access="hasRole('ROLE_USER')" />
 		<form-login login-page="/login.html" />
 		<logout logout-url="/logout" />
+		<remember-me />
 	</http>
 
 	<authentication-manager>

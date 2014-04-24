@@ -81,4 +81,8 @@ public class UserService {
 		return userRepository.findByName(username);
 	}
 
+	public long count() {
+		return userRepository.count();
+	}
+
 }
