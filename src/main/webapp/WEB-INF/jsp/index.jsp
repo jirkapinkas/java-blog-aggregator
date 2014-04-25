@@ -9,17 +9,17 @@
 
 <table class="table table-bordered table-hover table-striped">
 	<tbody>
-		<security:authorize access="hasRole('ROLE_ADMIN')">
-			<tr>
-				<td>
-					<strong>count:</strong>
+		<tr>
+			<td>
+				<strong>count:</strong>
+				<span class="badge">blogs: ${blogCount}</span>
+				<span class="badge">last updated: ${lastIndexDate} minutes ago</span>
+				<security:authorize access="hasRole('ROLE_ADMIN')">
 					<span class="badge">items: ${itemCount}</span>
 					<span class="badge">users: ${userCount}</span>
-					<span class="badge">blogs: ${blogCount}</span>
-					<span class="badge">last update: <fmt:formatDate value="${lastIndexedDateFinish}" pattern="MM/dd/yy HH:mm:ss"/></span>
-				</td> 
-			</tr>
-		</security:authorize>
+				</security:authorize>
+			</td> 
+		</tr>
 		<c:forEach items="${items}" var="item">
 			<tr>
 				<c:choose>

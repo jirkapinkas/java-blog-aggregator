@@ -45,7 +45,7 @@ public class ItemService {
 
 	public boolean isTooOld(Date date) {
 		GregorianCalendar calendar = new GregorianCalendar();
-		calendar.add(Calendar.WEEK_OF_YEAR, -2);
+		calendar.add(Calendar.MONTH, -2);
 		Date oneMonthBefore = calendar.getTime();
 		if (date.compareTo(oneMonthBefore) < 0) {
 			return true;

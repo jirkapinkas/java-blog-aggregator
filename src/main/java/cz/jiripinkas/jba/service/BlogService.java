@@ -64,7 +64,11 @@ public class BlogService {
 		}
 		lastIndexedDateFinish = new Date();
 	}
-	
+
+	public int getLastIndexDateMinutes() {
+		return (int) ((new Date().getTime() - lastIndexedDateFinish.getTime()) / (1000 * 60));
+	}
+
 	public void save(Blog blog, String name) {
 		User user = userRepository.findByName(name);
 		blog.setUser(user);
@@ -91,14 +95,6 @@ public class BlogService {
 
 	public long count() {
 		return blogRepository.count();
-	}
-
-	public Date getLastIndexedDateFinish() {
-		return lastIndexedDateFinish;
-	}
-
-	public void setLastIndexedDateFinish(Date lastIndexedDateFinish) {
-		this.lastIndexedDateFinish = lastIndexedDateFinish;
 	}
 
 }

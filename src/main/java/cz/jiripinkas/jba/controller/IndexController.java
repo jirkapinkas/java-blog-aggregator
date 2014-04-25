@@ -32,11 +32,11 @@ public class IndexController {
 	@RequestMapping("/index")
 	public String index(Model model, HttpServletRequest request) {
 		boolean showAll = false;
+		model.addAttribute("lastIndexDate", blogService.getLastIndexDateMinutes());
+		model.addAttribute("blogCount", blogService.count());
 		if (request.isUserInRole("ROLE_ADMIN")) {
 			model.addAttribute("itemCount", itemService.count());
 			model.addAttribute("userCount", userService.count());
-			model.addAttribute("blogCount", blogService.count());
-			model.addAttribute("lastIndexedDateFinish", blogService.getLastIndexedDateFinish());
 			showAll = true;
 		}
 		model.addAttribute("items", itemService.getDtoItems(0, showAll));

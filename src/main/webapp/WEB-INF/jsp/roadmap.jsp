@@ -28,12 +28,6 @@
 	</thead>
 	<tbody>
 		<tr>
-			<td>April 2014</td>
-			<td>
-				Finish video tutorials on <a href="https://www.youtube.com/playlist?list=PLmcxdcWPhFqMq2BctGktOcIJKUw23wJeh" target="_blank">YouTube</a> and <a href="http://www.javavids.com/tutorial/spring-web-application-tutorial-java-blogs-aggregator.html" target="_blank">JavaVids</a> 
-			</td>
-		</tr>
-		<tr>
 			<td>Before summer 2014</td>
 			<td>
 				Voting system (thumbs up / down)
@@ -65,10 +59,18 @@
 	<tbody>
 		<tr>
 			<td>
+				04/24/2014
+			</td>
+			<td>
+				Completed video tutorials on <a href="https://www.youtube.com/playlist?list=PLmcxdcWPhFqMq2BctGktOcIJKUw23wJeh" target="_blank">YouTube</a> and <a href="http://www.javavids.com/tutorial/spring-web-application-tutorial-java-blogs-aggregator.html" target="_blank">JavaVids</a>
+			</td>
+		</tr>
+		<tr>
+			<td>
 				04/04/2014
 			</td>
 			<td>
-				First release
+				First public release
 			</td>
 		</tr>
 		<tr>

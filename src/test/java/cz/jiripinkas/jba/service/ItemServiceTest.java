@@ -23,7 +23,7 @@ public class ItemServiceTest {
 	public void testIsTooOld() {
 		assertFalse(itemService.isTooOld(new Date()));
 		Calendar calendar = new GregorianCalendar();
-		calendar.add(Calendar.MONTH, -1);
+		calendar.add(Calendar.MONTH, -5);
 		assertTrue(itemService.isTooOld(calendar.getTime()));
 	}
 
