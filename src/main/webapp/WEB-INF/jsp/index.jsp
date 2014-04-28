@@ -33,8 +33,7 @@
 				<td>
 					<strong>
 						<a href="<c:out value="${item.link}" />" target="_blank" style="${customCss}" class="itemLink">
-							${item.title}
-						</a>
+							${item.title} <span class="glyphicon glyphicon-share-alt"></span></a>
 					</strong>
 					<br />
 					<span style="${customCss}" class="itemDesc">${item.description}</span>
