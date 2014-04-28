@@ -32,22 +32,35 @@ $(document).ready(function() {
 	<h1><c:out value="${blog.name}" /></h1>
 	<p>
 	
-	<a href="<spring:url value="/blog/remove/${blog.id}.html" />" class="btn btn-danger triggerRemove">remove blog</a>
+		<a href="<spring:url value="/blog/remove/${blog.id}.html" />" class="btn btn-danger triggerRemove">remove blog</a>
+		<a href="<c:out value="${blog.url}" />" target="_blank">
+			<c:out value="${blog.url}" />
+		</a>
 	
-	<c:out value="${blog.url}" /></p>
+	</p>
+
+	<p>Note: Only posts from last two months and max. 10 posts will be displayed.</p>
 
 	<table class="table table-bordered table-hover table-striped">
 		<thead>
 			<tr>
-				<th>Title</th>
-				<th>Link</th>
+				<th>Item</th>
 			</tr>
 		</thead>
 		<tbody>
 			<c:forEach items="${blog.items}" var="item">
 				<tr>
-					<td><c:out value="${item.title}" /></td>
-					<td><c:out value="${item.link}" /></td>
+					<td>
+						<strong>
+							<a href="<c:out value="${item.link}" />" target="_blank">
+								<c:out value="${item.title}" />
+							</a>
+						</strong>
+						<br />
+						${item.description}
+						<br />
+						${item.publishedDate}
+					</td>
 				</tr>
 			</c:forEach>
 		</tbody>

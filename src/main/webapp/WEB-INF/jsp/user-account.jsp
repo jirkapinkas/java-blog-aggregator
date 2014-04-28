@@ -110,19 +110,17 @@ $(document).ready(function() {
 	
 	<a href="<c:out value="${blog.url}" />" target="_blank"><c:out value="${blog.url}" /></a></p>
 
-	<p>Note: Only posts from last two weeks and max. 10 posts will be displayed.</p>
+	<p>Note: Only posts from last two months and max. 10 posts will be displayed.</p>
 
 	<table class="table table-bordered table-hover table-striped">
 		<thead>
 			<tr>
-				<th>date</th>
 				<th>item</th>
 			</tr>
 		</thead>
 		<tbody>
 			<c:forEach items="${blog.items}" var="item">
 				<tr>
-					<td><c:out value="${item.publishedDate}" /></td>
 					<td>
 						<strong>
 							<a href="<c:out value="${item.link}" />" target="_blank">
@@ -131,6 +129,8 @@ $(document).ready(function() {
 						</strong>
 						<br />
 						${item.description}
+						<br />
+						<c:out value="${item.publishedDate}" />
 					</td>
 				</tr>
 			</c:forEach>
