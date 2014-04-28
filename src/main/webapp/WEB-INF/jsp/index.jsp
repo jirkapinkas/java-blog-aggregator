@@ -13,7 +13,7 @@
 			<td>
 				<strong>count:</strong>
 				<span class="badge">blogs: ${blogCount}</span>
-				<span class="badge">last updated: ${lastIndexDate} minutes ago</span>
+				<span class="badge">last update: ${lastIndexDate} minutes ago</span>
 				<security:authorize access="hasRole('ROLE_ADMIN')">
 					<span class="badge">items: ${itemCount}</span>
 					<span class="badge">users: ${userCount}</span>
