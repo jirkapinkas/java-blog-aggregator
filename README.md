@@ -13,7 +13,7 @@ Run this application using embedded Jetty server: <code>mvn -P dev jetty:run -Ds
 <h2>To deploy on Heroku:</h2>
 
 <p>
-first run: <code>mvn package</code><br />
+first run: <code>mvn -P prod package</code><br />
 next goto target directory and run: <code>heroku deploy:war --war jba.war --app YOUR_APP</code><br />
 To deploy WAR to Heroku see this article: <a href="https://devcenter.heroku.com/articles/war-deployment" target="_blank">https://devcenter.heroku.com/articles/war-deployment</a><br />
 
