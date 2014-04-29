@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import cz.jiripinkas.jba.service.ItemService;
 
 @Controller
-public class Admin2Controller {
+public class AdminItemsController {
 
 	@Autowired
 	private ItemService itemService;

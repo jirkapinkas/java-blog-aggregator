@@ -66,6 +66,9 @@ public class BlogService {
 	}
 
 	public int getLastIndexDateMinutes() {
+		if(lastIndexedDateFinish == null) {
+			return 0;
+		}
 		return (int) ((new Date().getTime() - lastIndexedDateFinish.getTime()) / (1000 * 60));
 	}
 
@@ -95,6 +98,10 @@ public class BlogService {
 
 	public long count() {
 		return blogRepository.count();
+	}
+
+	public void setLastIndexedDateFinish(Date lastIndexedDateFinish) {
+		this.lastIndexedDateFinish = lastIndexedDateFinish;
 	}
 
 }

@@ -75,4 +75,14 @@ public class ItemService {
 		return itemRepository.count();
 	}
 
+	@Transactional
+	public int incCount(int id) {
+		Item item = itemRepository.findOne(id);
+		if(item.getClickCount() == null) {
+			item.setClickCount(0);
+		}
+		item.setClickCount(item.getClickCount() + 1);
+		return item.getClickCount();
+	}
+
 }

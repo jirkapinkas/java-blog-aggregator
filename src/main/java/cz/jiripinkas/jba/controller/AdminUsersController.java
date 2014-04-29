@@ -10,7 +10,7 @@ import cz.jiripinkas.jba.service.UserService;
 
 @Controller
 @RequestMapping("/users")
-public class AdminController {
+public class AdminUsersController {
 
 	@Autowired
 	private UserService userService;

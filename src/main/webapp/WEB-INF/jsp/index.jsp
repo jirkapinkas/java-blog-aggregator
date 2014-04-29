@@ -32,7 +32,7 @@
 				</c:choose>
 				<td>
 					<strong>
-						<a href="<c:out value="${item.link}" />" target="_blank" style="${customCss}" class="itemLink">
+						<a id="${item.id}" href="<c:out value="${item.link}" />" target="_blank" style="${customCss}" class="itemLink" onClick="itemClick(event)">
 							${item.title} <span class="glyphicon glyphicon-share-alt"></span></a>
 					</strong>
 					<br />
@@ -53,6 +53,7 @@
 								</c:otherwise>
 							</c:choose>
 						</a>
+						<span class="badge">clicks: ${item.clickCount}</span>
 					</security:authorize>
 				</td>
 			</tr>
@@ -84,7 +85,7 @@
 					if(value.enabled == false) {
 						css = "text-decoration: line-through;color:grey";
 					}
-					html += "<a href='" + value.link + "' target='_blank' class='itemLink' style='" + css + "'>";
+					html += "<a href='" + value.link + "' target='_blank' class='itemLink' style='" + css + "' onClick='itemClick(event)' id='" + value.id + "'>";
 					html += value.title;
 					html += "</a>";
 					html += "</strong>";
@@ -111,6 +112,13 @@
 		});
 		
 	});
+	
+	function itemClick(e) {
+		var itemId = $(e.target).attr("id");
+		$.getJSON("<spring:url value='/inc-count/' />" + itemId + ".json", function(data) {
+			// TODO change counter
+		});
+	}
 
 </script>
 
@@ -134,6 +142,7 @@
 					html += 'enable';
 				}
 				html += '</a>';
+				html += ' <span class="badge">clicks: ' + item.clickCount + '</span>';
 				return html;
 			}
 

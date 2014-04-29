@@ -18,6 +18,16 @@ public class ItemDto {
 
 	private BlogDto blog;
 
+	private int clickCount;
+
+	public void setClickCount(int clickCount) {
+		this.clickCount = clickCount;
+	}
+
+	public int getClickCount() {
+		return clickCount;
+	}
+
 	public int getId() {
 		return id;
 	}

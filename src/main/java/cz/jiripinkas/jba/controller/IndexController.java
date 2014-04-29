@@ -64,4 +64,10 @@ public class IndexController {
 		}
 		return itemService.getDtoItems(page, showAll);
 	}
+
+	@ResponseBody
+	@RequestMapping("/inc-count/{itemId}")
+	public int incItemCount(@PathVariable int itemId) {
+		return itemService.incCount(itemId);
+	}
 }

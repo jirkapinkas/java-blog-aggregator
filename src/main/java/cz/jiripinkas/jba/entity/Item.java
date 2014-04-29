@@ -39,9 +39,20 @@ public class Item {
 	private Blog blog;
 
 	private boolean enabled;
-	
+
+	@Column(name = "click_count")
+	private Integer clickCount;
+
 	public Item() {
 		setEnabled(true);
+	}
+
+	public void setClickCount(Integer clickCount) {
+		this.clickCount = clickCount;
+	}
+
+	public Integer getClickCount() {
+		return clickCount;
 	}
 
 	public boolean isEnabled() {
