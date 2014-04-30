@@ -53,7 +53,7 @@
 								</c:otherwise>
 							</c:choose>
 						</a>
-						<span class="badge">clicks: ${item.clickCount}</span>
+						<span class="badge">views: ${item.clickCount}</span>
 					</security:authorize>
 				</td>
 			</tr>
@@ -142,7 +142,7 @@
 					html += 'enable';
 				}
 				html += '</a>';
-				html += ' <span class="badge">clicks: ' + item.clickCount + '</span>';
+				html += ' <span class="badge">views: ' + item.clickCount + '</span>';
 				return html;
 			}
 
