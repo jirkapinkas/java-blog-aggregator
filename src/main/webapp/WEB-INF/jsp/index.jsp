@@ -115,9 +115,14 @@
 	
 	function itemClick(e) {
 		var itemId = $(e.target).attr("id");
-		$.getJSON("<spring:url value='/inc-count/' />" + itemId + ".json", function(data) {
-			// TODO change counter
-		});
+		$.post(
+				"<spring:url value='/inc-count.html' />", 
+				{ id: itemId },
+				function(data, status) {
+				    // TODO change counter
+ 				    // alert("Data: " + data + "\nStatus: " + status);
+				}
+		);
 	}
 
 </script>

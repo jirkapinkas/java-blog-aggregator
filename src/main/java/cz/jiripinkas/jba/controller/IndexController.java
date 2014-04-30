@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -66,8 +67,8 @@ public class IndexController {
 	}
 
 	@ResponseBody
-	@RequestMapping("/inc-count/{itemId}")
-	public int incItemCount(@PathVariable int itemId) {
-		return itemService.incCount(itemId);
+	@RequestMapping(value="/inc-count", method=RequestMethod.POST)
+	public String incItemCount(@RequestParam int id) {
+		return Integer.toString(itemService.incCount(id));
 	}
 }
