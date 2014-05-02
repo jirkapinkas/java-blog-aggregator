@@ -12,7 +12,7 @@
 <br />
 <br />
 
-Top Java Blogs is a Java blog aggregator (with only English-written blogs) focused on Java SE, Java EE, Spring Framework and Hibernate.
+Top Java Blogs is a Java blog aggregator (with English-written blogs only) focused on Java SE, Java EE, Spring Framework and Hibernate.
 
 <br />
 <br />
