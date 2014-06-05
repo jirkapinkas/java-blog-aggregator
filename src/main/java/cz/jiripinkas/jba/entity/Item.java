@@ -45,6 +45,7 @@ public class Item {
 
 	public Item() {
 		setEnabled(true);
+		setClickCount(0);
 	}
 
 	public void setClickCount(Integer clickCount) {

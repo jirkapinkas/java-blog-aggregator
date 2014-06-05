@@ -3,7 +3,7 @@
 
 <%@ include file="../layout/taglib.jsp"%>
 
-<h1>Latest news from the Java world:</h1>
+<h1>${title}</h1>
 
 <jsp:include page="../layout/adsense.jsp" />
 
@@ -61,12 +61,39 @@
 		<tr class="loadNextRow">
 			<td class="loadNextColumn">
 				<div style="text-align: center">
-					<strong><a href="/?page=${nextPage}" class="loadButton" rel="next">load next 10 items</a></strong>
+							<strong><a href="<spring:url value='' />?page=${nextPage}" class="loadButton">load next 10 items</a></strong>
 				</div>
 			</td>
 		</tr>
 	</tbody>
 </table>
+
+<c:choose>
+	<c:when test="${topViews eq true}">
+		<script>
+			var topViews = true;
+		</script>
+	</c:when>
+	<c:otherwise>
+		<script>
+			var topViews = false;
+		</script>
+	</c:otherwise>
+</c:choose>
+
+<c:choose>
+	<c:when test="${max eq true}">
+		<script>
+			var max = true;
+			var maxValue = "${maxValue}";
+		</script>
+	</c:when>
+	<c:otherwise>
+		<script>
+			var max = false;
+		</script>
+	</c:otherwise>
+</c:choose>
 
 <script>
 
@@ -76,7 +103,15 @@
 		$(".loadButton").click(function(e) {
 			e.preventDefault();
 			var nextPage = currentPage + 1;
-			$.getJSON( "<spring:url value='/page/' />" + nextPage + ".json", function( data ) {
+			var url = "<spring:url value='/page/' />" + nextPage + ".json";
+			if(topViews == true) {
+				url = url + "?topviews=true";
+				if(max == true) {
+					url = url + "&max=" + maxValue;
+				}
+			}
+
+			$.getJSON( url, function( data ) {
 				var html = "";
 				$.each(data, function(key, value) {
 					html += "<tr><td>";
@@ -87,6 +122,7 @@
 					}
 					html += "<a href='" + value.link + "' target='_blank' class='itemLink' style='" + css + "' onClick='itemClick(event)' id='" + value.id + "'>";
 					html += value.title;
+					html += " <span class='glyphicon glyphicon-share-alt'></span>";
 					html += "</a>";
 					html += "</strong>";
 					html += "<br />";

@@ -8,9 +8,15 @@
 	</definition>
 
 	<definition name="index" extends="common">
-		<put-attribute name="title" value="Java Blog Aggregator" />
+		<put-attribute name="title" value="Java Blog Aggregator: Latest" />
 		<put-attribute name="body" value="/WEB-INF/jsp/index.jsp" />
 		<put-attribute name="current" value="index" />
+	</definition>
+
+	<definition name="top-views" extends="common">
+		<put-attribute name="title" value="Java Blog Aggregator: Most Viewed" />
+		<put-attribute name="body" value="/WEB-INF/jsp/index.jsp" />
+		<put-attribute name="current" value="top-views" />
 	</definition>
 
 	<definition name="users" extends="common">

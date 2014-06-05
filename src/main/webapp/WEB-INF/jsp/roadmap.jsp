@@ -30,7 +30,7 @@
 		<tr>
 			<td>Before summer 2014</td>
 			<td>
-				Voting system (thumbs up / down)
+				
 			</td>
 		</tr>
 		<tr>
@@ -42,6 +42,14 @@
 				or for each item? Category for each item 
 				would be nice, but how group them automatically 
 				into predefined categories?
+				<br /><br />
+				Voting system (thumbs up / down)
+				<br /><br />
+				Sending emails - lost password
+				<br /><br />
+				Edit user / blog
+				<br /><br />
+				Search for user
 			</td>
 		</tr>
 	</tbody>
@@ -57,6 +65,14 @@
 		</tr>
 	</thead>
 	<tbody>
+		<tr>
+			<td>
+				05/02/2014
+			</td>
+			<td>
+				Tracking visitors to each story and added <a href="index.html?top-views">Most viewed Java stories</a>.
+			</td>
+		</tr>
 		<tr>
 			<td>
 				04/24/2014

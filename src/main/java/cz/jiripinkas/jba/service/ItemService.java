@@ -1,5 +1,7 @@
 package cz.jiripinkas.jba.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -10,7 +12,6 @@ import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,14 +28,57 @@ public class ItemService {
 	@Autowired
 	private Mapper mapper;
 
-	public List<ItemDto> getDtoItems(int page, boolean showAll) {
+	public enum OrderType {
+		LATEST, MOST_VIEWED
+	};
+
+	public enum MaxType {
+		WEEK, MONTH, UNDEFINED
+	}
+
+	public List<ItemDto> getDtoItems(int page, boolean showAll, OrderType orderType, MaxType maxType) {
+		Direction orderDirection = Direction.DESC;
+
+		String orderByProperty = null;
+		switch (orderType) {
+		case LATEST:
+			orderByProperty = "publishedDate";
+			break;
+		case MOST_VIEWED:
+			orderByProperty = "clickCount";
+			break;
+		}
+
+		Date publishedDate = null;
+		switch (maxType) {
+		case UNDEFINED:
+			try {
+				publishedDate = new SimpleDateFormat("dd.MM.yyyy").parse("01.01.1970");
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			break;
+
+		case MONTH:
+			GregorianCalendar calendar1 = new GregorianCalendar();
+			calendar1.add(Calendar.MONTH, -1);
+			publishedDate = calendar1.getTime();
+			break;
+
+		case WEEK:
+			GregorianCalendar calendar2 = new GregorianCalendar();
+			calendar2.add(Calendar.WEEK_OF_MONTH, -1);
+			publishedDate = calendar2.getTime();
+			break;
+		}
+
 		ArrayList<ItemDto> result = new ArrayList<ItemDto>();
 
 		List<Item> items = null;
 		if (showAll) {
-			items = itemRepository.findPageAllItems(new PageRequest(page, 10, Direction.DESC, "publishedDate"));
+			items = itemRepository.findPageAllItems(publishedDate, new PageRequest(page, 10, orderDirection, orderByProperty));
 		} else {
-			items = itemRepository.findPageEnabled(new PageRequest(page, 10, Direction.DESC, "publishedDate"));
+			items = itemRepository.findPageEnabled(publishedDate, new PageRequest(page, 10, orderDirection, orderByProperty));
 		}
 		for (Item item : items) {
 			ItemDto itemDto = mapper.map(item, ItemDto.class);
@@ -54,15 +98,15 @@ public class ItemService {
 	}
 
 	// 86400000 = one day = 60 * 60 * 24 * 1000
-	@Scheduled(fixedDelay = 86400000)
-	public void cleanOldItems() {
-		List<Item> items = itemRepository.findAll();
-		for (Item item : items) {
-			if (isTooOld(item.getPublishedDate())) {
-				itemRepository.delete(item);
-			}
-		}
-	}
+	// @Scheduled(fixedDelay = 86400000)
+	// public void cleanOldItems() {
+	// List<Item> items = itemRepository.findAll();
+	// for (Item item : items) {
+	// if (isTooOld(item.getPublishedDate())) {
+	// itemRepository.delete(item);
+	// }
+	// }
+	// }
 
 	@Transactional
 	public boolean toggleEnabled(int id) {
@@ -78,9 +122,6 @@ public class ItemService {
 	@Transactional
 	public int incCount(int id) {
 		Item item = itemRepository.findOne(id);
-		if(item.getClickCount() == null) {
-			item.setClickCount(0);
-		}
 		item.setClickCount(item.getClickCount() + 1);
 		return item.getClickCount();
 	}
