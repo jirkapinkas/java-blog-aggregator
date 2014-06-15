@@ -4,7 +4,7 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-        <property name="context-root" value="java-blog-aggregator"/>
         <property name="java-output-path" value="/java-blog-aggregator/target/classes"/>
+        <property name="context-root" value="jba"/>
     </wb-module>
 </project-modules>
