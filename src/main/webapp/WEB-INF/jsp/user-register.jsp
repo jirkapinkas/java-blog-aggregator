@@ -10,7 +10,7 @@
 		Otherwise you don't have to register.
 	</div>
 
-	<c:if test="${param.success eq true}">
+	<c:if test="${success eq true}">
 		<div class="alert alert-success">Registration successfull!</div>
 	</c:if>
 
