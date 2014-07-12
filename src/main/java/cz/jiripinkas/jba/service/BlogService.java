@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -55,18 +54,8 @@ public class BlogService {
 		}
 	}
 
-	// 0.5 hour = 60 seconds * 30 minutes * 1000
-	@Scheduled(fixedDelay = 1800000)
-	public void reloadBlogs() {
-		List<Blog> blogs = blogRepository.findAll();
-		for (Blog blog : blogs) {
-			saveItems(blog);
-		}
-		lastIndexedDateFinish = new Date();
-	}
-
 	public int getLastIndexDateMinutes() {
-		if(lastIndexedDateFinish == null) {
+		if (lastIndexedDateFinish == null) {
 			return 0;
 		}
 		return (int) ((new Date().getTime() - lastIndexedDateFinish.getTime()) / (1000 * 60));

@@ -97,17 +97,6 @@ public class ItemService {
 		return false;
 	}
 
-	// 86400000 = one day = 60 * 60 * 24 * 1000
-	// @Scheduled(fixedDelay = 86400000)
-	// public void cleanOldItems() {
-	// List<Item> items = itemRepository.findAll();
-	// for (Item item : items) {
-	// if (isTooOld(item.getPublishedDate())) {
-	// itemRepository.delete(item);
-	// }
-	// }
-	// }
-
 	@Transactional
 	public boolean toggleEnabled(int id) {
 		Item item = itemRepository.findOne(id);
