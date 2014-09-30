@@ -85,7 +85,7 @@
               </security:authorize>
               <security:authorize access="isAuthenticated()">
               	<li class="${current == 'account' ? 'active' : ''}"><a href="<spring:url value="/account.html" />">My account</a></li>
-              	<li><a href="<spring:url value="/logout" />">Logout</a></li>
+              	<li><a href="<spring:url value="/logout" />">Logout ${pageContext.request.remoteUser}</a></li>
               </security:authorize>
             </ul>
           </div><!--/.nav-collapse -->
