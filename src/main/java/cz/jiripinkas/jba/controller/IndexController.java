@@ -75,13 +75,13 @@ public class IndexController {
 	}
 
 	private String resolveTitle(MaxType maxType) {
-		String finalTitle = "Most viewed stories";
+		String finalTitle = "Best Java news";
 		switch (maxType) {
 		case MONTH:
-			finalTitle += " (this month): ";
+			finalTitle += " this month: ";
 			break;
 		case WEEK:
-			finalTitle += " (this week): ";
+			finalTitle += " this week: ";
 			break;
 		default:
 			finalTitle += ": ";

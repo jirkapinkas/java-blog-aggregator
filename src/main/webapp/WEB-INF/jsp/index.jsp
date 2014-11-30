@@ -3,7 +3,7 @@
 
 <%@ include file="../layout/taglib.jsp"%>
 
-<h1>${title}</h1>
+<h1 style="font-size:25px">${title}</h1>
 
 <jsp:include page="../layout/adsense.jsp" />
 

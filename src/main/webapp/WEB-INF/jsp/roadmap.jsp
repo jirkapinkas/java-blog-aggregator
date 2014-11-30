@@ -28,20 +28,11 @@
 	</thead>
 	<tbody>
 		<tr>
-			<td>Before summer 2014</td>
+			<td>winter 2014 / early 2015</td>
 			<td>
-				
-			</td>
-		</tr>
-		<tr>
-			<td>Summer 2014</td>
-			<td>
-				Categories - Spring, Java SE, Database, 
-				... but currently I have no idea how to do that 
-				... should I create a category for a whole blog, 
-				or for each item? Category for each item 
-				would be nice, but how group them automatically 
-				into predefined categories?
+				Edit admin username and password<br /><br />
+				Show blog detail<br /><br />
+				Categories - Spring, Java SE, Database, ... 
 				<br /><br />
 				Voting system (thumbs up / down)
 				<br /><br />

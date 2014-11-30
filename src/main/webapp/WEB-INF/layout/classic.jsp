@@ -65,6 +65,7 @@
             </button>
             <a class="navbar-brand" style="padding:10px" href="<spring:url value="/" />">
             	<img src="<spring:url value="/resources/images/logo.png" />" alt="logo" />
+            	top java blogs
             </a>
           </div>
           <div class="navbar-collapse collapse">
