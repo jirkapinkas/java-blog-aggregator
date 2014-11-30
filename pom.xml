@@ -22,7 +22,6 @@
 			<version>5.4.0</version>
 		</dependency>
 
-		<!-- available on Heroku, used in database-prod.xml -->
 		<dependency>
 			<groupId>commons-dbcp</groupId>
 			<artifactId>commons-dbcp</artifactId>

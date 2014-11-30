@@ -1,5 +1,6 @@
 package cz.jiripinkas.jba.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class ScheduledTasksService {
 		for (Blog blog : blogs) {
 			blogService.saveItems(blog);
 		}
+		blogService.setLastIndexedDateFinish(new Date());
 	}
 
 	/**
