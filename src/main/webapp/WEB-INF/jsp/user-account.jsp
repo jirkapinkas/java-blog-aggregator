@@ -21,15 +21,15 @@
       <div class="modal-body">
 
 		<div class="form-group">
-			<label for="name" class="col-sm-2 control-label">Name:</label>
-			<div class="col-sm-10">
+			<label for="name" class="col-sm-3 control-label">Name:</label>
+			<div class="col-sm-9">
 				<form:input path="name" cssClass="form-control" />
 				<form:errors path="name" />
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="name" class="col-sm-2 control-label">URL:</label>
-			<div class="col-sm-10">
+			<label for="name" class="col-sm-3 control-label">RSS&nbsp;/&nbsp;ATOM&nbsp;URL:</label>
+			<div class="col-sm-9">
 				<form:input path="url" cssClass="form-control" />
 				<form:errors path="url" />
 			</div>
