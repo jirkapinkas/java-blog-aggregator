@@ -8,7 +8,9 @@
 		.adBlockMessage a:hover {border-color: #222; }
 	</style>
 
-	<script type="text/javascript" src="/resources/js/ads.js"></script>
+	<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+
+	<script type="text/javascript" src="<spring:url value="/resources/js/ads.js" />"></script>
 
 	<div id="footer"></div>
 	<script type="text/javascript">

@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
@@ -24,6 +25,10 @@ public class Blog {
 	@GeneratedValue
 	private Integer id;
 
+	@Lob
+	@Column(length = Integer.MAX_VALUE)
+	private byte[] icon;
+
 	@UniqueBlog(message = "This blog already exists!")
 	@Size(min = 1, message = "Invalid URL!")
 	@URL(message = "Invalid URL!")
@@ -33,7 +38,7 @@ public class Blog {
 	@Size(min = 1, message = "Name must be at least 1 character!")
 	private String name;
 
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
 
@@ -47,6 +52,14 @@ public class Blog {
 		this.url = url;
 		this.name = name;
 		this.user = user;
+	}
+
+	public byte[] getIcon() {
+		return icon;
+	}
+
+	public void setIcon(byte[] icon) {
+		this.icon = icon;
 	}
 
 	public User getUser() {

@@ -30,6 +30,9 @@
 					</c:otherwise>
 				</c:choose>
 				<td>
+				
+					<img src="<spring:url value='/spring/icon/${item.blog.id}' />" alt="icon" style="float:left;padding-right:10px" />
+				
 					<strong>
 						<a id="${item.id}" href="<c:out value="${item.link}" />" target="_blank" style="${customCss}" class="itemLink" onClick="itemClick(event)">
 							${item.title} <span class="glyphicon glyphicon-share-alt"></span></a>
@@ -103,6 +106,7 @@
 			e.preventDefault();
 			var nextPage = currentPage + 1;
 			var url = "<spring:url value='/page/' />" + nextPage + ".json";
+			var iconBaseUrl = "<spring:url value='/spring/icon/' />";
 			if(topViews == true) {
 				url = url + "?topviews=true";
 				if(max == true) {
@@ -114,6 +118,7 @@
 				var html = "";
 				$.each(data, function(key, value) {
 					html += "<tr><td>";
+					html += "<img src='" + iconBaseUrl + value.blog.id + "' alt='icon' style='float:left;padding-right:10px' />";
 					html += "<strong>";
 					var css = "";
 					if(value.enabled == false) {

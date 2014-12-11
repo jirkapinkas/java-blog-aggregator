@@ -30,13 +30,13 @@
 	<task:annotation-driven />
 
 	<bean class="org.dozer.DozerBeanMapper" />
-	
+
 	<beans profile="dev">
-		<import resource="database-dev.xml"/>
+		<import resource="database-dev.xml" />
 	</beans>
 
 	<beans profile="prod">
-		<import resource="database-prod.xml"/>
+		<import resource="database-prod.xml" />
 	</beans>
 
 </beans>

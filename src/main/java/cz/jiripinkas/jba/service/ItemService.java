@@ -36,6 +36,7 @@ public class ItemService {
 		WEEK, MONTH, UNDEFINED
 	}
 
+	@Transactional
 	public List<ItemDto> getDtoItems(int page, boolean showAll, OrderType orderType, MaxType maxType) {
 		Direction orderDirection = Direction.DESC;
 

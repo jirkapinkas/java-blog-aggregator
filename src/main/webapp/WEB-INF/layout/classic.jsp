@@ -15,6 +15,9 @@
 <link rel="stylesheet"
 	href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css" />
 
+<link rel="stylesheet"
+	href="<spring:url value='/resources/css/custom.css' />" />
+
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
 <script type="text/javascript" 

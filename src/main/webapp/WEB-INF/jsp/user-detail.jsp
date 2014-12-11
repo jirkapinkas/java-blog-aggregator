@@ -36,6 +36,17 @@ $(document).ready(function() {
 		<a href="<c:out value="${blog.url}" />" target="_blank">
 			<c:out value="${blog.url}" />
 		</a>
+		<div style="clear:both"></div>
+		<img src="<spring:url value="/spring/icon/${blog.id}" />" alt="icon" style="float:left;padding-right:10px" />
+		
+		<form method="post" enctype="multipart/form-data" action="${user.id}.html">
+			<span class="btn btn-default btn-file">
+				Select icon (50 x 50 px) <input type="file" name="icon" />
+			</span>
+			<input type="hidden" name="blogId" value="${blog.id}" /> 
+			<input type="submit" value="Upload" class="btn btn-primary" />
+		</form>
+		
 	
 	</p>
 

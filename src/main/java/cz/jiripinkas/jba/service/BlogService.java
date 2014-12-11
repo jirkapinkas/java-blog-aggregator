@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import cz.jiripinkas.jba.entity.Blog;
 import cz.jiripinkas.jba.entity.Item;
@@ -76,6 +79,11 @@ public class BlogService {
 	public Blog findOne(int id) {
 		return blogRepository.findOne(id);
 	}
+	
+	@Transactional
+	public byte[] getIcon(int blogId) {
+		return blogRepository.findOne(blogId).getIcon();
+	}
 
 	public Blog findOne(String url) {
 		return blogRepository.findByUrl(url);
@@ -91,6 +99,14 @@ public class BlogService {
 
 	public void setLastIndexedDateFinish(Date lastIndexedDateFinish) {
 		this.lastIndexedDateFinish = lastIndexedDateFinish;
+	}
+
+//	@Transactional
+	public void saveIcon(int blogId, byte[] bytes) {
+		Blog blog = blogRepository.findOne(blogId);
+		blog.setIcon(bytes);
+		System.out.println("save, bytes: " + bytes.length);
+		blogRepository.save(blog); // TODO maybe unnecessary call?
 	}
 
 }

@@ -10,6 +10,7 @@ import cz.jiripinkas.jba.entity.User;
 
 public interface BlogRepository extends JpaRepository<Blog, Integer>{
 
+	@Query("select b from Blog b where user = ?1 order by b.id")
 	List<Blog> findByUser(User user);
 
 	Blog findByUrl(String url);
