@@ -55,4 +55,16 @@
 		<put-attribute name="current" value="roadmap" />
 	</definition>
 
+	<definition name="blogs" extends="common">
+		<put-attribute name="title" value="All blogs" />
+		<put-attribute name="body" value="/WEB-INF/jsp/blogs.jsp" />
+		<put-attribute name="current" value="blogs" />
+	</definition>
+
+	<definition name="blog-form" extends="common">
+		<put-attribute name="title" value="Blog form" />
+		<put-attribute name="body" value="/WEB-INF/jsp/blog-form.jsp" />
+		<put-attribute name="current" value="account" />
+	</definition>
+
 </tiles-definitions>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beansProjectDescription>
 	<version>1</version>
-	<pluginVersion><![CDATA[3.4.0.201310051539-RELEASE]]></pluginVersion>
+	<pluginVersion><![CDATA[3.6.2.201410090854-RELEASE]]></pluginVersion>
 	<configSuffixes>
 		<configSuffix><![CDATA[xml]]></configSuffix>
 	</configSuffixes>
@@ -12,7 +12,10 @@
 		<config>src/main/webapp/WEB-INF/security.xml</config>
 		<config>src/main/webapp/WEB-INF/database-dev.xml</config>
 		<config>src/main/webapp/WEB-INF/database-prod.xml</config>
+		<config>src/main/webapp/WEB-INF/cache.xml</config>
 	</configs>
+	<autoconfigs>
+	</autoconfigs>
 	<configSets>
 	</configSets>
 </beansProjectDescription>

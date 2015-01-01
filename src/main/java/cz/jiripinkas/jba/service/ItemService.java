@@ -116,4 +116,30 @@ public class ItemService {
 		return item.getClickCount();
 	}
 
+	@Transactional
+	public int incLike(int itemId) {
+		Item item = itemRepository.findOne(itemId);
+		item.setLikeCount(item.getLikeCount() + 1);
+		return item.getLikeCount();
+	}
+
+	@Transactional
+	public int incDislike(int itemId) {
+		Item item = itemRepository.findOne(itemId);
+		item.setDislikeCount(item.getDislikeCount() + 1);
+		return item.getDislikeCount();
+	}
+
+	@Transactional
+	public List<ItemDto> getDtoItems(int page, String blogShortName) {
+		ArrayList<ItemDto> result = new ArrayList<ItemDto>();
+		List<Item> items = null;
+		items = itemRepository.findBlogPageEnabled(blogShortName, new PageRequest(page, 10, Direction.DESC, "publishedDate"));
+		for (Item item : items) {
+			ItemDto itemDto = mapper.map(item, ItemDto.class);
+			result.add(itemDto);
+		}
+		return result;
+	}
+
 }

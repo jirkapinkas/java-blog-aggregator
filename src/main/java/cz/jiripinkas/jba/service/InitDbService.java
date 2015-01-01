@@ -56,24 +56,35 @@ public class InitDbService {
 			userAdmin.setRoles(roles);
 			userRepository.save(userAdmin);
 
+			Blog blogSpring = new Blog();
+			blogSpring.setName("Spring");
+			blogSpring.setUrl("http://spring.io/blog.atom");
+			blogSpring.setHomepageUrl("http://spring.io/");
+			blogSpring.setShortName("spring");
+			blogSpring.setUser(userAdmin);
+			blogRepository.save(blogSpring);
+
 			Blog blogJavavids = new Blog();
 			blogJavavids.setName("javavids");
-			blogJavavids
-					.setUrl("http://feeds.feedburner.com/javavids?format=xml");
+			blogJavavids.setUrl("http://feeds.feedburner.com/javavids?format=xml");
+			blogJavavids.setHomepageUrl("http://www.javavids.com");
+			blogJavavids.setShortName("javavids");
 			blogJavavids.setUser(userAdmin);
 			blogRepository.save(blogJavavids);
 
 			Blog blogJavaSkoleni = new Blog();
 			blogJavaSkoleni.setName("java skoleni");
-			blogJavaSkoleni
-					.setUrl("http://novinky.seico.cz/java-skoleni");
+			blogJavaSkoleni.setUrl("http://novinky.seico.cz/java-skoleni");
+			blogJavaSkoleni.setHomepageUrl("http://www.java-skoleni.cz");
+			blogJavaSkoleni.setShortName("java-skoleni");
 			blogJavaSkoleni.setUser(userAdmin);
 			blogRepository.save(blogJavaSkoleni);
 
 			Blog blogSqlSkoleni = new Blog();
 			blogSqlSkoleni.setName("sql skoleni");
-			blogSqlSkoleni
-					.setUrl("http://novinky.seico.cz/sql-skoleni");
+			blogSqlSkoleni.setUrl("http://novinky.seico.cz/sql-skoleni");
+			blogSqlSkoleni.setHomepageUrl("http://www.sql-skoleni.cz");
+			blogSqlSkoleni.setShortName("sql-skoleni");
 			blogSqlSkoleni.setUser(userAdmin);
 			blogRepository.save(blogSqlSkoleni);
 		}

@@ -135,7 +135,7 @@ public class IndexController {
 
 	@ResponseBody
 	@RequestMapping(value = "/inc-count", method = RequestMethod.POST)
-	public String incItemCount(@RequestParam int id) {
-		return Integer.toString(itemService.incCount(id));
+	public String incItemCount(@RequestParam int itemId) {
+		return Integer.toString(itemService.incCount(itemId));
 	}
 }

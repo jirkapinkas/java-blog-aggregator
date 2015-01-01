@@ -1,6 +1,8 @@
 package cz.jiripinkas.jba.service;
 
 import java.io.File;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -67,12 +69,14 @@ public class RssService {
 	private List<Item> getItems(StreamSource source) throws RssException {
 
 		Node node = null;
-
+		
 		InputSource inputSource = new InputSource();
 		try {
 			inputSource.setByteStream(source.getInputStream());
 			inputSource.setCharacterStream(source.getReader());
 			inputSource.setSystemId(source.getSystemId());
+			// TODO predelat podle:
+			// http://stackoverflow.com/questions/4627395/http-requests-with-basic-authentication
 			Document document = db.parse(inputSource);
 			node = document.getDocumentElement();
 		} catch (Exception ex) {

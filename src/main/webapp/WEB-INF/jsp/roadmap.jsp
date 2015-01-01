@@ -31,14 +31,11 @@
 			<td>winter 2014 / early 2015</td>
 			<td>
 				Edit admin username and password<br /><br />
-				Show blog detail<br /><br />
 				Categories - Spring, Java SE, Database, ... 
 				<br /><br />
 				Voting system (thumbs up / down)
 				<br /><br />
 				Sending emails - lost password
-				<br /><br />
-				Edit user / blog
 				<br /><br />
 				Search for user
 			</td>
@@ -58,10 +55,18 @@
 	<tbody>
 		<tr>
 			<td>
+				12/13/2014
+			</td>
+			<td>
+				Added icon to each blog, blog detail and edit user
+			</td>
+		</tr>
+		<tr>
+			<td>
 				05/02/2014
 			</td>
 			<td>
-				Tracking visitors to each story and added <a href="index.html?top-views">Most viewed Java stories</a>.
+				Tracking visitors to each story and added <a href="index.html?top-views">Most viewed Java stories</a>
 			</td>
 		</tr>
 		<tr>

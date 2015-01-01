@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.URL;
@@ -45,13 +46,65 @@ public class Blog {
 	@OneToMany(mappedBy = "blog", cascade = CascadeType.REMOVE)
 	private List<Item> items;
 
-	public Blog() {
+	@NotNull
+	@Size(min = 1, message = "Short name cannot be empty!")
+	@Column(name = "short_name")
+	private String shortName;
+
+	@NotNull
+	@Size(min = 1, message = "Homepage cannot be empty!")
+	@URL(message = "Invalid URL!")
+	@Column(name = "homepage")
+	private String homepageUrl;
+
+	@Column(name = "last_check_status")
+	private Boolean lastCheckStatus;
+
+	@Lob
+	@Column(name = "last_check_error_text", length = Integer.MAX_VALUE)
+	private String lastCheckErrorText;
+
+	@Column(name = "last_check_error_count")
+	private Integer lastCheckErrorCount;
+
+	public String getLastCheckErrorText() {
+		return lastCheckErrorText;
 	}
 
-	public Blog(String url, String name, User user) {
-		this.url = url;
-		this.name = name;
-		this.user = user;
+	public void setLastCheckErrorText(String lastCheckErrorText) {
+		this.lastCheckErrorText = lastCheckErrorText;
+	}
+
+	public Integer getLastCheckErrorCount() {
+		return lastCheckErrorCount;
+	}
+
+	public void setLastCheckErrorCount(Integer lastCheckErrorCount) {
+		this.lastCheckErrorCount = lastCheckErrorCount;
+	}
+
+	public Boolean getLastCheckStatus() {
+		return lastCheckStatus;
+	}
+
+	public void setLastCheckStatus(Boolean lastCheckStatus) {
+		this.lastCheckStatus = lastCheckStatus;
+	}
+
+	public String getShortName() {
+		return shortName;
+	}
+
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
+	}
+
+	public String getHomepageUrl() {
+		return homepageUrl;
+	}
+
+	public void setHomepageUrl(String homepageUrl) {
+		this.homepageUrl = homepageUrl;
 	}
 
 	public byte[] getIcon() {

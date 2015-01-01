@@ -2,6 +2,7 @@ package cz.jiripinkas.jba.controller;
 
 import java.security.Principal;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,19 @@ public class UserController {
 		return new Blog();
 	}
 
+	@RequestMapping("/blog-form")
+	public String showForm(@RequestParam int blogId, Model model) {
+		model.addAttribute("blog", blogService.findOne(blogId));
+		return "blog-form";
+	}
+
+	@RequestMapping(value = "/blog-form", method = RequestMethod.POST)
+	public String editBlog(@RequestParam int blogId, @ModelAttribute Blog blog, Model model, Principal principal, HttpServletRequest request) {
+		blog.setId(blogId);
+		blogService.update(blog, principal.getName(), request.isUserInRole("ROLE_ADMIN"));
+		return "redirect:/account.html";
+	}
+
 	@RequestMapping("/account")
 	public String account(Model model, Principal principal) {
 		String name = principal.getName();
@@ -41,9 +55,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/account", method = RequestMethod.POST)
-	public String doAddBlog(Model model,
-			@Valid @ModelAttribute("blog") Blog blog, BindingResult result,
-			Principal principal) {
+	public String doAddBlog(Model model, @Valid @ModelAttribute("blog") Blog blog, BindingResult result, Principal principal) {
 		if (result.hasErrors()) {
 			return account(model, principal);
 		}

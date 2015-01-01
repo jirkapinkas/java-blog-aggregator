@@ -28,10 +28,24 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="name" class="col-sm-3 control-label">RSS&nbsp;/&nbsp;ATOM&nbsp;URL:</label>
+			<label for="shortName" class="col-sm-3 control-label">Short&nbsp;name:</label>
+			<div class="col-sm-9">
+				<form:input path="shortName" cssClass="form-control" />
+				<form:errors path="shortName" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="url" class="col-sm-3 control-label">RSS&nbsp;/&nbsp;ATOM&nbsp;URL:</label>
 			<div class="col-sm-9">
 				<form:input path="url" cssClass="form-control" />
 				<form:errors path="url" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="homepageUrl" class="col-sm-3 control-label">Homepage&nbsp;URL:</label>
+			<div class="col-sm-9">
+				<form:input path="homepageUrl" cssClass="form-control" />
+				<form:errors path="homepageUrl" />
 			</div>
 		</div>
 
@@ -74,6 +88,15 @@ $(document).ready(function() {
 								}
 							}
 						}
+					},
+					homepageUrl: {
+						required : true,
+						minlength : 1,
+						url: true
+					},
+					shortName: {
+						required : true,
+						minlength : 1
 					}
 				},
 				highlight: function(element) {
@@ -105,6 +128,8 @@ $(document).ready(function() {
   <div class="tab-pane" id="blog_${blog.id}">
 	<h1><c:out value="${blog.name}" /></h1>
 	<p>
+
+	<a href="<spring:url value="/blog-form.html?blogId=${blog.id}" />" class="btn btn-primary">edit blog</a>
 	
 	<a href="<spring:url value="/blog/remove/${blog.id}.html" />" class="btn btn-danger triggerRemove">remove blog</a>
 	

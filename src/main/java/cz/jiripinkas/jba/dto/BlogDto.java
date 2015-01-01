@@ -3,8 +3,18 @@ package cz.jiripinkas.jba.dto;
 public class BlogDto {
 
 	private String name;
+	
+	private String shortName;
 
 	private int id;
+
+	public String getShortName() {
+		return shortName;
+	}
+
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
+	}
 
 	public int getId() {
 		return id;

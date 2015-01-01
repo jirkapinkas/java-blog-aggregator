@@ -20,6 +20,26 @@ public class ItemDto {
 
 	private int clickCount;
 
+	private int likeCount;
+
+	private int dislikeCount;
+
+	public int getLikeCount() {
+		return likeCount;
+	}
+
+	public void setLikeCount(int likeCount) {
+		this.likeCount = likeCount;
+	}
+
+	public int getDislikeCount() {
+		return dislikeCount;
+	}
+
+	public void setDislikeCount(int dislikeCount) {
+		this.dislikeCount = dislikeCount;
+	}
+
 	public void setClickCount(int clickCount) {
 		this.clickCount = clickCount;
 	}

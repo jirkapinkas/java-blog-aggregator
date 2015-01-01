@@ -43,9 +43,33 @@ public class Item {
 	@Column(name = "click_count")
 	private Integer clickCount;
 
+	@Column(name = "like_count")
+	private Integer likeCount;
+
+	@Column(name = "dislike_count")
+	private Integer dislikeCount;
+
 	public Item() {
 		setEnabled(true);
 		setClickCount(0);
+		setLikeCount(0);
+		setDislikeCount(0);
+	}
+
+	public Integer getLikeCount() {
+		return likeCount;
+	}
+
+	public void setLikeCount(Integer likeCount) {
+		this.likeCount = likeCount;
+	}
+
+	public Integer getDislikeCount() {
+		return dislikeCount;
+	}
+
+	public void setDislikeCount(Integer dislikeCount) {
+		this.dislikeCount = dislikeCount;
 	}
 
 	public void setClickCount(Integer clickCount) {

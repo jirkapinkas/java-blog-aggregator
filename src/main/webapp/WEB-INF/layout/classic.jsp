@@ -26,6 +26,9 @@
 <script
 	src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 
+<script type="text/javascript" 
+		src="<spring:url value='/resources/js/jquery.cookie.js' />"></script>
+
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -54,11 +57,9 @@
 
 <tilesx:useAttribute name="current"/>
 
-<div class="container">
-
   <!-- Static navbar -->
-      <div class="navbar navbar-default" role="navigation">
-        <div class="container-fluid">
+      <div class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="container">
           <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
               <span class="sr-only">Toggle navigation</span>
@@ -74,27 +75,37 @@
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
               <li class="${current == 'index' ? 'active' : ''}"><a href='<spring:url value="/" />'>Latest</a></li>
-              <li class="${current == 'top-views' && maxValue == 'week' ? 'active' : ''}"><a href='<spring:url value="/index.html?top-views&max=week" />'>Top this week</a></li>
-              <li class="${current == 'top-views' && maxValue == 'month' ? 'active' : ''}"><a href='<spring:url value="/index.html?top-views&max=month" />'>Top this month</a></li>
-              <li class="${current == 'top-views' && maxValue == null ? 'active' : ''}"><a href='<spring:url value="/index.html?top-views" />'>Top all time</a></li>
+
+              <li class="dropdown ${current == 'top-views' ? 'active' : ''}">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Top <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+	              <li class="${current == 'top-views' && maxValue == 'week' ? 'active' : ''}"><a href='<spring:url value="/index.html?top-views&max=week" />'>Top this week</a></li>
+	              <li class="${current == 'top-views' && maxValue == 'month' ? 'active' : ''}"><a href='<spring:url value="/index.html?top-views&max=month" />'>Top this month</a></li>
+	              <li class="${current == 'top-views' && maxValue == null ? 'active' : ''}"><a href='<spring:url value="/index.html?top-views" />'>Top all time</a></li>
+                </ul>
+              </li>
+
               <security:authorize access="hasRole('ROLE_ADMIN')">
               	<li class="${current == 'users' ? 'active' : ''}"><a href="<spring:url value="/users.html" />">Users</a></li>
               </security:authorize>
-              <li class="${current == 'roadmap' ? 'active' : ''}"><a href="<spring:url value="/roadmap.html" />">Roadmap</a></li>
+              <li class="${current == 'blogs' ? 'active' : ''}"><a href="<spring:url value="/blogs.html" />">Blogs</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <security:authorize access="! isAuthenticated()">
-	              <li class="${current == 'register' ? 'active' : ''}"><a href="<spring:url value="/register.html" />">Register</a></li>
 	              <li class="${current == 'login' ? 'active' : ''}"><a href="<spring:url value="/login.html" />">Login</a></li>
+	              <li class="${current == 'register' ? 'active' : ''}"><a href="<spring:url value="/register.html" />">Register</a></li>
               </security:authorize>
               <security:authorize access="isAuthenticated()">
               	<li class="${current == 'account' ? 'active' : ''}"><a href="<spring:url value="/account.html" />">My account</a></li>
               	<li><a href="<spring:url value="/logout" />">Logout ${pageContext.request.remoteUser}</a></li>
               </security:authorize>
+              <li class="${current == 'roadmap' ? 'active' : ''}"><a href="<spring:url value="/roadmap.html" />">Roadmap</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
       </div>
+
+	<div class="container">
 
 	<tiles:insertAttribute name="body" />
 

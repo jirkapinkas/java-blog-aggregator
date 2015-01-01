@@ -2,7 +2,6 @@ package cz.jiripinkas.jba.controller;
 
 import java.io.IOException;
 
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -20,10 +19,6 @@ public class BlogIconController {
 
 	@RequestMapping(value = "/icon/{blogId}", produces = MediaType.IMAGE_PNG_VALUE)
 	public @ResponseBody byte[] getBlogIcon(@PathVariable int blogId) throws IOException {
-		byte[] icon = blogService.getIcon(blogId);
-		if (icon == null) {
-			return IOUtils.toByteArray(getClass().getResourceAsStream("/generic-blog.png"));
-		}
-		return icon;
+		return blogService.getIcon(blogId);
 	}
 }

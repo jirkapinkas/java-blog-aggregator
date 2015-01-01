@@ -32,6 +32,8 @@ $(document).ready(function() {
 	<h1><c:out value="${blog.name}" /></h1>
 	<p>
 	
+		<a href="<spring:url value="/blog-form.html?blogId=${blog.id}" />" class="btn btn-primary">edit blog</a>
+
 		<a href="<spring:url value="/blog/remove/${blog.id}.html" />" class="btn btn-danger triggerRemove">remove blog</a>
 		<a href="<c:out value="${blog.url}" />" target="_blank">
 			<c:out value="${blog.url}" />

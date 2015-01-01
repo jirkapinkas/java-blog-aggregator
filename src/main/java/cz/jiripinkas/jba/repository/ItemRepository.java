@@ -21,4 +21,8 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 
 	@Query("select i from Item i join fetch i.blog where i.enabled = true and i.publishedDate >= ?1")
 	List<Item> findPageEnabled(Date publishedDate, Pageable pageable);
+
+	@Query("select i from Item i join fetch i.blog where i.enabled = true and i.blog.shortName = ?1")
+	List<Item> findBlogPageEnabled(String shortName, Pageable pageable);
+
 }
