@@ -1,8 +1,8 @@
 package cz.jiripinkas.jba.service;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,7 +21,16 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.config.RequestConfig.Builder;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -44,7 +53,6 @@ public class RssService {
 
 	static {
 		try {
-			System.setProperty("http.agent", "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36");
 			System.setProperty("com.sun.net.ssl.checkRevocation", "false");
 			JAXBContext jaxbContextRss = JAXBContext.newInstance(cz.jiripinkas.jba.rss.ObjectFactory.class);
 			unmarshallerRss = jaxbContextRss.createUnmarshaller();
@@ -58,37 +66,112 @@ public class RssService {
 		}
 	}
 
-	public List<Item> getItems(File file) throws RssException {
-		return getItems(new StreamSource(file));
+	private StreamSource constructStreamSource(File file) {
+		StreamSource source = new StreamSource(file);
+		InputSource inputSource = new InputSource();
+		inputSource.setByteStream(source.getInputStream());
+		inputSource.setCharacterStream(source.getReader());
+		inputSource.setSystemId(source.getSystemId());
+		return source;
 	}
 
-	public List<Item> getItems(String url) throws RssException {
-		return getItems(new StreamSource(url));
+	private StreamSource constructStreamSource(String url) {
+		StreamSource source = new StreamSource(url);
+		InputSource inputSource = new InputSource();
+		inputSource.setByteStream(source.getInputStream());
+		inputSource.setCharacterStream(source.getReader());
+		inputSource.setSystemId(source.getSystemId());
+		return source;
 	}
+	public List<Item> getItems(String location) throws RssException {
+		return getItems(location, false);
+	}
+	
+	  /**
+     * This method ensures that the output String has only
+     * valid XML unicode characters as specified by the
+     * XML 1.0 standard. For reference, please see
+     * <a href="http://www.w3.org/TR/2000/REC-xml-20001006#NT-Char">the
+     * standard</a>. This method will return an empty
+     * String if the input is null or empty.
+     *
+     * @param in The String whose non-valid characters we want to remove.
+     * @return The in String, stripped of non-valid characters.
+     */
+    private String stripNonValidXMLCharacters(String in) {
+        StringBuffer out = new StringBuffer(); // Used to hold the output.
+        char current; // Used to reference the current character.
 
-	private List<Item> getItems(StreamSource source) throws RssException {
+        if (in == null || ("".equals(in))) return ""; // vacancy test.
+        for (int i = 0; i < in.length(); i++) {
+            current = in.charAt(i); // NOTE: No IndexOutOfBoundsException caught here; it should not happen.
+            if ((current == 0x9) ||
+                (current == 0xA) ||
+                (current == 0xD) ||
+                ((current >= 0x20) && (current <= 0xD7FF)) ||
+                ((current >= 0xE000) && (current <= 0xFFFD)) ||
+                ((current >= 0x10000) && (current <= 0x10FFFF)))
+                out.append(current);
+        }
+        return out.toString();
+    }    
+
+
+	public List<Item> getItems(String location, boolean localFile) throws RssException {
 
 		Node node = null;
-		
-		InputSource inputSource = new InputSource();
+
 		try {
-			inputSource.setByteStream(source.getInputStream());
-			inputSource.setCharacterStream(source.getReader());
-			inputSource.setSystemId(source.getSystemId());
-			// TODO predelat podle:
-			// http://stackoverflow.com/questions/4627395/http-requests-with-basic-authentication
-			Document document = db.parse(inputSource);
+			Document document = null;
+			if (localFile) {
+				document = db.parse(new File(location));
+			} else {
+				CloseableHttpClient httpClient = null;
+				try {
+					httpClient = HttpClients.createDefault();
+					HttpGet get = new HttpGet(location);
+					Builder requestConfigBuilder = RequestConfig.custom().setSocketTimeout(100000).setConnectTimeout(100000);
+					get.setConfig(requestConfigBuilder.build());
+					get.setHeader("Accept", "application/xml,application/rss+xml,text/html,*/*");
+					get.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36");
+					CloseableHttpResponse response = null;
+					try {
+						response = httpClient.execute(get);
+						HttpEntity entity = response.getEntity();
+						String page = EntityUtils.toString(entity);
+						page = page.replace("&ndash;", "-");
+						page = stripNonValidXMLCharacters(page);
+//						System.out.println(page);
+						document = db.parse(new ByteArrayInputStream(page.getBytes(Charset.forName("UTF-8"))));
+					} finally {
+						if (response != null) {
+							response.close();
+						}
+					}
+				} finally {
+					if (httpClient != null) {
+						httpClient.close();
+					}
+				}
+			}
 			node = document.getDocumentElement();
 		} catch (Exception ex) {
 			System.out.println("error parsing XML file");
-//			ex.printStackTrace();
+			// ex.printStackTrace();
 			throw new RssException(ex);
 		}
 
 		if ("rss".equals(node.getNodeName())) {
 			return getRssItems(node);
 		} else if ("feed".equals(node.getNodeName())) {
-			return getAtomItems(source); // TODO WHY IS node NOT WORKING? JUST source?
+			// TODO WHY IS node NOT WORKING? JUST source?
+			Source source = null;
+			if (localFile) {
+				source = constructStreamSource(new File(location));
+			} else {
+				source = constructStreamSource(location);
+			}
+			return getAtomItems(source);
 		} else {
 			throw new RssException("unknown RSS type");
 		}
@@ -157,11 +240,11 @@ public class RssService {
 		}
 		return list;
 	}
-	
+
 	public Date getRssDate(String stringDate) throws ParseException {
 		try {
 			return new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH).parse(stringDate);
-		} catch(ParseException e) {
+		} catch (ParseException e) {
 			return new SimpleDateFormat("EEE, dd MMM yyyy", Locale.ENGLISH).parse(stringDate);
 		}
 	}
@@ -172,7 +255,7 @@ public class RssService {
 
 	// TODO TEST THIS
 	public String cleanDescription(String description) {
-		String cleanDescription = Jsoup.parse(description).text();
+		String cleanDescription = Jsoup.clean(description, Whitelist.none());
 		cleanDescription = cleanDescription.replace("~", ""); // fix for Tomcat
 																// blog
 		ArrayList<String> links = pullLinks(cleanDescription);

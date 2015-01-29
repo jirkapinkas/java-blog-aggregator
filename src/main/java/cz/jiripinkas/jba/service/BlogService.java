@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import cz.jiripinkas.jba.entity.Blog;
 import cz.jiripinkas.jba.entity.Item;
 import cz.jiripinkas.jba.entity.User;
-import cz.jiripinkas.jba.exception.RssException;
 import cz.jiripinkas.jba.repository.BlogRepository;
 import cz.jiripinkas.jba.repository.ItemRepository;
 import cz.jiripinkas.jba.repository.UserRepository;

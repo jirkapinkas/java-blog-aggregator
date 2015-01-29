@@ -1,8 +1,8 @@
 package cz.jiripinkas.jba.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
-import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class RssServiceTest {
 
 	@Test
 	public void testGetItemsFileJavaVids() throws RssException {
-		List<Item> items = rssService.getItems(new File("test-rss/javavids.xml"));
+		List<Item> items = rssService.getItems("test-rss/javavids.xml", true);
 		assertEquals(10, items.size());
 		Item firstItem = items.get(0);
 		assertEquals("How to generate web.xml in Eclipse", firstItem.getTitle());
@@ -34,7 +34,7 @@ public class RssServiceTest {
 
 	@Test
 	public void testGetItemsFileSpring() throws RssException {
-		List<Item> items = rssService.getItems(new File("test-rss/spring.xml"));
+		List<Item> items = rssService.getItems("test-rss/spring.xml", true);
 		assertEquals(20, items.size());
 		Item firstItem = items.get(0);
 		assertEquals("Spring Boot 1.0.1.RELEASE Available Now", firstItem.getTitle());
@@ -47,7 +47,7 @@ public class RssServiceTest {
 
 	@Test
 	public void testGetItemsFileHibernate() throws RssException {
-		List<Item> items = rssService.getItems(new File("test-rss/hibernate.xml"));
+		List<Item> items = rssService.getItems("test-rss/hibernate.xml", true);
 		assertEquals(14, items.size());
 		Item firstItem = items.get(0);
 		assertEquals("Third milestone on the path for Hibernate Search 5", firstItem.getTitle());
