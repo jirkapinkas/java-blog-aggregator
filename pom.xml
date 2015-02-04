@@ -249,11 +249,10 @@
 					</execution>
 				</executions>
 			</plugin>
-
 			<plugin>
-				<groupId>org.eclipse.jetty</groupId>
+				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
-				<version>9.1.3.v20140225</version>
+				<version>8.1.14.v20131031</version>
 				<configuration>
 					<scanIntervalSeconds>3</scanIntervalSeconds>
 					<contextXml>${basedir}/src/main/webapp/WEB-INF/jetty-context.xml</contextXml>
