@@ -18,8 +18,6 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
@@ -34,7 +32,6 @@ import org.jsoup.safety.Whitelist;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import org.xml.sax.InputSource;
 
 import cz.jiripinkas.jba.atom.Entry;
 import cz.jiripinkas.jba.atom.Feed;
@@ -66,56 +63,45 @@ public class RssService {
 		}
 	}
 
-	private StreamSource constructStreamSource(File file) {
-		StreamSource source = new StreamSource(file);
-		InputSource inputSource = new InputSource();
-		inputSource.setByteStream(source.getInputStream());
-		inputSource.setCharacterStream(source.getReader());
-		inputSource.setSystemId(source.getSystemId());
-		return source;
-	}
-
-	private StreamSource constructStreamSource(String url) {
-		StreamSource source = new StreamSource(url);
-		InputSource inputSource = new InputSource();
-		inputSource.setByteStream(source.getInputStream());
-		inputSource.setCharacterStream(source.getReader());
-		inputSource.setSystemId(source.getSystemId());
-		return source;
-	}
 	public List<Item> getItems(String location) throws RssException {
 		return getItems(location, false);
 	}
-	
-	  /**
-     * This method ensures that the output String has only
-     * valid XML unicode characters as specified by the
-     * XML 1.0 standard. For reference, please see
-     * <a href="http://www.w3.org/TR/2000/REC-xml-20001006#NT-Char">the
-     * standard</a>. This method will return an empty
-     * String if the input is null or empty.
-     *
-     * @param in The String whose non-valid characters we want to remove.
-     * @return The in String, stripped of non-valid characters.
-     */
-    private String stripNonValidXMLCharacters(String in) {
-        StringBuffer out = new StringBuffer(); // Used to hold the output.
-        char current; // Used to reference the current character.
 
-        if (in == null || ("".equals(in))) return ""; // vacancy test.
-        for (int i = 0; i < in.length(); i++) {
-            current = in.charAt(i); // NOTE: No IndexOutOfBoundsException caught here; it should not happen.
-            if ((current == 0x9) ||
-                (current == 0xA) ||
-                (current == 0xD) ||
-                ((current >= 0x20) && (current <= 0xD7FF)) ||
-                ((current >= 0xE000) && (current <= 0xFFFD)) ||
-                ((current >= 0x10000) && (current <= 0x10FFFF)))
-                out.append(current);
-        }
-        return out.toString();
-    }    
+	/**
+	 * This method ensures that the output String has only valid XML unicode
+	 * characters as specified by the XML 1.0 standard. For reference, please
+	 * see <a href="http://www.w3.org/TR/2000/REC-xml-20001006#NT-Char">the
+	 * standard</a>. This method will return an empty String if the input is
+	 * null or empty.
+	 *
+	 * @param in
+	 *            The String whose non-valid characters we want to remove.
+	 * @return The in String, stripped of non-valid characters.
+	 */
+	private String stripNonValidXMLCharacters(String in) {
+		StringBuffer out = new StringBuffer(); // Used to hold the output.
+		char current; // Used to reference the current character.
 
+		if (in == null || ("".equals(in)))
+			return ""; // vacancy test.
+		for (int i = 0; i < in.length(); i++) {
+			current = in.charAt(i); // NOTE: No IndexOutOfBoundsException caught
+									// here; it should not happen.
+			if ((current == 0x9) || (current == 0xA) || (current == 0xD) || ((current >= 0x20) && (current <= 0xD7FF)) || ((current >= 0xE000) && (current <= 0xFFFD))
+					|| ((current >= 0x10000) && (current <= 0x10FFFF)))
+				out.append(current);
+		}
+		return out.toString();
+	}
+
+	/**
+	 * fix for jsfcentral atom feed, which contains white space in pubDate
+	 */
+	protected String fixDate(String page) {
+		String result = page.replaceAll("<pubDate>(\\s*)(.*)</pubDate>", "<pubDate>$2</pubDate>");
+		result = result.replaceAll("\\s*</pubDate>", "</pubDate>");
+		return result;
+	}
 
 	public List<Item> getItems(String location, boolean localFile) throws RssException {
 
@@ -141,7 +127,7 @@ public class RssService {
 						String page = EntityUtils.toString(entity);
 						page = page.replace("&ndash;", "-");
 						page = stripNonValidXMLCharacters(page);
-//						System.out.println(page);
+						page = fixDate(page);
 						document = db.parse(new ByteArrayInputStream(page.getBytes(Charset.forName("UTF-8"))));
 					} finally {
 						if (response != null) {
@@ -157,21 +143,13 @@ public class RssService {
 			node = document.getDocumentElement();
 		} catch (Exception ex) {
 			System.out.println("error parsing XML file");
-			// ex.printStackTrace();
 			throw new RssException(ex);
 		}
 
 		if ("rss".equals(node.getNodeName())) {
 			return getRssItems(node);
 		} else if ("feed".equals(node.getNodeName())) {
-			// TODO WHY IS node NOT WORKING? JUST source?
-			Source source = null;
-			if (localFile) {
-				source = constructStreamSource(new File(location));
-			} else {
-				source = constructStreamSource(location);
-			}
-			return getAtomItems(source);
+			return getAtomItems(node);
 		} else {
 			throw new RssException("unknown RSS type");
 		}
@@ -210,10 +188,10 @@ public class RssService {
 		return list;
 	}
 
-	private List<Item> getAtomItems(Source source) throws RssException {
+	private List<Item> getAtomItems(Node node) throws RssException {
 		ArrayList<Item> list = new ArrayList<Item>();
 		try {
-			JAXBElement<Feed> jaxbElement = unmarshallerAtom.unmarshal(source, Feed.class);
+			JAXBElement<Feed> jaxbElement = unmarshallerAtom.unmarshal(node, Feed.class);
 			Feed rss = jaxbElement.getValue();
 			List<Entry> entries = rss.getEntries();
 			for (Entry entry : entries) {
@@ -245,7 +223,11 @@ public class RssService {
 		try {
 			return new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH).parse(stringDate);
 		} catch (ParseException e) {
-			return new SimpleDateFormat("EEE, dd MMM yyyy", Locale.ENGLISH).parse(stringDate);
+			try {
+				return new SimpleDateFormat("EEE, dd MMM yyyy", Locale.ENGLISH).parse(stringDate);
+			} catch (ParseException e2) {
+				return new SimpleDateFormat("dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH).parse(stringDate);
+			}
 		}
 	}
 
@@ -256,8 +238,8 @@ public class RssService {
 	// TODO TEST THIS
 	public String cleanDescription(String description) {
 		String cleanDescription = Jsoup.clean(description, Whitelist.none());
-		cleanDescription = cleanDescription.replace("~", ""); // fix for Tomcat
-																// blog
+		// fix for Tomcat blog
+		cleanDescription = cleanDescription.replace("~", ""); 
 		ArrayList<String> links = pullLinks(cleanDescription);
 		for (String link : links) {
 			cleanDescription = cleanDescription.replace(link, "");
