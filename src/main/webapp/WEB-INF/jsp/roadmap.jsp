@@ -30,7 +30,6 @@
 		<tr>
 			<td>winter 2014 / early 2015</td>
 			<td>
-				Edit admin username and password<br /><br />
 				Categories - Spring, Java SE, Database, ... 
 				<br /><br />
 				Voting system (thumbs up / down)

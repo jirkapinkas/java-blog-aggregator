@@ -67,4 +67,10 @@
 		<put-attribute name="current" value="account" />
 	</definition>
 
+	<definition name="admin-detail" extends="common">
+		<put-attribute name="title" value="Admin detail" />
+		<put-attribute name="body" value="/WEB-INF/jsp/admin-detail.jsp" />
+		<put-attribute name="current" value="admin-detail" />
+	</definition>
+
 </tiles-definitions>

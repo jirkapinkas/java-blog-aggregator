@@ -87,6 +87,7 @@
 
               <security:authorize access="hasRole('ROLE_ADMIN')">
               	<li class="${current == 'users' ? 'active' : ''}"><a href="<spring:url value="/users.html" />">Users</a></li>
+              	<li class="${current == 'admin-detail' ? 'active' : ''}"><a href="<spring:url value="/admin-detail.html" />">Admin detail</a></li>
               </security:authorize>
               <li class="${current == 'blogs' ? 'active' : ''}"><a href="<spring:url value="/blogs.html" />">Blogs</a></li>
             </ul>

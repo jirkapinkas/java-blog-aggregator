@@ -29,10 +29,10 @@ public class UserService {
 
 	@Autowired
 	private RoleRepository roleRepository;
-	
+
 	@Autowired
 	private BlogRepository blogRepository;
-	
+
 	@Autowired
 	private ItemRepository itemRepository;
 
@@ -43,7 +43,7 @@ public class UserService {
 	public User findOne(int id) {
 		return userRepository.findOne(id);
 	}
-	
+
 	@Transactional
 	public User findOneWithBlogs(int id) {
 		User user = findOne(id);
@@ -67,7 +67,19 @@ public class UserService {
 
 		userRepository.save(user);
 	}
-	
+
+	/**
+	 * Called from admin-detail.html
+	 * 
+	 * @param user
+	 */
+	public void saveAdmin(User user) {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		String encodedPassword = encoder.encode(user.getPassword());
+		userRepository.updateAdminPassword(encodedPassword);
+		userRepository.updateAdminName(user.getName());
+	}
+
 	public User findOneWithBlogs(String name) {
 		User user = userRepository.findByName(name);
 		return findOneWithBlogs(user.getId());
@@ -83,6 +95,10 @@ public class UserService {
 
 	public long count() {
 		return userRepository.count();
+	}
+
+	public User findAdmin() {
+		return userRepository.findAdmin();
 	}
 
 }
