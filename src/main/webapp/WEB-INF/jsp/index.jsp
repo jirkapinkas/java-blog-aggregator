@@ -7,12 +7,10 @@
 	<c:when test="${blogDetail eq true}">
 		<table style="width:100%">
 			<tr>
-				<td style="width:50px">
-					<a href="${blog.homepageUrl}" target="_blank">
-						<img src="<spring:url value='/resources/images/home.png' />" alt="home" style="width:20px;padding-top:7px;" />
+				<td style="width:42px">
+					<a href="${blog.homepageUrl}" target="_blank" class="fa fa-home fa-lg" style="float:left;padding-top:14px;color:#333333">
 					</a>
-					<a href="${blog.url}" target="_blank">
-						<img src="<spring:url value='/resources/images/rss.png' />" alt="rss" style="width:20px;padding-top:7px;" />
+					<a href="${blog.url}" target="_blank" class="fa fa-rss fa-lg"  style="float:left;padding-top:14px;padding-left:5px;color:#333333">
 					</a>
 				</td>
 				<td>
@@ -61,28 +59,44 @@
 				<td>
 				
 					
-<!-- 					<table style="float:left;margin-right:5px"> -->
-<!-- 						<tr> -->
-<!-- 							<td style="padding:2px"> -->
-<!-- 								TODO ziskat cookie a pokud existuje, pak nepovolit klik (a zobrazit ikonu, ze uz bylo kliknuto) -->
-<%-- 								cookie: ${cookie['5'].value} --%>
-								
-<%-- 								<img src="<spring:url value='/resources/images/like.png' />" id="${item.id}" onClick="itemLike(event)" style="cursor:pointer" /> --%>
-<!-- 							</td> -->
-					
-<!-- 							<td style="padding:2px"> -->
-<%-- 								<span class="likeCount_${item.id}">${item.likeCount}</span> --%>
-<!-- 							</td> -->
-<!-- 						</tr> -->
-<!-- 						<tr> -->
-<!-- 							<td style="padding:2px"> -->
-<%-- 								<img src="<spring:url value='/resources/images/dislike.png' />" onClick="itemDislike(event)" id="${item.id}" style="cursor:pointer" /> --%>
-<!-- 							</td> -->
-<!-- 							<td style="padding:2px"> -->
-<%-- 								<span class="dislikeCount_${item.id}">${item.dislikeCount}</span> --%>
-<!-- 							</td> -->
-<!-- 						</tr> -->
-<!-- 					</table> -->
+					<table style="float:left;margin-right:5px">
+						<tr>
+							<td style="padding:2px">
+								<i style="color:#6273a9;cursor:pointer;" 
+								   class="fa fa-thumbs-o-up icon_like_${item.id}" 
+								   id="${item.id}" 
+								   onClick="itemLike(event)"></i>
+								<script>
+									if($.cookie('like_${item.id}') == '1') {
+										$(".icon_like_${item.id}").removeClass("fa-thumbs-o-up").addClass("fa-thumbs-up");
+									}
+								</script>
+							</td>
+							<security:authorize access="hasRole('ROLE_ADMIN')">
+							<td style="padding:2px">
+								<span class="likeCount_${item.id}">${item.likeCount}</span>
+							</td>
+							</security:authorize>
+						</tr>
+						<tr>
+							<td style="padding:2px">
+								<i style="color:#6273a9;cursor:pointer;" 
+								   class="fa fa-thumbs-o-down icon_dislike_${item.id}" 
+								   id="${item.id}" 
+								   onClick="itemDislike(event)"></i>
+								<script>
+									if($.cookie('dislike_${item.id}') == '1') {
+										$(".icon_dislike_${item.id}").removeClass("fa-thumbs-o-down").addClass("fa-thumbs-down");
+									}
+								</script>
+							</td>
+							<security:authorize access="hasRole('ROLE_ADMIN')">
+							<td style="padding:2px">
+								<span class="dislikeCount_${item.id}">${item.dislikeCount}</span>
+							</td>
+							</security:authorize>
+						</tr>
+					</table>
 				
 
 						<a id="${item.id}" href="<c:out value="${item.link}" />" target="_blank" style="${customCss}" class="itemLink" onClick="itemClick(event)">
@@ -173,6 +187,7 @@
 	</c:otherwise>
 </c:choose>
 
+<security:authorize access="hasRole('ROLE_ADMIN')" var="isAdmin" />
 
 <script>
 
@@ -203,10 +218,38 @@
 				$.each(data, function(key, value) {
 					html += "<tr><td>";
 
-// 					html += '<a href="" onClick="itemLike(event)" id="' + value.id + '">like</a> ';
-// 					html += '<span class="likeCount_' + value.id + '">' + value.likeCount + '</span> ';
-// 					html += '<a href="" onClick="itemDislike(event)" id="' + value.id + '">dislike</a> ';
-// 					html += '<span class="dislikeCount_' + value.id + '">' + value.dislikeCount + '</span> ';
+					// like / dislike buttons
+					html += ' <table style="float:left;margin-right:5px">';
+					html += ' <tr>';
+					html += ' <td style="padding:2px">';
+					html += ' <i style="color:#6273a9;cursor:pointer;" ';
+					html += ' class="fa fa-thumbs-o-up icon_like_' + value.id + '" ';
+					html += ' id="' + value.id + '" ';
+					html += ' onClick="itemLike(event)"></i>';
+					html += ' </td>';
+
+					if("${isAdmin}" == "true") {
+						html += ' <td style="padding:2px">';
+						html += ' <span class="likeCount_' + value.id + '">' + value.likeCount + '</span>';
+						html += ' </td>';
+					}
+
+					html += ' </tr>';
+					html += ' <tr>';
+					html += ' <td style="padding:2px">';
+					html += ' <i style="color:#6273a9;cursor:pointer;" ';
+					html += ' class="fa fa-thumbs-o-down icon_dislike_' + value.id + '" ';
+					html += ' id="' + value.id + '" ';
+					html += ' onClick="itemDislike(event)"></i>';
+					html += ' </td>';
+
+					if("${isAdmin}" == "true") {
+						html += ' <td style="padding:2px">';
+						html += ' <span class="dislikeCount_' + value.id + '">' + value.dislikeCount + '</span>';
+						html += ' </td>';
+					}
+					html += ' </tr>';
+					html += ' </table>';
 
 					var css = "";
 					if(value.enabled == false) {
@@ -239,51 +282,22 @@
 				});
 				var newCode = $(".table tr:last").prev().after(html);
 				adminHandler(newCode);
+				// like / dislike buttons
+				$.each(data, function(key, value) {
+ 					if($.cookie("like_" + value.id) == "1") {
+ 						$(".icon_like_" + value.id).removeClass("fa-thumbs-o-up").addClass("fa-thumbs-up");
+ 					}
+					if($.cookie("dislike_" + value.id) == "1") {
+						$(".icon_dislike_" + value.id).removeClass("fa-thumbs-o-down").addClass("fa-thumbs-down");
+					}
+				});
 			});
 			currentPage++;
 		});
 		
 	});
 	
-	function itemClick(e) {
-		var itemId = $(e.target).attr("id");
-		$.post(
-				"<spring:url value='/inc-count.html' />", 
-				{ itemId: itemId },
-				function(data, status) {
-				}
-		);
-	}
-	
-	function itemLike(e) {
-		e.preventDefault();
-		var itemId = $(e.target).attr("id");
-		$.post(
-				"<spring:url value='/social/like.html' />", 
-				{ itemId: itemId },
-				function(data, status) {
-					$(".likeCount_" + itemId).text(data);
-					// http://stackoverflow.com/questions/1458724/how-to-set-unset-cookie-with-jquery
-// 					$.cookie(itemId, "1");
-				}
-		);
-	}
-
-	function itemDislike(e) {
-		e.preventDefault();
-		var itemId = $(e.target).attr("id");
-		$.post(
-				"<spring:url value='/social/dislike.html' />", 
-				{ itemId: itemId },
-				function(data, status) {
-					$(".dislikeCount_" + itemId).text(data);
-				}
-		);
-	}
-
 </script>
-
-<security:authorize access="hasRole('ROLE_ADMIN')" var="isAdmin" />
 
 <c:choose>
 	<c:when test="${isAdmin eq true}">

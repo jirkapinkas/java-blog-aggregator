@@ -111,23 +111,31 @@ public class ItemService {
 
 	@Transactional
 	public int incCount(int id) {
-		Item item = itemRepository.findOne(id);
-		item.setClickCount(item.getClickCount() + 1);
-		return item.getClickCount();
+		itemRepository.incClickCount(id);
+		return itemRepository.getClickCount(id);
 	}
 
 	@Transactional
 	public int incLike(int itemId) {
-		Item item = itemRepository.findOne(itemId);
-		item.setLikeCount(item.getLikeCount() + 1);
-		return item.getLikeCount();
+		itemRepository.incLike(itemId, 1);
+		return itemRepository.getLikeCount(itemId);
+	}
+
+	@Transactional
+	public int decLike(int itemId) {
+		itemRepository.incLike(itemId, -1);
+		return itemRepository.getLikeCount(itemId);
 	}
 
 	@Transactional
 	public int incDislike(int itemId) {
-		Item item = itemRepository.findOne(itemId);
-		item.setDislikeCount(item.getDislikeCount() + 1);
-		return item.getDislikeCount();
+		itemRepository.incDislike(itemId, 1);
+		return itemRepository.getDislikeCount(itemId);
+	}
+
+	public int decDislike(int itemId) {
+		itemRepository.incDislike(itemId, -1);
+		return itemRepository.getDislikeCount(itemId);
 	}
 
 	@Transactional

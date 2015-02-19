@@ -22,10 +22,22 @@ public class SocialController {
 		return Integer.toString(itemService.incLike(itemId));
 	}
 
+	@RequestMapping(value = "/unlike", method = RequestMethod.POST)
+	@ResponseBody
+	public String unlike(@RequestParam int itemId) {
+		return Integer.toString(itemService.decLike(itemId));
+	}
+
 	@RequestMapping(value = "/dislike", method = RequestMethod.POST)
 	@ResponseBody
 	public String dislike(@RequestParam int itemId) {
 		return Integer.toString(itemService.incDislike(itemId));
+	}
+
+	@RequestMapping(value = "/undislike", method = RequestMethod.POST)
+	@ResponseBody
+	public String undislike(@RequestParam int itemId) {
+		return Integer.toString(itemService.decDislike(itemId));
 	}
 
 }

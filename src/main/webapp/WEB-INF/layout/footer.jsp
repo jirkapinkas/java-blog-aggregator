@@ -11,6 +11,7 @@
 	<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
 	<script type="text/javascript" src="<spring:url value="/resources/js/ads.js" />"></script>
+	<script type="text/javascript" src="<spring:url value="/resources/js/custom-js.jsp" />"></script>
 
 	<div id="footer"></div>
 	<script type="text/javascript">

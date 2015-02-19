@@ -29,12 +29,10 @@
 
 					<table style="float:left">
 						<tr>
-							<td style="width:40px">
-								<a href="${blog.homepageUrl}" target="_blank">
-									<img src="<spring:url value='/resources/images/home.png' />" alt="home" style="width:15px" />
+							<td style="width:42px">
+								<a href="${blog.homepageUrl}" target="_blank" class="fa fa-home fa-lg" style="float:left;padding-top:0px;color:grey">
 								</a>
-								<a href="${blog.url}" target="_blank">
-									<img src="<spring:url value='/resources/images/rss.png' />" alt="rss" style="width:15px"/>
+								<a href="${blog.url}" target="_blank" class="fa fa-rss fa-lg"  style="float:left;padding-top:0px;padding-left:5px;color:grey">
 								</a>
 							</td>
 							<td>
