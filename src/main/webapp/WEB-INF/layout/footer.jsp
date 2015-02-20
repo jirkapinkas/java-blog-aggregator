@@ -39,7 +39,7 @@
 
 | this project on <a href="https://github.com/jirkapinkas/java-blog-aggregator" target="_blank">GitHub</a>
 
-| other projects: <a href="http://www.javavids.com" target="_blank">JavaVids</a>
+| related: <a href="http://www.javavids.com" target="_blank">JavaVids</a>
 
 | <a href="http://www.java-skoleni.cz" target="_blank">Java školení</a>
 

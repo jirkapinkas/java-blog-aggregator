@@ -28,11 +28,9 @@
 	</thead>
 	<tbody>
 		<tr>
-			<td>winter 2014 / early 2015</td>
+			<td>2015</td>
 			<td>
-				Categories - Spring, Java SE, Database, ... 
-				<br /><br />
-				Voting system (thumbs up / down)
+				Favourite topics 
 				<br /><br />
 				Sending emails - lost password
 				<br /><br />
@@ -52,6 +50,14 @@
 		</tr>
 	</thead>
 	<tbody>
+		<tr>
+			<td>
+				02/20/2015
+			</td>
+			<td>
+				Thumbs up / down
+			</td>
+		</tr>
 		<tr>
 			<td>
 				12/13/2014

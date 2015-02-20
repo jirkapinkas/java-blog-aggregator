@@ -12,6 +12,9 @@ function itemClick(e) {
 	);
 }
 
+/*
+ * Called when user clicks on the like button.
+ */
 function itemLike(e) {
 	e.preventDefault();
 	var itemId = $(e.target).attr("id");
@@ -25,6 +28,9 @@ function itemLike(e) {
 	}
 }
 
+/*
+ * Called when user clicks on the dislike button.
+ */
 function itemDislike(e) {
 	e.preventDefault();
 	var itemId = $(e.target).attr("id");
@@ -33,9 +39,29 @@ function itemDislike(e) {
 	} else if($.cookie("like_" + itemId) == "1") {
 		unlike(itemId);
 		dislike(itemId);
+		hide(itemId);
 	} else {
 		dislike(itemId);
+		hide(itemId);
 	}
+}
+
+function showCurrentState(id) {
+	if($.cookie("like_" + id) == "1") {
+		$(".icon_like_" + id).removeClass("fa-thumbs-o-up").addClass("fa-thumbs-up");
+	}
+	if($.cookie("dislike_" + id) == "1") {
+		$(".icon_dislike_" + id).removeClass("fa-thumbs-o-down").addClass("fa-thumbs-down");
+		hide(id);
+	}
+}
+
+function hide(id) {
+	// TODO
+	// $(".icon_dislike_" + id).closest(".item-row").html("<tr><td>show disliked item</td></tr>");
+}
+
+function unhide(id) {
 }
 
 function like(itemId) {

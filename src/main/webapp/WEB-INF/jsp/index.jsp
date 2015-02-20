@@ -40,14 +40,14 @@
 					</c:otherwise>
 				</c:choose>
 				<span class="badge">last update was ${lastIndexDate} minutes ago</span>
-				<security:authorize access="hasRole('ROLE_ADMIN')">
+				<security:authorize access="${isAdmin}">
 					<span class="badge">items: ${itemCount}</span>
 					<span class="badge">users: ${userCount}</span>
 				</security:authorize>
 			</td> 
 		</tr>
 		<c:forEach items="${items}" var="item">
-			<tr>
+			<tr class="item-row">
 				<c:choose>
 					<c:when test="${item.enabled}">
 						<c:set var="customCss" value="" />
@@ -65,39 +65,32 @@
 								<i style="color:#6273a9;cursor:pointer;" 
 								   class="fa fa-thumbs-o-up icon_like_${item.id}" 
 								   id="${item.id}" 
-								   onClick="itemLike(event)"></i>
-								<script>
-									if($.cookie('like_${item.id}') == '1') {
-										$(".icon_like_${item.id}").removeClass("fa-thumbs-o-up").addClass("fa-thumbs-up");
-									}
-								</script>
+								   onClick="itemLike(event)"
+								   title="like"></i>
 							</td>
-							<security:authorize access="hasRole('ROLE_ADMIN')">
 							<td style="padding:2px">
 								<span class="likeCount_${item.id}">${item.likeCount}</span>
 							</td>
-							</security:authorize>
 						</tr>
 						<tr>
 							<td style="padding:2px">
 								<i style="color:#6273a9;cursor:pointer;" 
 								   class="fa fa-thumbs-o-down icon_dislike_${item.id}" 
 								   id="${item.id}" 
-								   onClick="itemDislike(event)"></i>
-								<script>
-									if($.cookie('dislike_${item.id}') == '1') {
-										$(".icon_dislike_${item.id}").removeClass("fa-thumbs-o-down").addClass("fa-thumbs-down");
-									}
-								</script>
+								   onClick="itemDislike(event)"
+								   title="dislike"></i>
 							</td>
-							<security:authorize access="hasRole('ROLE_ADMIN')">
 							<td style="padding:2px">
 								<span class="dislikeCount_${item.id}">${item.dislikeCount}</span>
 							</td>
-							</security:authorize>
 						</tr>
 					</table>
 				
+					<script type="text/javascript">
+						$(document).ready(function() {
+							showCurrentState("${item.id}");
+						});
+					</script>
 
 						<a id="${item.id}" href="<c:out value="${item.link}" />" target="_blank" style="${customCss}" class="itemLink" onClick="itemClick(event)">
 							<img id="${item.id}" src="<spring:url value='/spring/icon/${item.blog.id}' />" alt="icon" style="float:left;padding-right:5px" />
@@ -108,11 +101,14 @@
 					<br />
 					<span style="${customCss}" class="itemDesc">${item.description}</span>
 					<br /><br />
+					<c:if test="${item.publishedDate > yesterdayDate}">
+						<i class="fa fa-plus" title="today"></i>
+					</c:if>
 					<fmt:formatDate value="${item.publishedDate}" pattern="dd-MM-yyyy hh:mm:ss" />:
 					<strong>
 						<a href="<spring:url value='/blog/${item.blog.shortName}.html' />"><c:out value="${item.blog.name}" /></a>
 					</strong>
-					<security:authorize access="hasRole('ROLE_ADMIN')">
+					<security:authorize access="${isAdmin}">
 						<a href="<spring:url value="/items/toggle-enabled/${item.id}.html" />" class="btn btn-primary btn-xs btnToggleEnabled">
 							<c:choose>
 								<c:when test="${item.enabled}">
@@ -187,8 +183,6 @@
 	</c:otherwise>
 </c:choose>
 
-<security:authorize access="hasRole('ROLE_ADMIN')" var="isAdmin" />
-
 <script>
 
 	$(document).ready(function() {
@@ -225,14 +219,12 @@
 					html += ' <i style="color:#6273a9;cursor:pointer;" ';
 					html += ' class="fa fa-thumbs-o-up icon_like_' + value.id + '" ';
 					html += ' id="' + value.id + '" ';
-					html += ' onClick="itemLike(event)"></i>';
+					html += ' onClick="itemLike(event)" title="like"></i>';
 					html += ' </td>';
 
-					if("${isAdmin}" == "true") {
-						html += ' <td style="padding:2px">';
-						html += ' <span class="likeCount_' + value.id + '">' + value.likeCount + '</span>';
-						html += ' </td>';
-					}
+					html += ' <td style="padding:2px">';
+					html += ' <span class="likeCount_' + value.id + '">' + value.likeCount + '</span>';
+					html += ' </td>';
 
 					html += ' </tr>';
 					html += ' <tr>';
@@ -240,14 +232,13 @@
 					html += ' <i style="color:#6273a9;cursor:pointer;" ';
 					html += ' class="fa fa-thumbs-o-down icon_dislike_' + value.id + '" ';
 					html += ' id="' + value.id + '" ';
-					html += ' onClick="itemDislike(event)"></i>';
+					html += ' onClick="itemDislike(event)" title="dislike"></i>';
 					html += ' </td>';
 
-					if("${isAdmin}" == "true") {
-						html += ' <td style="padding:2px">';
-						html += ' <span class="dislikeCount_' + value.id + '">' + value.dislikeCount + '</span>';
-						html += ' </td>';
-					}
+					html += ' <td style="padding:2px">';
+					html += ' <span class="dislikeCount_' + value.id + '">' + value.dislikeCount + '</span>';
+					html += ' </td>';
+
 					html += ' </tr>';
 					html += ' </table>';
 
@@ -269,6 +260,10 @@
 					html += "<br />";
 					html += "<br />";
 					var date = new Date(value.publishedDate);
+					if(date.getTime() > "${yesterdayDate.time}") {
+						html += '<i class="fa fa-plus" title="today"></i> ';
+					}
+					html += "";
 					html += ("0" + date.getDate()).slice(-2) + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + date.getFullYear();
 					html += " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2) + ":" + ("0" + date.getSeconds()).slice(-2);
 					html += ": ";
@@ -284,12 +279,7 @@
 				adminHandler(newCode);
 				// like / dislike buttons
 				$.each(data, function(key, value) {
- 					if($.cookie("like_" + value.id) == "1") {
- 						$(".icon_like_" + value.id).removeClass("fa-thumbs-o-up").addClass("fa-thumbs-up");
- 					}
-					if($.cookie("dislike_" + value.id) == "1") {
-						$(".icon_dislike_" + value.id).removeClass("fa-thumbs-o-down").addClass("fa-thumbs-down");
-					}
+					showCurrentState(value.id);
 				});
 			});
 			currentPage++;
