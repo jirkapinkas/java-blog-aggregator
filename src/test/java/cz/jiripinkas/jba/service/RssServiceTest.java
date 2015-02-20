@@ -94,5 +94,15 @@ public class RssServiceTest {
 		String fixDate = rssService.fixDate("<guid>http://www.jsfcentral.com/listings/R221940</guid><pubDate>    25 Jan 2015 20:00:00 GMT   </pubDate><description>");
 		System.out.println(fixDate);
 	}
+	
+	@Test
+	public void testCleanDescription() {
+		assertEquals("test this is strong", rssService.cleanDescription("test <strong>this is strong</strong>"));
+		assertEquals("test this is strong", rssService.cleanDescription("test &lt;strong&gt;this is strong&lt;/strong&gt;"));
+		assertEquals("test this is strong", rssService.cleanDescription("<![CDATA[test &lt;strong&gt;this is strong&lt;/strong&gt;]]>"));
+		assertEquals("stupid description", rssService.cleanDescription("~~~~~~~~ stupid description ~~~~~~~~"));
+		assertEquals("This tutorial will show example codes on how to convert Java String To Long. This is a common scenario when programming with Core Java. [......", rssService.cleanDescription("<![CDATA[ This tutorial will show example codes on how to convert &lt;strong&gt;Java String To Long&lt;/strong&gt;. This is a common scenario when programming with Core Java. <a href='http://javadevnotes.com/java-string-to-long-examples' class='excerpt-more'>[...]</a> ]]>"));
+		assertEquals("test", rssService.cleanDescription("test <script> alert('hello')</script>"));
+	}
 
 }

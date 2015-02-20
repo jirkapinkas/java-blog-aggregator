@@ -19,6 +19,7 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.config.RequestConfig.Builder;
@@ -235,9 +236,10 @@ public class RssService {
 		return Jsoup.parse(title).text();
 	}
 
-	// TODO TEST THIS
 	public String cleanDescription(String description) {
-		String cleanDescription = Jsoup.parse(Jsoup.clean(description, Whitelist.none())).text();
+		String unescapedDescription = StringEscapeUtils.unescapeHtml3(description);
+		unescapedDescription = unescapedDescription.replace("<![CDATA[", "").replace("]]>", "");
+		String cleanDescription = Jsoup.parse(Jsoup.clean(unescapedDescription, Whitelist.none())).text();
 		// fix for Tomcat blog
 		cleanDescription = cleanDescription.replace("~", ""); 
 		ArrayList<String> links = pullLinks(cleanDescription);
@@ -249,7 +251,7 @@ public class RssService {
 			cleanDescription = cleanDescription.substring(0, 140);
 			cleanDescription += "...";
 		}
-		return cleanDescription;
+		return cleanDescription.trim();
 	}
 
 	public ArrayList<String> pullLinks(String text) {
