@@ -185,107 +185,107 @@
 
 <script>
 
-	$(document).ready(function() {
-
-		var currentPage = 0;
-		$(".loadButton").click(function(e) {
-			e.preventDefault();
-			var nextPage = currentPage + 1;
-			var url = "<spring:url value='/page/' />" + nextPage + ".json";
-			var iconBaseUrl = "<spring:url value='/spring/icon/' />";
-			var blogDetailBaseUrl = "<spring:url value='/blog/' />";
-			if(topViews == true) {
-				url = url + "?topviews=true";
-				if(max == true) {
-					url = url + "&max=" + maxValue;
-				}
-				if(blogDetail == true) {
-					url = url + "&shortName=" + blogShortName;
-				}
-			} else if(blogDetail == true) {
-				url = url + "?shortName=" + blogShortName;
-			}
-
-
-			$.getJSON( url, function( data ) {
-				var html = "";
-				$.each(data, function(key, value) {
-					html += "<tr><td>";
-
-					// like / dislike buttons
-					html += ' <table style="float:left;margin-right:5px">';
-					html += ' <tr>';
-					html += ' <td style="padding:2px">';
-					html += ' <i style="color:#6273a9;cursor:pointer;" ';
-					html += ' class="fa fa-thumbs-o-up icon_like_' + value.id + '" ';
-					html += ' id="' + value.id + '" ';
-					html += ' onClick="itemLike(event)" title="like"></i>';
-					html += ' </td>';
-
-					html += ' <td style="padding:2px">';
-					html += ' <span class="likeCount_' + value.id + '">' + value.likeCount + '</span>';
-					html += ' </td>';
-
-					html += ' </tr>';
-					html += ' <tr>';
-					html += ' <td style="padding:2px">';
-					html += ' <i style="color:#6273a9;cursor:pointer;" ';
-					html += ' class="fa fa-thumbs-o-down icon_dislike_' + value.id + '" ';
-					html += ' id="' + value.id + '" ';
-					html += ' onClick="itemDislike(event)" title="dislike"></i>';
-					html += ' </td>';
-
-					html += ' <td style="padding:2px">';
-					html += ' <span class="dislikeCount_' + value.id + '">' + value.dislikeCount + '</span>';
-					html += ' </td>';
-
-					html += ' </tr>';
-					html += ' </table>';
-
-					var css = "";
-					if(value.enabled == false) {
-						css = "text-decoration: line-through;color:grey";
-					}
-					html += "<a href='" + value.link + "' target='_blank' class='itemLink' style='" + css + "' onClick='itemClick(event)' id='" + value.id + "'>";
-					html += "<img src='" + iconBaseUrl + value.blog.id + "' alt='icon' style='float:left;padding-right:10px' id='" + value.id + "' />";
-					html += "<strong id='" + value.id + "'>";
-					html += value.title;
-					html += " <span class='glyphicon glyphicon-share-alt'></span>";
-					html += "</strong>";
-					html += "</a>";
-					html += "<br />";
-					html += "<span class='itemDesc' style='" + css + "'>";
-					html += value.description;
-					html += "</span>";
-					html += "<br />";
-					html += "<br />";
-					var date = new Date(value.publishedDate);
-					if(date.getTime() > "${yesterdayDate.time}") {
-						html += '<i class="fa fa-plus" title="today"></i> ';
-					}
-					html += "";
-					html += ("0" + date.getDate()).slice(-2) + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + date.getFullYear();
-					html += " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2) + ":" + ("0" + date.getSeconds()).slice(-2);
-					html += ": ";
-					html += "<strong>";
-					html += "<a href='" + blogDetailBaseUrl + value.blog.shortName + ".html'>";
-					html += value.blog.name;
-					html += "</a>";
-					html += "</strong>";
- 					html += adminMenu(value);
-					html += "</td></tr>";
-				});
-				var newCode = $(".table tr:last").prev().after(html);
-				adminHandler(newCode);
-				// like / dislike buttons
-				$.each(data, function(key, value) {
-					showCurrentState(value.id);
-				});
-			});
-			currentPage++;
-		});
+	var currentPage = 0;
+	$(".loadButton").click(loadNextPage);
 		
-	});
+	function loadNextPage(e) {
+		if(e != null) {
+			e.preventDefault();
+		}
+		var nextPage = currentPage + 1;
+		var url = "<spring:url value='/page/' />" + nextPage + ".json";
+		var iconBaseUrl = "<spring:url value='/spring/icon/' />";
+		var blogDetailBaseUrl = "<spring:url value='/blog/' />";
+		if(topViews == true) {
+			url = url + "?topviews=true";
+			if(max == true) {
+				url = url + "&max=" + maxValue;
+			}
+			if(blogDetail == true) {
+				url = url + "&shortName=" + blogShortName;
+			}
+		} else if(blogDetail == true) {
+			url = url + "?shortName=" + blogShortName;
+		}
+
+
+		$.getJSON( url, function( data ) {
+			var html = "";
+			$.each(data, function(key, value) {
+				html += "<tr><td>";
+
+				// like / dislike buttons
+				html += ' <table style="float:left;margin-right:5px">';
+				html += ' <tr>';
+				html += ' <td style="padding:2px">';
+				html += ' <i style="color:#6273a9;cursor:pointer;" ';
+				html += ' class="fa fa-thumbs-o-up icon_like_' + value.id + '" ';
+				html += ' id="' + value.id + '" ';
+				html += ' onClick="itemLike(event)" title="like"></i>';
+				html += ' </td>';
+
+				html += ' <td style="padding:2px">';
+				html += ' <span class="likeCount_' + value.id + '">' + value.likeCount + '</span>';
+				html += ' </td>';
+
+				html += ' </tr>';
+				html += ' <tr>';
+				html += ' <td style="padding:2px">';
+				html += ' <i style="color:#6273a9;cursor:pointer;" ';
+				html += ' class="fa fa-thumbs-o-down icon_dislike_' + value.id + '" ';
+				html += ' id="' + value.id + '" ';
+				html += ' onClick="itemDislike(event)" title="dislike"></i>';
+				html += ' </td>';
+
+				html += ' <td style="padding:2px">';
+				html += ' <span class="dislikeCount_' + value.id + '">' + value.dislikeCount + '</span>';
+				html += ' </td>';
+
+				html += ' </tr>';
+				html += ' </table>';
+
+				var css = "";
+				if(value.enabled == false) {
+					css = "text-decoration: line-through;color:grey";
+				}
+				html += "<a href='" + value.link + "' target='_blank' class='itemLink' style='" + css + "' onClick='itemClick(event)' id='" + value.id + "'>";
+				html += "<img src='" + iconBaseUrl + value.blog.id + "' alt='icon' style='float:left;padding-right:10px' id='" + value.id + "' />";
+				html += "<strong id='" + value.id + "'>";
+				html += value.title;
+				html += " <span class='glyphicon glyphicon-share-alt'></span>";
+				html += "</strong>";
+				html += "</a>";
+				html += "<br />";
+				html += "<span class='itemDesc' style='" + css + "'>";
+				html += value.description;
+				html += "</span>";
+				html += "<br />";
+				html += "<br />";
+				var date = new Date(value.publishedDate);
+				if(date.getTime() > "${yesterdayDate.time}") {
+					html += '<i class="fa fa-plus" title="today"></i> ';
+				}
+				html += "";
+				html += ("0" + date.getDate()).slice(-2) + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + date.getFullYear();
+				html += " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2) + ":" + ("0" + date.getSeconds()).slice(-2);
+				html += ": ";
+				html += "<strong>";
+				html += "<a href='" + blogDetailBaseUrl + value.blog.shortName + ".html'>";
+				html += value.blog.name;
+				html += "</a>";
+				html += "</strong>";
+					html += adminMenu(value);
+				html += "</td></tr>";
+			});
+			var newCode = $(".table tr:last").prev().after(html);
+			adminHandler(newCode);
+			// like / dislike buttons
+			$.each(data, function(key, value) {
+				showCurrentState(value.id);
+			});
+		});
+		currentPage++;
+	}
 	
 </script>
 
