@@ -7,11 +7,12 @@
       <constructor-arg value="#{systemEnvironment['DATABASE_URL']}" />
    </bean>
 
-   <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
-      <property name="url"
+   <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource">
+      <property name="jdbcUrl"
          value="#{ 'jdbc:postgresql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() }" />
       <property name="username" value="#{ @dbUrl.getUserInfo().split(':')[0] }" />
       <property name="password" value="#{ @dbUrl.getUserInfo().split(':')[1] }" />
+      <property name="driverClassName" value="org.postgresql.Driver" />
    </bean>
 
 	<bean

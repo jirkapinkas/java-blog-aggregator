@@ -47,9 +47,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>commons-dbcp</groupId>
-			<artifactId>commons-dbcp</artifactId>
-			<version>1.4</version>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP-java6</artifactId>
+			<version>2.3.2</version>
 		</dependency>
 
 		<dependency>
@@ -214,9 +214,9 @@
 			<id>prod</id>
 			<dependencies>
 				<dependency>
-					<groupId>postgresql</groupId>
+					<groupId>org.postgresql</groupId>
 					<artifactId>postgresql</artifactId>
-					<version>9.1-901-1.jdbc4</version>
+					<version>9.3-1103-jdbc4</version>
 				</dependency>
 			</dependencies>
 		</profile>
