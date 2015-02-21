@@ -24,10 +24,10 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-    $("img.lazy").unveil(200);
+    $("img.lazy").unveil(unveilTreshold);
     $('#dataTable').DataTable( {
 		"fnDrawCallback": function( oSettings ) {
-			$("img.lazy").unveil(200);
+			$("img.lazy").unveil(unveilTreshold);
 		}
 	});
 } );

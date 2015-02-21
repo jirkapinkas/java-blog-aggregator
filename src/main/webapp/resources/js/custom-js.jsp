@@ -2,6 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
+var unveilTreshold = 200;
+
 function itemClick(e) {
 	var itemId = $(e.target).attr("id");
 	$.post(

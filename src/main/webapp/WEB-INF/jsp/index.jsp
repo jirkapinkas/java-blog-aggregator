@@ -89,7 +89,7 @@
 					<script type="text/javascript">
 						$(document).ready(function() {
 							showCurrentState("${item.id}");
-							$("img.lazy").unveil(200);
+							$("img.lazy").unveil(unveilTreshold);
 						});
 					</script>
 
@@ -279,7 +279,7 @@
 				html += "</td></tr>";
 			});
 			var newCode = $(".table tr:last").prev().after(html);
-			$("img.lazy").unveil(200);
+			$("img.lazy").unveil(unveilTreshold);
 			adminHandler(newCode);
 			// like / dislike buttons
 			$.each(data, function(key, value) {
