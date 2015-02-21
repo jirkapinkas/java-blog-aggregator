@@ -55,7 +55,7 @@
 				02/20/2015
 			</td>
 			<td>
-				Thumbs up / down
+				Thumbs up / down. In blog list is now used datatables javascript component. Images lazy loading.
 			</td>
 		</tr>
 		<tr>

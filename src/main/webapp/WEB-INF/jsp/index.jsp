@@ -89,11 +89,12 @@
 					<script type="text/javascript">
 						$(document).ready(function() {
 							showCurrentState("${item.id}");
+							$("img.lazy").unveil(200);
 						});
 					</script>
 
 						<a id="${item.id}" href="<c:out value="${item.link}" />" target="_blank" style="${customCss}" class="itemLink" onClick="itemClick(event)">
-							<img id="${item.id}" src="<spring:url value='/spring/icon/${item.blog.id}' />" alt="icon" style="float:left;padding-right:5px" />
+							<img class="lazy" id="${item.id}" data-src="<spring:url value='/spring/icon/${item.blog.id}' />" alt="icon" style="float:left;padding-right:5px" />
 							<strong id="${item.id}">
 									${item.title} <span class="glyphicon glyphicon-share-alt"></span>
 							</strong>
@@ -249,7 +250,7 @@
 					css = "text-decoration: line-through;color:grey";
 				}
 				html += "<a href='" + value.link + "' target='_blank' class='itemLink' style='" + css + "' onClick='itemClick(event)' id='" + value.id + "'>";
-				html += "<img src='" + iconBaseUrl + value.blog.id + "' alt='icon' style='float:left;padding-right:10px' id='" + value.id + "' />";
+				html += "<img class='lazy' data-src='" + iconBaseUrl + value.blog.id + "' alt='icon' style='float:left;padding-right:10px' id='" + value.id + "' />";
 				html += "<strong id='" + value.id + "'>";
 				html += value.title;
 				html += " <span class='glyphicon glyphicon-share-alt'></span>";
@@ -278,6 +279,7 @@
 				html += "</td></tr>";
 			});
 			var newCode = $(".table tr:last").prev().after(html);
+			$("img.lazy").unveil(200);
 			adminHandler(newCode);
 			// like / dislike buttons
 			$.each(data, function(key, value) {
