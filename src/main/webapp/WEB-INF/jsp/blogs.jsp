@@ -47,7 +47,7 @@ $(document).ready(function() {
 		<c:forEach items="${blogs}" var="blog">
 			<tr>
 				<td>
-					<img class="lazy" data-src="<spring:url value='/spring/icon/${blog.id}' />" alt="icon" style="float:left;padding-right:5px" />
+					<img class="lazy" data-src="<spring:url value='/spring/icon/${blog.id}' />" style="float:left;padding-right:5px" />
 					
 					<a href="${blog.homepageUrl}" target="_blank" class="fa fa-home fa-lg" style="float:left;padding-top:0px;color:grey">
 					</a>

@@ -39,7 +39,7 @@ $(document).ready(function() {
 			<c:out value="${blog.url}" />
 		</a>
 		<div style="clear:both"></div>
-		<img src="<spring:url value="/spring/icon/${blog.id}" />" alt="icon" style="float:left;padding-right:10px" />
+		<img src="<spring:url value="/spring/icon/${blog.id}" />" style="float:left;padding-right:10px" />
 		
 		<form method="post" enctype="multipart/form-data" action="${user.id}.html">
 			<span class="btn btn-default btn-file">
