@@ -130,13 +130,23 @@
 				<div style="text-align: center">
 					<c:choose>
 						<c:when test="${blogDetail eq true}">
-							<strong><a href="<spring:url value='' />?page=${nextPage}&shortName=${blogShortName}" class="loadButton">load next 10 items</a></strong>
+							<c:set var="noscriptNextPageUrl" value="?page=${nextPage}&shortName=${blogShortName}" />
+						</c:when>
+						<c:when test="${topViews eq true}">
+							<c:choose>
+								<c:when test="${max eq true}">
+									<c:set var="noscriptNextPageUrl" value="?page=${nextPage}&top-views&max=${maxValue}" />
+								</c:when>
+								<c:otherwise>
+									<c:set var="noscriptNextPageUrl" value="?page=${nextPage}&top-views" />
+								</c:otherwise>
+							</c:choose>
 						</c:when>
 						<c:otherwise>
-							<!-- TODO funguje strankovani pri vypnutem javascriptu i u top stranek? ASI NEFUNGUJE!!! -->
-							<strong><a href="<spring:url value='' />?page=${nextPage}" class="loadButton">load next 10 items</a></strong>
+							<c:set var="noscriptNextPageUrl" value="?page=${nextPage}" />
 						</c:otherwise>
 					</c:choose>
+					<strong><a href="<spring:url value='' />${noscriptNextPageUrl}" class="loadButton">load next 10 items</a></strong>
 				</div>
 			</td>
 		</tr>
