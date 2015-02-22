@@ -14,7 +14,7 @@ Run this application using embedded Jetty server: <code>mvn -P dev jetty:run -Ds
 
 <p>
 Setup app as specified here: <a href="https://devcenter.heroku.com/articles/git" target="_blank">https://devcenter.heroku.com/articles/git</a><br />
-Afterwards just run: <code>git push heroku latest:master</code><br />
+Afterwards just run: <code>git push -f heroku latest:master</code><br />
 You can use this user to login (name / password): <code>admin / admin</code>
 </p>
 
