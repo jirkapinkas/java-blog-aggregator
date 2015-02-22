@@ -140,12 +140,16 @@ public class ItemService {
 
 	@Transactional
 	public int incDislike(int itemId) {
-		itemRepository.changeDislike(itemId, 1);
-		return itemRepository.getDislikeCount(itemId);
+		return dislike(itemId, 1);
 	}
 
+	@Transactional
 	public int decDislike(int itemId) {
-		itemRepository.changeDislike(itemId, -1);
+		return dislike(itemId, -1);
+	}
+	
+	private int dislike(int itemId, int amount) {
+		itemRepository.changeDislike(itemId, amount);
 		return itemRepository.getDislikeCount(itemId);
 	}
 
