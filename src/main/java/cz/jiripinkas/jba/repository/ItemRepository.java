@@ -2,6 +2,7 @@ package cz.jiripinkas.jba.repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -30,15 +31,15 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 	@Transactional
 	@Modifying
 	@Query("update Item i set i.likeCount = i.likeCount + ?2 where i.id = ?1")
-	void incLike(int id, int amount);
+	void changeLike(int id, int amount);
 
-	@Query("select i.likeCount from Item i where i.id = ?1")
-	int getLikeCount(int id);
+	@Query("select new map(i.likeCount as like, i.clickCount as click) from Item i where i.id = ?1")
+	Map<String, Integer> getLikeAndClickCount(int id);
 
 	@Transactional
 	@Modifying
 	@Query("update Item i set i.dislikeCount = i.dislikeCount + ?2 where i.id = ?1")
-	void incDislike(int id, int amount);
+	void changeDislike(int id, int amount);
 
 	@Query("select i.dislikeCount from Item i where i.id = ?1")
 	int getDislikeCount(int id);

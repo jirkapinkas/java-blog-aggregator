@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Map;
 
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,11 +84,17 @@ public class ItemService {
 		}
 		for (Item item : items) {
 			ItemDto itemDto = mapper.map(item, ItemDto.class);
+			// calculate like count
+			itemDto.setLikeCount(calculateLikeCount(itemDto.getLikeCount(), itemDto.getClickCount()));
 			result.add(itemDto);
 		}
 		return result;
 	}
-
+	
+	private int calculateLikeCount(int likeCount, int clickCount) {
+		return likeCount + (int)(clickCount / 5);
+	}
+	
 	public boolean isTooOld(Date date) {
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.add(Calendar.MONTH, -2);
@@ -117,24 +124,28 @@ public class ItemService {
 
 	@Transactional
 	public int incLike(int itemId) {
-		itemRepository.incLike(itemId, 1);
-		return itemRepository.getLikeCount(itemId);
+		return like(itemId, 1);
 	}
 
 	@Transactional
 	public int decLike(int itemId) {
-		itemRepository.incLike(itemId, -1);
-		return itemRepository.getLikeCount(itemId);
+		return like(itemId, -1);
+	}
+	
+	private int like(int itemId, int amount) {
+		itemRepository.changeLike(itemId, amount);
+		Map<String, Integer> likeAndClickCount = itemRepository.getLikeAndClickCount(itemId);
+		return calculateLikeCount(likeAndClickCount.get("like"), likeAndClickCount.get("click"));
 	}
 
 	@Transactional
 	public int incDislike(int itemId) {
-		itemRepository.incDislike(itemId, 1);
+		itemRepository.changeDislike(itemId, 1);
 		return itemRepository.getDislikeCount(itemId);
 	}
 
 	public int decDislike(int itemId) {
-		itemRepository.incDislike(itemId, -1);
+		itemRepository.changeDislike(itemId, -1);
 		return itemRepository.getDislikeCount(itemId);
 	}
 
