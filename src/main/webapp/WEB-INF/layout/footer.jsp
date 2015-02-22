@@ -10,6 +10,11 @@
 
 	<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
+	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+	<script type="text/javascript" src="//cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="<spring:url value='/resources/js/jquery.unveil.js' />"></script>
+	<script type="text/javascript" src="<spring:url value='/resources/js/jquery.cookie.js' />"></script>
 	<script type="text/javascript" src="<spring:url value="/resources/js/ads.js" />"></script>
 	<script type="text/javascript" src="<spring:url value="/resources/js/custom-js.jsp" />"></script>
 

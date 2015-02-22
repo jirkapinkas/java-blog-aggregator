@@ -9,33 +9,13 @@
 
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
 
-<link rel="stylesheet"
-	href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
-
-<link rel="stylesheet"
-	href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css" />
-
-<link rel="stylesheet"
-	href="<spring:url value='/resources/css/custom.css' />" />
-
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
-<script type="text/javascript" src="<spring:url value='/resources/js/jquery.unveil.js' />"></script>
-
-<script type="text/javascript" 
-		src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
-
-<script type="text/javascript" src="//cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
-
-<script
-	src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-
-<script type="text/javascript" 
-		src="<spring:url value='/resources/js/jquery.cookie.js' />"></script>
-
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css" />
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
-
-<link href="//cdn.datatables.net/1.10.5/css/jquery.dataTables.css" rel="stylesheet" />
+<link href="//cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="<spring:url value='/resources/css/custom.css' />" />
 
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
