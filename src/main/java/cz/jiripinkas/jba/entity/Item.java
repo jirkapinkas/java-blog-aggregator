@@ -40,13 +40,13 @@ public class Item {
 
 	private boolean enabled;
 
-	@Column(name = "click_count")
+	@Column(name = "click_count", nullable = false)
 	private Integer clickCount;
 
-	@Column(name = "like_count")
+	@Column(name = "like_count", nullable = false)
 	private Integer likeCount;
 
-	@Column(name = "dislike_count")
+	@Column(name = "dislike_count", nullable = false)
 	private Integer dislikeCount;
 
 	public Item() {
