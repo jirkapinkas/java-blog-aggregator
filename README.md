@@ -13,10 +13,8 @@ Run this application using embedded Jetty server: <code>mvn -P dev jetty:run -Ds
 <h2>To deploy on Heroku:</h2>
 
 <p>
-first run: <code>mvn -P prod package</code><br />
-next goto target directory and run: <code>heroku deploy:war --war jba.war --app YOUR_APP</code><br />
-To deploy WAR to Heroku see this article: <a href="https://devcenter.heroku.com/articles/war-deployment" target="_blank">https://devcenter.heroku.com/articles/war-deployment</a><br />
-
+Setup app as specified here: <a href="https://devcenter.heroku.com/articles/git">https://devcenter.heroku.com/articles/git</a><br />
+Afterwards just run: <code>git push heroku latest:master</code><br />
 You can use this user to login (name / password): <code>admin / admin</code>
 </p>
 
