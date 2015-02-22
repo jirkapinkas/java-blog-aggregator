@@ -128,6 +128,7 @@
 		<tr class="loadNextRow">
 			<td class="loadNextColumn">
 				<div style="text-align: center">
+					<%-- Static URL for those, who doesn't have javascript turned on. --%>
 					<c:choose>
 						<c:when test="${blogDetail eq true}">
 							<c:set var="noscriptNextPageUrl" value="?page=${nextPage}&shortName=${blogShortName}" />
@@ -196,13 +197,15 @@
 
 <script>
 
-	var currentPage = 0;
-	$(".loadButton").click(loadNextPage);
-		
+	$(function() {
+		$(".loadButton").click(loadNextPage);
+	});
+
 	function loadNextPage(e) {
 		if(e != null) {
 			e.preventDefault();
 		}
+		startRefresh();
 		var nextPage = currentPage + 1;
 		var url = "<spring:url value='/page/' />" + nextPage + ".json";
 		var iconBaseUrl = "<spring:url value='/spring/icon/' />";
@@ -225,7 +228,7 @@
 			$.each(data, function(key, value) {
 				html += "<tr><td>";
 
-				// like / dislike buttons
+				// show like / dislike buttons
 				html += ' <table style="float:left;margin-right:5px">';
 				html += ' <tr>';
 				html += ' <td style="padding:2px">';
@@ -291,10 +294,11 @@
 			var newCode = $(".table tr:last").prev().after(html);
 			$("img.lazy").unveil(unveilTreshold);
 			adminHandler(newCode);
-			// like / dislike buttons
+			// set like / dislike buttons state
 			$.each(data, function(key, value) {
 				showCurrentState(value.id);
 			});
+			finishRefresh();
 		});
 		currentPage++;
 	}

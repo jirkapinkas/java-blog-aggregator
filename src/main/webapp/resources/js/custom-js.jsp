@@ -4,6 +4,11 @@
 
 var unveilTreshold = 200;
 
+var currentPage = 0;
+
+/*
+ * Called when user clicks on item URL
+ */
 function itemClick(e) {
 	var itemId = $(e.target).attr("id");
 	$.post(
@@ -15,7 +20,7 @@ function itemClick(e) {
 }
 
 /*
- * Called when user clicks on the like button.
+ * Called when user clicks on like button.
  */
 function itemLike(e) {
 	e.preventDefault();
@@ -31,7 +36,7 @@ function itemLike(e) {
 }
 
 /*
- * Called when user clicks on the dislike button.
+ * Called when user clicks on dislike button.
  */
 function itemDislike(e) {
 	e.preventDefault();
@@ -136,4 +141,14 @@ function undislike(itemId) {
 				arrLikeProgress.splice($.inArray(itemId, arrLikeProgress), 1);
 			}
 	);
+}
+
+function startRefresh() {
+	$(".loadButton").css("display", "none");
+	$(".loadButton").after("<i class='fa fa-refresh fa-spin' style='color:#428bca'></i>");
+}
+
+function finishRefresh() {
+	$(".loadButton").css("display", "inline");
+	$(".fa-spin").remove();
 }
