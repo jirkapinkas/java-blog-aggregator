@@ -77,6 +77,7 @@ function like(itemId) {
 	if($.inArray(itemId, arrLikeProgress) !== -1) {
 		return;
 	}
+	$(".icon_like_" + itemId).removeClass("fa-thumbs-o-up").addClass("fa-thumbs-up");
 	arrLikeProgress.push(itemId);
 	$.post(
 			"<spring:url value='/social/like.html' />", 
@@ -85,7 +86,6 @@ function like(itemId) {
 				$(".likeCount_" + itemId).text(data);
 				$.cookie("like_" + itemId, "1", {expires: 30, path: '/'});
 				$.removeCookie("dislike_" + itemId);
-				$(".icon_like_" + itemId).removeClass("fa-thumbs-o-up").addClass("fa-thumbs-up");
 				arrLikeProgress.splice($.inArray(itemId, arrLikeProgress), 1);
 			}
 	);
@@ -95,6 +95,7 @@ function unlike(itemId) {
 	if($.inArray(itemId, arrLikeProgress) !== -1) {
 		return;
 	}
+	$(".icon_like_" + itemId).removeClass("fa-thumbs-up").addClass("fa-thumbs-o-up");
 	arrLikeProgress.push(itemId);
 	$.post(
 			"<spring:url value='/social/unlike.html' />", 
@@ -102,7 +103,6 @@ function unlike(itemId) {
 			function(data, status) {
 				$(".likeCount_" + itemId).text(data);
 				$.removeCookie("like_" + itemId);
-				$(".icon_like_" + itemId).removeClass("fa-thumbs-up").addClass("fa-thumbs-o-up");
 				arrLikeProgress.splice($.inArray(itemId, arrLikeProgress), 1);
 			}
 	);
@@ -112,6 +112,7 @@ function dislike(itemId) {
 	if($.inArray(itemId, arrLikeProgress) !== -1) {
 		return;
 	}
+	$(".icon_dislike_" + itemId).removeClass("fa-thumbs-o-down").addClass("fa-thumbs-down");
 	arrLikeProgress.push(itemId);
 	$.post(
 			"<spring:url value='/social/dislike.html' />", 
@@ -120,7 +121,6 @@ function dislike(itemId) {
 				$(".dislikeCount_" + itemId).text(data);
 				$.cookie("dislike_" + itemId, "1", {expires: 30, path: '/'});
 				$.removeCookie("like_" + itemId);
-				$(".icon_dislike_" + itemId).removeClass("fa-thumbs-o-down").addClass("fa-thumbs-down");
 				arrLikeProgress.splice($.inArray(itemId, arrLikeProgress), 1);
 			}
 	);
@@ -130,6 +130,7 @@ function undislike(itemId) {
 	if($.inArray(itemId, arrLikeProgress) !== -1) {
 		return;
 	}
+	$(".icon_dislike_" + itemId).removeClass("fa-thumbs-down").addClass("fa-thumbs-o-down");
 	arrLikeProgress.push(itemId);
 	$.post(
 			"<spring:url value='/social/undislike.html' />", 
@@ -137,7 +138,6 @@ function undislike(itemId) {
 			function(data, status) {
 				$(".dislikeCount_" + itemId).text(data);
 				$.removeCookie("dislike_" + itemId, "1");
-				$(".icon_dislike_" + itemId).removeClass("fa-thumbs-down").addClass("fa-thumbs-o-down");
 				arrLikeProgress.splice($.inArray(itemId, arrLikeProgress), 1);
 			}
 	);
