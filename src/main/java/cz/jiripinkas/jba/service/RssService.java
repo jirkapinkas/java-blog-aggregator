@@ -2,6 +2,8 @@ package cz.jiripinkas.jba.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.Reader;
+import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,12 +15,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
@@ -48,13 +50,13 @@ public class RssService {
 	private static Unmarshaller unmarshallerRss;
 	private static Unmarshaller unmarshallerAtom;
 	private static DocumentBuilder db;
-
+	
 	static {
 		try {
 			System.setProperty("com.sun.net.ssl.checkRevocation", "false");
-			JAXBContext jaxbContextRss = JAXBContext.newInstance(TRss.class, TRssChannel.class, TRssItem.class);
+			JAXBContext jaxbContextRss = JAXBContext.newInstance(TRss.class);
 			unmarshallerRss = jaxbContextRss.createUnmarshaller();
-			JAXBContext jaxbContextAtom = JAXBContext.newInstance(Feed.class, Entry.class);
+			JAXBContext jaxbContextAtom = JAXBContext.newInstance(Feed.class);
 			unmarshallerAtom = jaxbContextAtom.createUnmarshaller();
 
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -106,11 +108,14 @@ public class RssService {
 
 	public List<Item> getItems(String location, boolean localFile) throws RssException {
 		Node node = null;
+		Reader reader = null;
 
 		try {
 			Document document = null;
 			if (localFile) {
-				document = db.parse(new File(location));
+				File file = new File(location);
+				document = db.parse(file);
+				reader = new StringReader(FileUtils.readFileToString(file));
 			} else {
 				CloseableHttpClient httpClient = null;
 				try {
@@ -129,6 +134,7 @@ public class RssService {
 						page = stripNonValidXMLCharacters(page);
 						page = fixDate(page);
 						document = db.parse(new ByteArrayInputStream(page.getBytes(Charset.forName("UTF-8"))));
+						reader = new StringReader(page);
 					} finally {
 						if (response != null) {
 							response.close();
@@ -147,20 +153,19 @@ public class RssService {
 		}
 
 		if ("rss".equals(node.getNodeName())) {
-			return getRssItems(node);
+			return getRssItems(reader);
 		} else if ("feed".equals(node.getNodeName())) {
-			return getAtomItems(node);
+			return getAtomItems(reader);
 		} else {
 			throw new RssException("unknown RSS type");
 		}
 
 	}
 
-	private List<Item> getRssItems(Node node) throws RssException {
+	private List<Item> getRssItems(Reader reader) throws RssException {
 		ArrayList<Item> list = new ArrayList<Item>();
 		try {
-			JAXBElement<TRss> jaxbElement = unmarshallerRss.unmarshal(node, TRss.class);
-			TRss rss = jaxbElement.getValue();
+			TRss rss = (TRss) unmarshallerRss.unmarshal(reader);
 
 			List<TRssChannel> channels = rss.getChannels();
 
@@ -170,7 +175,11 @@ public class RssService {
 					Item item = new Item();
 					item.setTitle(cleanTitle(rssItem.getTitle()));
 					item.setDescription(cleanDescription(rssItem.getDescription()));
-					item.setLink(rssItem.getLink());
+					if(rssItem.getOrigLink() != null) {
+						item.setLink(rssItem.getOrigLink());
+					} else {
+						item.setLink(rssItem.getLink());
+					}
 					Date pubDate = getRssDate(rssItem.getPubDate());
 					item.setPublishedDate(pubDate);
 					list.add(item);
@@ -187,12 +196,11 @@ public class RssService {
 		return list;
 	}
 
-	private List<Item> getAtomItems(Node node) throws RssException {
+	private List<Item> getAtomItems(Reader reader) throws RssException {
 		ArrayList<Item> list = new ArrayList<Item>();
 		try {
-			JAXBElement<Feed> jaxbElement = unmarshallerAtom.unmarshal(node, Feed.class);
-			Feed rss = jaxbElement.getValue();
-			List<Entry> entries = rss.getEntries();
+			Feed atom = (Feed) unmarshallerAtom.unmarshal(reader);
+			List<Entry> entries = atom.getEntries();
 			for (Entry entry : entries) {
 				Item item = new Item();
 				item.setTitle(cleanTitle(entry.getTitle()));
@@ -204,7 +212,11 @@ public class RssService {
 					description = entry.getContent();
 				}
 				item.setDescription(cleanDescription(description));
-				item.setLink(entry.getLink().getHref());
+				if(entry.getOrigLink() != null) {
+					item.setLink(entry.getOrigLink());
+				} else {
+					item.setLink(entry.getLink().getHref());
+				}
 				Date pubDate = null;
 				if(entry.getPublished() != null) {
 					pubDate = entry.getPublished().toGregorianCalendar().getTime();

@@ -2,6 +2,7 @@ package cz.jiripinkas.jba.rss;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TRssItem {
@@ -10,9 +11,20 @@ public class TRssItem {
 
 	private String description;
 
+	private String pubDate;
+
 	private String link;
 
-	private String pubDate;
+	@XmlElement(namespace="http://rssnamespace.org/feedburner/ext/1.0")
+	private String origLink;
+
+	public String getOrigLink() {
+		return origLink;
+	}
+
+	public void setOrigLink(String origLink) {
+		this.origLink = origLink;
+	}
 
 	public String getPubDate() {
 		return pubDate;

@@ -92,7 +92,7 @@ public class RssServiceTest {
 	@Test
 	public void testFixDate() {
 		String fixDate = rssService.fixDate("<guid>http://www.jsfcentral.com/listings/R221940</guid><pubDate>    25 Jan 2015 20:00:00 GMT   </pubDate><description>");
-		System.out.println(fixDate);
+		assertEquals("<guid>http://www.jsfcentral.com/listings/R221940</guid><pubDate>25 Jan 2015 20:00:00 GMT</pubDate><description>", fixDate);
 	}
 	
 	@Test
@@ -110,6 +110,14 @@ public class RssServiceTest {
 		List<Item> items = rssService.getItems("test-rss/instanceofjava.xml", true);
 		Item firstItem = items.get(0);
 		assertEquals("22 02 2015 13:35:00", new SimpleDateFormat("dd MM yyyy HH:mm:ss").format(firstItem.getPublishedDate()));
+		assertEquals("http://www.instanceofjava.com/2015/02/java-8-interface-static-default-methods.html", firstItem.getLink());
 	}
 
+	@Test
+	public void testGetItemsFileBaeldungFeedburnerOrigLink() throws RssException {
+		List<Item> items = rssService.getItems("test-rss/baeldung.xml", true);
+		Item firstItem = items.get(0);
+		assertEquals("http://www.baeldung.com/spring-security-oauth2-authentication-with-reddit", firstItem.getLink());
+	}
+	
 }

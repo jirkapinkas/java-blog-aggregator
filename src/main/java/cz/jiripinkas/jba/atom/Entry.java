@@ -2,6 +2,7 @@ package cz.jiripinkas.jba.atom;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -11,6 +12,9 @@ public class Entry {
 
 	private Link link;
 
+	@XmlElement(namespace = "http://rssnamespace.org/feedburner/ext/1.0")
+	private String origLink;
+
 	private XMLGregorianCalendar updated;
 
 	private XMLGregorianCalendar published;
@@ -18,6 +22,14 @@ public class Entry {
 	private String content;
 
 	private String summary;
+
+	public String getOrigLink() {
+		return origLink;
+	}
+
+	public void setOrigLink(String origLink) {
+		this.origLink = origLink;
+	}
 
 	public XMLGregorianCalendar getPublished() {
 		return published;

@@ -1,0 +1,1645 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" media="screen" href="/~d/styles/rss2full.xsl"?><?xml-stylesheet type="text/css" media="screen" href="http://feeds.feedburner.com/~d/styles/itemcontent.css"?><rss xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" xmlns:feedburner="http://rssnamespace.org/feedburner/ext/1.0" version="2.0">
+
+<channel>
+	<title>Baeldung</title>
+	
+	<link>http://www.baeldung.com</link>
+	<description>Java, Spring and Web Development tutorials</description>
+	<lastBuildDate>Fri, 27 Feb 2015 22:03:40 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>http://wordpress.org/?v=4.1.1</generator>
+	<atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="self" type="application/rss+xml" href="http://feeds.feedburner.com/Baeldung" /><feedburner:info uri="baeldung" /><atom10:link xmlns:atom10="http://www.w3.org/2005/Atom" rel="hub" href="http://pubsubhubbub.appspot.com/" /><item>
+		<title>Authenticating with Reddit OAuth2 and Spring Security</title>
+		<link>http://feedproxy.google.com/~r/Baeldung/~3/dmHCtNXELgg/spring-security-oauth2-authentication-with-reddit</link>
+		<comments>http://www.baeldung.com/spring-security-oauth2-authentication-with-reddit#comments</comments>
+		<pubDate>Fri, 27 Feb 2015 22:03:40 +0000</pubDate>
+		<dc:creator><![CDATA[Eugen Paraschiv]]></dc:creator>
+				<category><![CDATA[Security]]></category>
+		<category><![CDATA[Spring]]></category>
+
+		<guid isPermaLink="false">http://www.baeldung.com/?p=5795</guid>
+		<description><![CDATA[1. Overview In this tutorial, we&#8217;ll use Spring Security OAuth to authenticate with the Reddit API. 2. Maven Configuration First, in order to use Spring Security OAuth &#8211; we need to add the following dependency to our pom.xml (of course along any other Spring dependency you might use): &#60;dependency&#62; &#60;groupId&#62;org.springframework.security.oauth&#60;/groupId&#62; &#60;artifactId&#62;spring-security-oauth2&#60;/artifactId&#62; &#60;version&#62;2.0.6.RELEASE&#60;/version&#62; &#60;/dependency&#62; 3. Configure [&#8230;]]]></description>
+				<content:encoded><![CDATA[<!-- Start Shortcoder content --><h3><b>I usually post about Security on Twitter - you can follow me there: <br /></b></h3>
+<p><a class="twitter-follow-button" href="https://twitter.com/baeldung" data-show-count="true" data-size="large" data-dnt="true">Follow @baeldung</a></p>
+<p>
+<script>// < ![CDATA[
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+// ]]&gt;</script>
+</p><!-- End Shortcoder content -->
+<h2><strong>1. Overview</strong></h2>
+<p>In this tutorial, we&#8217;ll use Spring Security OAuth to authenticate with the Reddit API.</p>
+<h2><strong>2. Maven Configuration</strong></h2>
+<p>First, in order to use Spring Security OAuth &#8211; we need to add the following dependency to our <em>pom.xml </em>(of course along any other Spring dependency you might use):</p>
+<pre class="brush: xml; gutter: true">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.security.oauth&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-security-oauth2&lt;/artifactId&gt;
+    &lt;version&gt;2.0.6.RELEASE&lt;/version&gt;
+&lt;/dependency&gt;</pre>
+<h2><strong>3. Configure OAuth2 Client</strong></h2>
+<p>Next &#8211; let&#8217;s configure our OAuth2 client &#8211; the <em>OAuth2RestTemplate</em> &#8211; and a <em>reddit.properties</em> file for all the authentication related properties:</p>
+<pre class="brush: java; gutter: true">@Configuration
+@EnableOAuth2Client
+@PropertySource(&quot;classpath:reddit.properties&quot;)
+protected static class ResourceConfiguration {
+
+    @Value(&quot;${accessTokenUri}&quot;)
+    private String accessTokenUri;
+
+    @Value(&quot;${userAuthorizationUri}&quot;)
+    private String userAuthorizationUri;
+
+    @Value(&quot;${clientID}&quot;)
+    private String clientID;
+
+    @Value(&quot;${clientSecret}&quot;)
+    private String clientSecret;
+
+    @Bean
+    public OAuth2ProtectedResourceDetails reddit() {
+        AuthorizationCodeResourceDetails details = new AuthorizationCodeResourceDetails();
+        details.setId(&quot;reddit&quot;);
+        details.setClientId(clientID);
+        details.setClientSecret(clientSecret);
+        details.setAccessTokenUri(accessTokenUri);
+        details.setUserAuthorizationUri(userAuthorizationUri);
+        details.setTokenName(&quot;oauth_token&quot;);
+        details.setScope(Arrays.asList(&quot;identity&quot;));
+        return details;
+    }
+
+    @Bean
+    public OAuth2RestTemplate redditRestTemplate(OAuth2ClientContext clientContext) {
+        OAuth2RestTemplate template = new OAuth2RestTemplate(reddit(), clientContext);
+        AccessTokenProvider accessTokenProvider = new AccessTokenProviderChain(
+          Arrays.&lt;AccessTokenProvider&gt; asList(
+            new MyAuthorizationCodeAccessTokenProvider(), 
+            new ImplicitAccessTokenProvider(), 
+            new ResourceOwnerPasswordAccessTokenProvider(),
+            new ClientCredentialsAccessTokenProvider())
+        );
+        template.setAccessTokenProvider(accessTokenProvider);
+        return template;
+    }
+
+}</pre>
+<p>And &#8220;<em>reddit.properties</em>&#8220;:</p>
+<pre class="brush: bash; gutter: true">clientID=xxxxxxxx
+clientSecret=xxxxxxxx
+accessTokenUri=https://www.reddit.com/api/v1/access_token
+userAuthorizationUri=https://www.reddit.com/api/v1/authorize</pre>
+<p>You can get your own secret code by creating a Reddit app from <a href="https://www.reddit.com/prefs/apps/">https://www.reddit.com/prefs/apps/</a></p>
+<p>We&#8217;re going to use the <em>OAuth2RestTemplate</em> to:</p>
+<ol>
+<li>Acquire the access token needed to access the remote resource.</li>
+<li>Access the remote resource after getting the access token.</li>
+</ol>
+<p>Also note how we added the scope &#8220;<em>identity</em>&#8221; to Reddit <em>OAuth2ProtectedResourceDetails</em> so that we can retrieve the users account information later.</p>
+<h2><strong>4. Custom <em>AuthorizationCodeAccessTokenProvider</em></strong></h2>
+<p>The Reddit OAuth2 implementation is a little different from the standard. And so &#8211; instead of elegantly extending the <em>AuthorizationCodeAccessTokenProvider</em> &#8211; we need to actually override some portions of it.</p>
+<p>There are github issues tracking improvements that will make this not necessary, but these issues are not yet done.</p>
+<p>One of the non-standard things that Reddit does is &#8211; when we redirect the user and prompt him to authenticate with Reddit, we need to have some custom parameters in the redirect URL. More specifically &#8211; if we&#8217;re asking for a permanent access token from Reddit &#8211; we need to add a parameter &#8220;<em>duration</em>&#8221; with the value &#8220;<em>permanent</em>&#8220;.</p>
+<p>So, after extending <em>AuthorizationCodeAccessTokenProvider</em> &#8211; we have added this parameter in the <em>getRedirectForAuthorization()</em> method:</p>
+<pre class="brush: java; gutter: true">    requestParameters.put(&quot;duration&quot;, &quot;permanent&quot;);</pre>
+<p>You can check the full source code from <a href="https://github.com/eugenp/tutorials/blob/master/spring-security-oauth/src/main/java/org/baeldung/config/MyAuthorizationCodeAccessTokenProvider.java">here</a>.</p>
+<h2><strong>5. MVC Configuration</strong></h2>
+<p>Now &#8211; let&#8217;s take a look at our MVC configuration of our simple web-app:</p>
+<pre class="brush: java; gutter: true">@Configuration
+@EnableWebMvc
+@ComponentScan(basePackages = { &quot;org.baeldung.web&quot; })
+public class WebConfig extends WebMvcConfigurerAdapter {
+
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer 
+      propertySourcesPlaceholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
+
+    @Bean
+    public ViewResolver viewResolver() {
+        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+        viewResolver.setPrefix(&quot;/WEB-INF/jsp/&quot;);
+        viewResolver.setSuffix(&quot;.jsp&quot;);
+        return viewResolver;
+    }
+
+    @Override
+    public void configureDefaultServletHandling(
+      DefaultServletHandlerConfigurer configurer) {
+        configurer.enable();
+    }
+
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler(&quot;/resources/**&quot;).addResourceLocations(&quot;/resources/&quot;);
+    }
+}</pre>
+<h2><strong>6. Custom <em>ServerInitializer</em></strong></h2>
+<p>Next &#8211; let&#8217;s create our custom <em>ServerInitializer</em>.</p>
+<p>We need to add a filter bean with id <em>oauth2ClientContextFilter</em>, so that we can use it to store the current context:</p>
+<pre class="brush: java; gutter: true">public class ServletInitializer extends AbstractDispatcherServletInitializer {
+
+    @Override
+    protected WebApplicationContext createServletApplicationContext() {
+        AnnotationConfigWebApplicationContext context = 
+          new AnnotationConfigWebApplicationContext();
+        context.register(WebConfig.class);
+        return context;
+    }
+
+    @Override
+    protected String[] getServletMappings() {
+        return new String[] { &quot;/&quot; };
+    }
+
+    @Override
+    protected WebApplicationContext createRootApplicationContext() {
+        return null;
+    }
+
+    @Override
+    public void onStartup(ServletContext servletContext) throws ServletException {
+        super.onStartup(servletContext);
+        registerProxyFilter(servletContext, &quot;oauth2ClientContextFilter&quot;);
+    }
+
+    private void registerProxyFilter(ServletContext servletContext, String name) {
+        DelegatingFilterProxy filter = new DelegatingFilterProxy(name);
+        filter.setContextAttribute(
+          &quot;org.springframework.web.servlet.FrameworkServlet.CONTEXT.dispatcher&quot;);
+        servletContext.addFilter(name, filter).addMappingForUrlPatterns(null, false, &quot;/*&quot;);
+    }
+}</pre>
+<h2><strong>7. <em>RedditController</em></strong></h2>
+<p>Now &#8211; let&#8217;s take a look at our controller <em>RedditController</em>.</p>
+<p>We use method <em>getInfo()</em> to get the user information from his Reddit account &#8211; as in the following example:</p>
+<pre class="brush: java; gutter: true">@Controller
+public class RedditController {
+
+    @Autowired
+    private OAuth2RestTemplate redditRestTemplate;
+
+    @RequestMapping(&quot;/info&quot;)
+    public String getInfo(Model model) {
+        JsonNode node = redditRestTemplate.getForObject(
+          &quot;https://oauth.reddit.com/api/v1/me&quot;, JsonNode.class);
+        String name = node.get(&quot;name&quot;).asText();
+        model.addAttribute(&quot;info&quot;, name);
+        return &quot;reddit&quot;;
+    }
+}</pre>
+<p>An interesting detail of this deceptively simple method &#8211; the reddit template <strong>checks if the access token is available before executing any request</strong>; it acquires a token if one is not available.</p>
+<p>Next &#8211; we present the information to our very simplistic front end.</p>
+<h2><strong>8. <em>reddit.jsp</em></strong></h2>
+<p>Finally &#8211; let&#8217;s take a look at <em>reddit.jsp</em> &#8211; to display the information retrieved form user&#8217;s Reddit account:</p>
+<pre class="brush: html; gutter: true">&lt;%@ taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot;%&gt;
+&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
+&lt;head&gt;
+    &lt;title&gt;Spring Security OAuth&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;c:choose&gt;
+    &lt;c:when test=&quot;${info != null}&quot;&gt;
+        &lt;h1&gt;Your Reddit Info&lt;/h1&gt;
+        &lt;b&gt;Your reddit username is &lt;/b&gt;${info}
+    &lt;/c:when&gt;
+    &lt;c:otherwise&gt; 
+        &lt;b&gt;Sorry, error occurred&lt;/b&gt; 
+        &lt;br&gt;&lt;br&gt;
+        &lt;div&gt;${error}&lt;/div&gt;
+    &lt;/c:otherwise&gt;
+&lt;/c:choose&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+<h2><strong>9. Conclusion</strong></h2>
+<p>In this introductory article, we explored <strong>authenticating with the Reddit OAuth2 API</strong> and displaying some very basic information in a simple front end.</p>
+<p>Now that we&#8217;re authenticated, we&#8217;re going to explore doing more interesting things with the Reddit API in the next article of this new series.</p>
+<p>The <strong>full implementation</strong> of this tutorial can be found in <a title="The Full Spring / Reddit Example Project on Github" href="https://github.com/eugenp/tutorials/tree/master/spring-security-oauth" target="_blank" rel="nofollow">the github project</a> – this is an Eclipse based project, so it should be easy to import and run as it is.</p>
+<!-- Start Shortcoder content --><h3><b>I usually post about Security on Twitter - you can follow me there: <br /></b></h3>
+<p><a class="twitter-follow-button" href="https://twitter.com/baeldung" data-show-count="true" data-size="large" data-dnt="true">Follow @Baeldung</a><br />
+<script>// < ![CDATA[
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+// ]]&gt;</script>
+</p><!-- End Shortcoder content -->
+<img src="//feeds.feedburner.com/~r/Baeldung/~4/dmHCtNXELgg" height="1" width="1" alt=""/>]]></content:encoded>
+			<wfw:commentRss>http://www.baeldung.com/spring-security-oauth2-authentication-with-reddit/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		<feedburner:origLink>http://www.baeldung.com/spring-security-oauth2-authentication-with-reddit</feedburner:origLink></item>
+		<item>
+		<title>Baeldung Weekly Review 9</title>
+		<link>http://feedproxy.google.com/~r/Baeldung/~3/8la2nitS8M8/2015-week-review-9</link>
+		<comments>http://www.baeldung.com/2015-week-review-9#comments</comments>
+		<pubDate>Fri, 27 Feb 2015 10:34:11 +0000</pubDate>
+		<dc:creator><![CDATA[Eugen Paraschiv]]></dc:creator>
+				<category><![CDATA[Weekly Review]]></category>
+
+		<guid isPermaLink="false">http://www.baeldung.com/?p=5810</guid>
+		<description><![CDATA[At the very beginning of 2014 I decided to track my reading habits and share the best stuff here, on Baeldung. 2014 has been quite the year, covering each week with a review. I&#8217;ve been doing a lot more reading to make sure I cover and curate stuff that has value and is actually worth [&#8230;]]]></description>
+				<content:encoded><![CDATA[<!-- Start Shortcoder content --><h3><b>I usually post about Dev stuff on Twitter - you can follow me there: </b></h3>
+<a href="https://twitter.com/baeldung" class="twitter-follow-button" data-show-count="true" data-size="large" data-dnt="true">Follow @baeldung</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+<!-- End Shortcoder content -->
+<p>At the very beginning of 2014 I decided to track my reading habits and <strong>share the best stuff here, on Baeldung</strong>.</p>
+<p>2014 has been quite the year, covering each week with a review. I&#8217;ve been doing a lot more reading to make sure I cover and curate stuff that has value and is actually worth reading.</p>
+<p><strong>Let me know in the comments</strong> if you&#8217;re finding my reviews interesting and useful.</p>
+<p><strong>Here we go…</strong></p>
+<h2><strong>1. Spring and Java</strong></h2>
+<h4><strong><a href="http://www.javaspecialists.eu/archive/Issue226.html">&gt;&gt; Discovering Where Threads Are Being Constructed</a></strong></h4>
+<p>An interesting example for getting in control of <strong>where threads are created from</strong> &#8211; and displaying some cool use of Java 8 syntax in the process.</p>
+<p><strong><a href="http://www.nurkiewicz.com/2015/02/journey-to-idempotency-and-temporal.html">&gt;&gt; Journey to idempotency and temporal decoupling</a></strong></p>
+<p>If your work involves HTTP in any way, shape or form, this one is <strong>a must read</strong> &#8211; slowly. It may make the difference between a resilient, mature system and one that just works sometimes.</p>
+<h4><strong><a href="http://marxsoftware.blogspot.ro/2015/02/joining-strings-in-jdk-8.html">&gt;&gt; Joining Strings in JDK 8</a></strong></h4>
+<p>We don&#8217;t need to use Guava for <strong>joining Strings</strong> any more &#8211; Java 8 has some useful APIs to do the job well.</p>
+<h4><strong><a href="http://vladmihalcea.com/2015/02/24/hibernate-locking-patterns-how-do-pessimistic_read-and-pessimistic_write-work/">&gt;&gt; Hibernate Locking Patterns – How do PESSIMISTIC_READ and PESSIMISTIC_WRITE work</a></strong></h4>
+<p>Vlad continues his very useful foray into the <strong>Hibernate pessimistic lock modes</strong>.</p>
+<p>Also worth reading:</p>
+<ul>
+<li>
+<h4><strong><a href="http://spring.io/blog/2015/02/20/stream-processing-in-spring-xd-1-1">&gt;&gt; Stream Processing in Spring XD 1.1</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://www.elasticsearch.org/blog/kibana-aggregation-execution-order-and-you/">&gt;&gt; Kibana, aggregation execution order, and you</a> and <a href="http://www.elasticsearch.org/blog/kibana-4-for-investigating-pacs-super-pacs-and-your-neighbors/">&gt;&gt; Kibana 4 for investigating PACs, Super PACs, and who your neighbor might be voting for</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://www.elasticsearch.org/blog/how-elasticsearch-made-us-faster-literally/">&gt;&gt; How Elasticsearch Made Us Faster – Literally</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://blog.codefx.org/design/patterns/interface-evolution-with-default-methods-methods/">&gt;&gt; Interface Evolution With Default Methods – Part I: Methods</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="https://www.voxxed.com/blog/2015/02/no-snail-herding-websocket-addition-jrebel-spring-boot/">&gt;&gt; No More Snail Herding: WebSocket Addition with JRebel and Spring Boot</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://ncredinburgh.com/blog/posts/should-i-test-builders">&gt;&gt; Should I test my builders?</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://nginx.com/blog/microservices-at-netflix-architectural-best-practices/">&gt;&gt; Adopting Microservices at Netflix: Lessons for Architectural Design</a></strong></h4>
+</li>
+</ul>
+<p>Webinars and presentations:</p>
+<ul>
+<li>
+<h4><strong><a href="http://www.infoq.com/presentations/resource-spring-mvc-4-1">&gt;&gt; Resource Handling in Spring MVC 4.1</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://spring.io/blog/2015/02/24/springone2gx-2014-replay-spring-data-rest-data-meets-hypermedia">&gt;&gt; Spring Data REST &#8211; Data Meets Hypermedia</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://www.infoq.com/presentations/spring-data-gemfire-7-5">&gt;&gt; The Revolution Will Not Be Centralized</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://spring.io/blog/2015/02/23/springone2gx-2014-replay-artistic-spring-data-neo4j-3-x-with-spring-boot">&gt;&gt; Artistic Spring Data Neo4j 3.x with Spring Boot</a></strong></h4>
+</li>
+</ul>
+<p>Time to upgrade:</p>
+<ul>
+<li>
+<h4><strong><a href="http://spring.io/blog/2015/02/20/spring-framework-4-1-5-released">&gt;&gt; Spring Framework 4.1.5 released</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://spring.io/blog/2015/02/26/spring-security-3-2-6-released">&gt;&gt; Spring Security 3.2.6 Released</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://spring.io/blog/2015/02/26/spring-security-4-0-0-rc2-released">&gt;&gt; Spring Security 4.0.0.RC2 Released</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://spring.io/blog/2015/02/27/spring-boot-1-1-11-released">&gt;&gt; Spring Boot 1.1.11 released</a> and <a href="http://spring.io/blog/2015/02/27/spring-boot-1-2-2-released">Spring Boot 1.2.2 released</a></strong></h4>
+</li>
+</ul>
+<h2><strong>2. Technical and Musings</strong></h2>
+<h4><strong><a href="http://blog.jayfields.com/2015/02/experience-report-weak-code-ownership.html">&gt;&gt; Experience Report: Weak Code Ownership</a></strong></h4>
+<p><strong>Being intentional about <em>code ownership</em> in a team</strong> is an important first step a lot of teams don&#8217;t take. But once that&#8217;s explicitly considered, there&#8217;s a choice between <em>Collective</em> and <em>Weak</em> code ownership &#8211; and I fully agree with this article &#8211; in my experience, weak ownership works better.</p>
+<h4><a href="http://www.daedtech.com/10x-developer-reconsidered"><strong>&gt;&gt; 10x Developer, Reconsidered</strong></a></h4>
+<p>The concept of the <em>10x Developer</em> with a pinch of nuance thrown in. You know &#8211; like real life.</p>
+<h4><strong><a href="http://dandreamsofcoding.com/2015/02/23/is-a-vs-has-a/">&gt;&gt; is-a vs. has-a</a></strong></h4>
+<p>An interesting look at a Maslow’s hierarchy of needs modified for <strong>working in a modern day company</strong>.</p>
+<h4><strong><a href="http://blog.thecodewhisperer.com/2015/02/15/you-have-to-know-when-to-stop/">&gt;&gt; You Have to Know When to Stop</a></strong></h4>
+<p><strong>A benefit of TDD</strong> that I haven&#8217;t considered &#8211; and know that I think about it, makes perfect sense &#8211; is you know <strong>When To Stop</strong>.</p>
+<h2><strong>3. Comics</strong></h2>
+<p>And my favorite Dilberts of the week:</p>
+<h4><strong><a href="http://dilbert.com/strip/2007-05-31">&gt;&gt; Your Annual Performance Review</a></strong></h4>
+<h4><strong><a href="http://dilbert.com/strip/2010-03-31">&gt;&gt; Leadership</a></strong></h4>
+<h4><strong><a href="http://dilbert.com/strip/2007-05-16">&gt;&gt; Data to Ignore</a></strong></h4>
+<h2><strong>4. Pick of the Week</strong></h2>
+<p>Earlier this year I introduced the “Pick of the Week” section here in my “Weekly Review”. <strong>If you’re already on my email list – you got the pick already</strong> – hope you enjoyed it.</p>
+<p>If not – you can <strong>share the review</strong> and unlock it right here:</p>
+
+<!-- Start Shortcoder content --><p>&nbsp;</p>
+<h3><b>I usually post about Dev stuff on Twitter - you can follow me there: </b></h3>
+<p><a class="twitter-follow-button" href="https://twitter.com/baeldung" data-show-count="true" data-size="large" data-dnt="true">Follow @baeldung</a></p>
+<p>
+<script>// < ![CDATA[
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+// ]]&gt;</script>
+</p><!-- End Shortcoder content -->
+<img src="//feeds.feedburner.com/~r/Baeldung/~4/8la2nitS8M8" height="1" width="1" alt=""/>]]></content:encoded>
+			<wfw:commentRss>http://www.baeldung.com/2015-week-review-9/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		<feedburner:origLink>http://www.baeldung.com/2015-week-review-9</feedburner:origLink></item>
+		<item>
+		<title>Spring Security Registration Tutorial</title>
+		<link>http://feedproxy.google.com/~r/Baeldung/~3/qXj5XeR2gMs/spring-security-registration</link>
+		<comments>http://www.baeldung.com/spring-security-registration#comments</comments>
+		<pubDate>Sun, 22 Feb 2015 16:58:34 +0000</pubDate>
+		<dc:creator><![CDATA[Eugen Paraschiv]]></dc:creator>
+				<category><![CDATA[Security]]></category>
+		<category><![CDATA[Spring]]></category>
+
+		<guid isPermaLink="false">http://www.baeldung.com/?p=5798</guid>
+		<description><![CDATA[Building a full-fledged, production ready registration for your web app is oh so much more than just putting together a simple registration page.]]></description>
+				<content:encoded><![CDATA[<!-- Start Shortcoder content --><h3><b>I usually post about Security on Twitter - you can follow me there: <br /></b></h3>
+<p><a class="twitter-follow-button" href="https://twitter.com/baeldung" data-show-count="true" data-size="large" data-dnt="true">Follow @baeldung</a></p>
+<p>
+<script>// < ![CDATA[
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+// ]]&gt;</script>
+</p><!-- End Shortcoder content -->
+<p>Building a full-fledged, production ready registration for your web application is oh so much more than just putting together a simple registration page.</p>
+<p>There are <strong>a lot of questions</strong> that need to be answered:</p>
+<ul>
+<li>How do I <strong>verify the email addresses</strong> of new users?</li>
+<li>How do I properly and safely <strong>store user credentials</strong>?</li>
+<li>What if a user <strong>forgets their password</strong>?</li>
+<li>What about <strong>users changing their own password</strong>?</li>
+<li>How <strong>strong should passwords be</strong>? How can I enforce some sensible defaults in the app so that my users have good, strong passwords?</li>
+<li>What if I have more than one type of user? I need a good way to <strong>store roles and privileges</strong>.</li>
+<li>What about <strong>security questions</strong>? Should I even have them?</li>
+<li>How do I do all of this with good localization support? There are a lot of messages involved.</li>
+</ul>
+<h4><strong><a href="http://www.baeldung.com/registration-with-spring-mvc-and-spring-security">&gt;&gt; The Registration Process</a></strong></h4>
+<p>Starting at the top &#8211; this is how to set up a basic Registration process for your web app. Doesn&#8217;t have to many bells and whistles, but it&#8217;s clean and functional to begin with.</p>
+<h4><strong><a href="http://www.baeldung.com/registration-verify-user-by-email">&gt;&gt; Registration – Activate a New Account by Email</a></strong></h4>
+<p>Now we want to make sure that users verify their emails before being able to just log into the app.</p>
+<h4><strong><a href="http://www.baeldung.com/spring-security-registration-verification-email">&gt;&gt; Resend the Verification Email</a><br />
+</strong></h4>
+<p>If a user signs up and doesn&#8217;t verify their email for a while &#8211; their verifications expires at some point. This is how they request a new verification link.</p>
+<h4><strong><a href="http://www.baeldung.com/spring-security-registration-password-encoding-bcrypt">&gt;&gt; Registration – Password Encoding</a></strong></h4>
+<p>The age old question &#8211; how to store passwords? Simple answer? You don&#8217;t!</p>
+<h4><strong><a href="http://www.baeldung.com/spring-security-registration-i-forgot-my-password">&gt;&gt; Reset Your Password</a></strong></h4>
+<p>Users are forgetful creatures &#8211; so <strong>they&#8217;ll forget their passwords</strong> sooner rather than later. You should have a good way for your users to reset their passwords if they need to.</p>
+<!-- Start Shortcoder content --><h3><b>I usually post about Security on Twitter - you can follow me there: <br /></b></h3>
+<p><a class="twitter-follow-button" href="https://twitter.com/baeldung" data-show-count="true" data-size="large" data-dnt="true">Follow @Baeldung</a><br />
+<script>// < ![CDATA[
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+// ]]&gt;</script>
+</p><!-- End Shortcoder content -->
+<img src="//feeds.feedburner.com/~r/Baeldung/~4/qXj5XeR2gMs" height="1" width="1" alt=""/>]]></content:encoded>
+			<wfw:commentRss>http://www.baeldung.com/spring-security-registration/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		<feedburner:origLink>http://www.baeldung.com/spring-security-registration</feedburner:origLink></item>
+		<item>
+		<title>REST Query Language – Advanced Search Operations</title>
+		<link>http://feedproxy.google.com/~r/Baeldung/~3/-CpEF5Trgxo/rest-api-query-search-language-more-operations</link>
+		<comments>http://www.baeldung.com/rest-api-query-search-language-more-operations#comments</comments>
+		<pubDate>Sat, 21 Feb 2015 14:25:40 +0000</pubDate>
+		<dc:creator><![CDATA[Eugen Paraschiv]]></dc:creator>
+				<category><![CDATA[REST]]></category>
+		<category><![CDATA[Spring]]></category>
+
+		<guid isPermaLink="false">http://www.baeldung.com/?p=5773</guid>
+		<description><![CDATA[How to implement a mature, tested Query Language for a REST Search API, using Spring and Spring Data JPA Specifications.]]></description>
+				<content:encoded><![CDATA[<!-- Start Shortcoder content --><h3><b>I usually post about REST APIs and HTTP on Twitter - you can follow me there: </b></h3>
+<a href="https://twitter.com/baeldung" class="twitter-follow-button" data-show-count="true" data-size="large" data-dnt="true">Follow @baeldung</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+<!-- End Shortcoder content -->
+<h2><strong>1. Overview</strong></h2>
+<p>In this article, we&#8217;ll extend the REST Query Language we developed in <a title="REST Query Language with Spring Data JPA Specifications" href="http://www.baeldung.com/rest-api-search-language-spring-data-specifications">the previous parts of the series</a> to <strong>include more search operations</strong>.</p>
+<p>We now support the following operations: Equality, Negation, Greater than, Less than, Starts with, Ends with, Contains and Like.</p>
+<p>Note that we explored three implementations &#8211; JPA Criteria, Spring Data JPA Specifications and Query DSL; we&#8217;re going forward with Specifications in this article because it&#8217;s a clean and flexible way to represent our operations.</p>
+<h2><strong>2. The <em>SearchOperation</em> <em>enum</em></strong></h2>
+<p>First &#8211; let&#8217;s start by defining a better representation of our various supported search operations &#8211; via an enumeration:</p>
+<pre class="brush: java; gutter: true">public enum SearchOperation {
+    EQUALITY, NEGATION, GREATER_THAN, LESS_THAN, LIKE, STARTS_WITH, ENDS_WITH, CONTAINS;
+
+    public static final String[] SIMPLE_OPERATION_SET = { &quot;:&quot;, &quot;!&quot;, &quot;&gt;&quot;, &quot;&lt;&quot;, &quot;~&quot; };
+
+    public static SearchOperation getSimpleOperation(char input) {
+        switch (input) {
+        case &#039;:&#039;:
+            return EQUALITY;
+        case &#039;!&#039;:
+            return NEGATION;
+        case &#039;&gt;&#039;:
+            return GREATER_THAN;
+        case &#039;&lt;&#039;:
+            return LESS_THAN;
+        case &#039;~&#039;:
+            return LIKE;
+        default:
+            return null;
+        }
+    }
+}</pre>
+<p>We have two sets of operations:</p>
+<p>1. <strong>Simple</strong> &#8211; can be represented by one character:</p>
+<ul>
+<li>Equality: represented by colon (<em>:</em>)</li>
+<li>Negation: represented by Exclamation mark (<em>!</em>)</li>
+<li>Greater than: represented by (<em>&gt;</em>)</li>
+<li>Less than: represented by (<em>&lt;</em>)</li>
+<li>Like: represented by tilde (<em>~</em>)</li>
+</ul>
+<p>2. <strong>Complex</strong> &#8211; need more than one character to be represented:</p>
+<ul>
+<li>Starts with: represented by (<em>=prefix*</em>)</li>
+<li>Ends with: represented by (<em>=*suffix</em>)</li>
+<li>Contains: represented by (<em>=*substring*</em>)</li>
+</ul>
+<p>We also need to modify our <em>SearchCriteria</em> class to use the new <em>SearchOperation</em>:</p>
+<pre class="brush: java; gutter: true">public class SearchCriteria {
+    private String key;
+    private SearchOperation operation;
+    private Object value;
+}</pre>
+<h2><strong>3. Modify <em>UserSpecification</em></strong></h2>
+<p>Now &#8211; let&#8217;s include the newly supported operations into our <em>UserSpecification</em> implementation:</p>
+<pre class="brush: java; gutter: true">public class UserSpecification implements Specification&lt;User&gt; {
+
+    private SearchCriteria criteria;
+
+    @Override
+    public Predicate toPredicate(
+      Root&lt;User&gt; root, CriteriaQuery&lt;?&gt; query, CriteriaBuilder builder) {
+    
+        switch (criteria.getOperation()) {
+        case EQUALITY:
+            return builder.equal(root.get(criteria.getKey()), criteria.getValue());
+        case NEGATION:
+            return builder.notEqual(root.get(criteria.getKey()), criteria.getValue());
+        case GREATER_THAN:
+            return builder.greaterThan(root.&lt;String&gt; get(
+              criteria.getKey()), criteria.getValue().toString());
+        case LESS_THAN:
+            return builder.lessThan(root.&lt;String&gt; get(
+              criteria.getKey()), criteria.getValue().toString());
+        case LIKE:
+            return builder.like(root.&lt;String&gt; get(
+              criteria.getKey()), criteria.getValue().toString());
+        case STARTS_WITH:
+            return builder.like(root.&lt;String&gt; get(criteria.getKey()), criteria.getValue() + &quot;%&quot;);
+        case ENDS_WITH:
+            return builder.like(root.&lt;String&gt; get(criteria.getKey()), &quot;%&quot; + criteria.getValue());
+        case CONTAINS:
+            return builder.like(root.&lt;String&gt; get(
+              criteria.getKey()), &quot;%&quot; + criteria.getValue() + &quot;%&quot;);
+        default:
+            return null;
+        }
+    }
+}</pre>
+<h2><strong>4. Persistence Tests<br />
+</strong></h2>
+<p>Next &#8211; we let&#8217;s test our new search operations &#8211; at the persistence level:</p>
+<h3><strong>4.1. Test Equality<br />
+</strong></h3>
+<p>In the following example &#8211; we&#8217;ll search for a user <strong>by their first and last name</strong>:</p>
+<pre class="brush: java; gutter: true">@Test
+public void givenFirstAndLastName_whenGettingListOfUsers_thenCorrect() {
+    UserSpecification spec = new UserSpecification(
+      new SearchCriteria(&quot;firstName&quot;, SearchOperation.EQUALITY, &quot;john&quot;));
+    UserSpecification spec1 = new UserSpecification(
+      new SearchCriteria(&quot;lastName&quot;, SearchOperation.EQUALITY, &quot;doe&quot;));
+    List&lt;User&gt; results = repository.findAll(Specifications.where(spec).and(spec1));
+
+    assertThat(userJohn, isIn(results));
+    assertThat(userTom, not(isIn(results)));
+}</pre>
+<h3><strong>4.2. Test Negation<br />
+</strong></h3>
+<p>Next, let&#8217;s search for users that by the <strong>their first name not &#8220;john&#8221;</strong>:</p>
+<pre class="brush: java; gutter: true">@Test
+public void givenFirstNameInverse_whenGettingListOfUsers_thenCorrect() {
+    UserSpecification spec = new UserSpecification(
+      new SearchCriteria(&quot;firstName&quot;, SearchOperation.NEGATION, &quot;john&quot;));
+    List&lt;User&gt; results = repository.findAll(Specifications.where(spec));
+
+    assertThat(userTom, isIn(results));
+    assertThat(userJohn, not(isIn(results)));
+}</pre>
+<h3><strong>4.3. Test Greater Than<br />
+</strong></h3>
+<p>Next &#8211; we will search for users with <strong>age greater than &#8220;25&#8221;</strong>:</p>
+<pre class="brush: java; gutter: true">@Test
+public void givenMinAge_whenGettingListOfUsers_thenCorrect() {
+    UserSpecification spec = new UserSpecification(
+      new SearchCriteria(&quot;age&quot;, SearchOperation.GREATER_THAN, &quot;25&quot;));
+    List&lt;User&gt; results = repository.findAll(Specifications.where(spec));
+
+    assertThat(userTom, isIn(results));
+    assertThat(userJohn, not(isIn(results)));
+}</pre>
+<h3><strong>4.4. Test Starts With<br />
+</strong></h3>
+<p>Next &#8211; users with <strong>their first name starting with &#8220;jo&#8221;</strong>:</p>
+<pre class="brush: java; gutter: true">@Test
+public void givenFirstNamePrefix_whenGettingListOfUsers_thenCorrect() {
+    UserSpecification spec = new UserSpecification(
+      new SearchCriteria(&quot;firstName&quot;, SearchOperation.STARTS_WITH, &quot;jo&quot;));
+    List&lt;User&gt; results = repository.findAll(spec);
+
+    assertThat(userJohn, isIn(results));
+    assertThat(userTom, not(isIn(results)));
+}</pre>
+<h3><strong>4.5. Test Ends With<br />
+</strong></h3>
+<p>Next we&#8217;ll search for users with <strong>their first name ending with &#8220;n&#8221;</strong>:</p>
+<pre class="brush: java; gutter: true">@Test
+public void givenFirstNameSuffix_whenGettingListOfUsers_thenCorrect() {
+    UserSpecification spec = new UserSpecification(
+      new SearchCriteria(&quot;firstName&quot;, SearchOperation.ENDS_WITH, &quot;n&quot;));
+    List&lt;User&gt; results = repository.findAll(spec);
+
+    assertThat(userJohn, isIn(results));
+    assertThat(userTom, not(isIn(results)));
+}</pre>
+<h3><strong>4.6. Test Contains</strong></h3>
+<p>Now, we&#8217;ll search for users with <strong>their first name containing &#8220;oh&#8221;</strong>:</p>
+<pre class="brush: java; gutter: true">@Test
+public void givenFirstNameSubstring_whenGettingListOfUsers_thenCorrect() {
+    UserSpecification spec = new UserSpecification(
+      new SearchCriteria(&quot;firstName&quot;, SearchOperation.CONTAINS, &quot;oh&quot;));
+    List&lt;User&gt; results = repository.findAll(spec);
+
+    assertThat(userJohn, isIn(results));
+    assertThat(userTom, not(isIn(results)));
+}</pre>
+<h3><strong>4.7. Test Range<br />
+</strong></h3>
+<p>Finally, we&#8217;ll search for users with <strong>ages between &#8220;20&#8221; and &#8220;25&#8221;</strong>:</p>
+<pre class="brush: java; gutter: true">@Test
+public void givenAgeRange_whenGettingListOfUsers_thenCorrect() {
+    UserSpecification spec = new UserSpecification(
+      new SearchCriteria(&quot;age&quot;, SearchOperation.GREATER_THAN, &quot;20&quot;));
+    UserSpecification spec1 = new UserSpecification(
+      new SearchCriteria(&quot;age&quot;, SearchOperation.LESS_THAN, &quot;25&quot;));
+    List&lt;User&gt; results = repository.findAll(Specifications.where(spec).and(spec1));
+
+    assertThat(userJohn, isIn(results));
+    assertThat(userTom, not(isIn(results)));
+}</pre>
+<h2><strong>5. The <em>UserSpecificationBuilder</em></strong></h2>
+<p>Now that persistence is done and tested, let&#8217;s move our attention to the web layer.</p>
+<p>We&#8217;ll build on top of the <em>UserSpecificationBuilder</em> implementation from the previous article to <strong>incorporate the new new search operations</strong>:</p>
+<pre class="brush: java; gutter: true">public class UserSpecificationsBuilder {
+
+    private List&lt;SearchCriteria&gt; params;
+
+    public UserSpecificationsBuilder with(
+      String key, String operation, Object value, String prefix, String suffix) {
+    
+        SearchOperation op = SearchOperation.getSimpleOperation(operation.charAt(0));
+        if (op != null) {
+            if (op == SearchOperation.EQUALITY) {
+                boolean startWithAsterisk = prefix.contains(&quot;*&quot;);
+                boolean endWithAsterisk = suffix.contains(&quot;*&quot;);
+
+                if (startWithAsterisk &amp;&amp; endWithAsterisk) {
+                    op = SearchOperation.CONTAINS;
+                } else if (startWithAsterisk) {
+                    op = SearchOperation.ENDS_WITH;
+                } else if (endWithAsterisk) {
+                    op = SearchOperation.STARTS_WITH;
+                }
+            }
+            params.add(new SearchCriteria(key, op, value));
+        }
+        return this;
+    }
+
+    public Specification&lt;User&gt; build() {
+        if (params.size() == 0) {
+            return null;
+        }
+
+        List&lt;Specification&lt;User&gt;&gt; specs = new ArrayList&lt;Specification&lt;User&gt;&gt;();
+        for (SearchCriteria param : params) {
+            specs.add(new UserSpecification(param));
+        }
+
+        Specification&lt;User&gt; result = specs.get(0);
+        for (int i = 1; i &lt; specs.size(); i++) {
+            result = Specifications.where(result).and(specs.get(i));
+        }
+        return result;
+    }
+}</pre>
+<h2><strong>6. The <em>UserController</em></strong></h2>
+<p>Next &#8211; we need to modify our <em>UserController</em> to correctly <strong>parse the new operations</strong>:</p>
+<pre class="brush: java; gutter: true">@RequestMapping(method = RequestMethod.GET, value = &quot;/users&quot;)
+@ResponseBody
+public List&lt;User&gt; findAllBySpecification(@RequestParam(value = &quot;search&quot;) String search) {
+    UserSpecificationsBuilder builder = new UserSpecificationsBuilder();
+    String operationSetExper = Joiner.on(&quot;|&quot;).join(SearchOperation.SIMPLE_OPERATION_SET);
+    Pattern pattern = Pattern.compile(
+      &quot;(\\w+?)(&quot; + operationSetExper + &quot;)(\\p{Punct}?)(\\w+?)(\\p{Punct}?),&quot;);
+    Matcher matcher = pattern.matcher(search + &quot;,&quot;);
+    while (matcher.find()) {
+        builder.with(
+          matcher.group(1), 
+          matcher.group(2), 
+          matcher.group(4), 
+          matcher.group(3), 
+          matcher.group(5));
+    }
+
+    Specification&lt;User&gt; spec = builder.build();
+    return dao.findAll(spec);
+}</pre>
+<p>We can now hit the API and get back the right results with any combination of criteria. For example &#8211; here&#8217;s a what a complex operation would look like using API with the query language:</p>
+<pre class="brush: bash; gutter: true">http://localhost:8080/users?search=firstName:jo*,age&lt;25</pre>
+<p>And the response:</p>
+<pre class="brush: bash; gutter: true">[{
+    &quot;id&quot;:1,
+    &quot;firstName&quot;:&quot;john&quot;,
+    &quot;lastName&quot;:&quot;doe&quot;,
+    &quot;email&quot;:&quot;john@doe.com&quot;,
+    &quot;age&quot;:24
+}]</pre>
+<h2><strong>7</strong><strong>. Tests for the Search API</strong></h2>
+<p>Finally &#8211; let&#8217;s make sure our API works well by writing a suite of API tests.</p>
+<p>We&#8217;ll start with the simple configuration of the test and the data initialization:</p>
+<pre class="brush: java; gutter: true">@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(
+  classes = { ConfigTest.class, PersistenceConfig.class }, 
+  loader = AnnotationConfigContextLoader.class)
+@ActiveProfiles(&quot;test&quot;)
+public class JPASpecificationLiveTest {
+
+    @Autowired
+    private UserRepository repository;
+
+    private User userJohn;
+    private User userTom;
+
+    private final String URL_PREFIX = &quot;http://localhost:8080/users?search=&quot;;
+
+    @Before
+    public void init() {
+        userJohn = new User();
+        userJohn.setFirstName(&quot;John&quot;);
+        userJohn.setLastName(&quot;Doe&quot;);
+        userJohn.setEmail(&quot;john@doe.com&quot;);
+        userJohn.setAge(22);
+        repository.save(userJohn);
+
+        userTom = new User();
+        userTom.setFirstName(&quot;Tom&quot;);
+        userTom.setLastName(&quot;Doe&quot;);
+        userTom.setEmail(&quot;tom@doe.com&quot;);
+        userTom.setAge(26);
+        repository.save(userTom);
+    }
+
+    private RequestSpecification givenAuth() {
+        return RestAssured.given().auth()
+                                  .preemptive()
+                                  .basic(&quot;username&quot;, &quot;password&quot;);
+    }
+}</pre>
+<h3><strong>7.1. Test Equality<br />
+</strong></h3>
+<p>First &#8211; let&#8217;s search for a user with <strong>the first name &#8220;<em>john</em>&#8221; and last name &#8220;<em>doe</em>&#8220;</strong>:</p>
+<pre class="brush: java; gutter: true">@Test
+public void givenFirstAndLastName_whenGettingListOfUsers_thenCorrect() {
+    Response response = givenAuth().get(URL_PREFIX + &quot;firstName:john,lastName:doe&quot;);
+    String result = response.body().asString();
+
+    assertTrue(result.contains(userJohn.getEmail()));
+    assertFalse(result.contains(userTom.getEmail()));
+}</pre>
+<h3><strong>7.2. Test Negation<br />
+</strong></h3>
+<p>Now &#8211; we&#8217;ll search for users when <strong>their first name isn&#8217;t &#8220;john&#8221;</strong>:</p>
+<pre class="brush: java; gutter: true">@Test
+public void givenFirstNameInverse_whenGettingListOfUsers_thenCorrect() {
+    Response response = givenAuth().get(URL_PREFIX + &quot;firstName!john&quot;);
+    String result = response.body().asString();
+
+    assertTrue(result.contains(userTom.getEmail()));
+    assertFalse(result.contains(userJohn.getEmail()));
+}</pre>
+<h3><strong>7.3. Test Greater Than<br />
+</strong></h3>
+<p>Next &#8211; we will look for users with <strong>age greater than &#8220;25&#8221;</strong>:</p>
+<pre class="brush: java; gutter: true">@Test
+public void givenMinAge_whenGettingListOfUsers_thenCorrect() {
+    Response response = givenAuth().get(URL_PREFIX + &quot;age&gt;25&quot;);
+    String result = response.body().asString();
+
+    assertTrue(result.contains(userTom.getEmail()));
+    assertFalse(result.contains(userJohn.getEmail()));
+}</pre>
+<h3><strong>7.4. Test Starts With<br />
+</strong></h3>
+<p>Next &#8211; users with <strong>their first name starting with &#8220;jo&#8221;</strong>:</p>
+<pre class="brush: java; gutter: true">@Test
+public void givenFirstNamePrefix_whenGettingListOfUsers_thenCorrect() {
+    Response response = givenAuth().get(URL_PREFIX + &quot;firstName:jo*&quot;);
+    String result = response.body().asString();
+
+    assertTrue(result.contains(userJohn.getEmail()));
+    assertFalse(result.contains(userTom.getEmail()));
+}</pre>
+<h3><strong>7.5. Test Ends With<br />
+</strong></h3>
+<p>Now &#8211; users with <strong>their first name ending with &#8220;n&#8221;</strong>:</p>
+<pre class="brush: java; gutter: true">@Test
+public void givenFirstNameSuffix_whenGettingListOfUsers_thenCorrect() {
+    Response response = givenAuth().get(URL_PREFIX + &quot;firstName:*n&quot;);
+    String result = response.body().asString();
+
+    assertTrue(result.contains(userJohn.getEmail()));
+    assertFalse(result.contains(userTom.getEmail()));
+}</pre>
+<h3><strong>7.6. Test Contains</strong></h3>
+<p>Next, we&#8217;ll search for users with <strong>their first name containing &#8220;oh&#8221;</strong>:</p>
+<pre class="brush: java; gutter: true">@Test
+public void givenFirstNameSubstring_whenGettingListOfUsers_thenCorrect() {
+    Response response = givenAuth().get(URL_PREFIX + &quot;firstName:*oh*&quot;);
+    String result = response.body().asString();
+
+    assertTrue(result.contains(userJohn.getEmail()));
+    assertFalse(result.contains(userTom.getEmail()));
+}</pre>
+<h3><strong>7.7. Test Range<br />
+</strong></h3>
+<p>Finally, we&#8217;ll search for users with <strong>ages between &#8220;20&#8221; and &#8220;25&#8221;</strong>:</p>
+<pre class="brush: java; gutter: true">@Test
+public void givenAgeRange_whenGettingListOfUsers_thenCorrect() {
+    Response response = givenAuth().get(URL_PREFIX + &quot;age&gt;20,age&lt;25&quot;);
+    String result = response.body().asString();
+
+    assertTrue(result.contains(userJohn.getEmail()));
+    assertFalse(result.contains(userTom.getEmail()));
+}</pre>
+<h2><strong>8. Conclusion</strong></h2>
+<p>In this article we brought the query language of our REST Search API forward to <strong>a mature, tested, production grade implementation</strong>. We now support a wide variety of operations and constraints, which should make it quite easy to cut across any dataset elegantly and get to the exact resources we&#8217;re looking for.</p>
+<p>The <strong>full implementation</strong> of this article can be found in <a title="The Full Example Project on Github" href="https://github.com/eugenp/tutorials/tree/master/spring-security-rest-full" target="_blank" rel="nofollow">the github project</a> – this is an Eclipse based project, so it should be easy to import and run as it is.</p>
+<!-- Start Shortcoder content --><h3><b>I usually post about REST APIs and HTTP on Twitter - you can follow me there: </b></h3>
+<a href="https://twitter.com/baeldung" class="twitter-follow-button" data-show-count="true" data-size="large" data-dnt="true">Follow @baeldung</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+<!-- End Shortcoder content -->
+<img src="//feeds.feedburner.com/~r/Baeldung/~4/-CpEF5Trgxo" height="1" width="1" alt=""/>]]></content:encoded>
+			<wfw:commentRss>http://www.baeldung.com/rest-api-query-search-language-more-operations/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		<feedburner:origLink>http://www.baeldung.com/rest-api-query-search-language-more-operations</feedburner:origLink></item>
+		<item>
+		<title>Baeldung Weekly Review 8</title>
+		<link>http://feedproxy.google.com/~r/Baeldung/~3/htpoVe8vVXQ/2015-week-review-8</link>
+		<comments>http://www.baeldung.com/2015-week-review-8#comments</comments>
+		<pubDate>Fri, 20 Feb 2015 09:02:01 +0000</pubDate>
+		<dc:creator><![CDATA[Eugen Paraschiv]]></dc:creator>
+				<category><![CDATA[Weekly Review]]></category>
+
+		<guid isPermaLink="false">http://www.baeldung.com/?p=5758</guid>
+		<description><![CDATA[HTTP 2 is final &#8211; the big news of this week (it has been a while since the last one). Also &#8211; some cool deep dives into the JVM and Hibernate.]]></description>
+				<content:encoded><![CDATA[<!-- Start Shortcoder content --><h3><b>I usually post about Dev stuff on Twitter - you can follow me there: </b></h3>
+<a href="https://twitter.com/baeldung" class="twitter-follow-button" data-show-count="true" data-size="large" data-dnt="true">Follow @baeldung</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+<!-- End Shortcoder content -->
+<p>At the very beginning of 2014 I decided to track my reading habits and <strong>share the best stuff here, on Baeldung</strong>.</p>
+<p>2014 has been quite the year, covering each week with a review. I&#8217;ve been doing a lot more reading to make sure I cover and curate stuff that has value and is actually worth reading.</p>
+<p><strong>Let me know in the comments</strong> if you&#8217;re finding my reviews interesting and useful.</p>
+<p><strong>Here we go…</strong></p>
+<h2><strong>1. Spring and Java</strong></h2>
+<h4><strong><a href="http://blog.codefx.org/jdk/value-based-classes">&gt;&gt; Value-Based Classes</a></strong></h4>
+<p>A comprehensive guide to <strong>what value based classes mean</strong> in Java 8 (not much) and what will likely mean in Java 9 and beyond (a lot more).</p>
+<h4><strong><a href="http://vladmihalcea.com/2015/02/16/hibernate-locking-patterns-how-does-pessimistic_force_increment-lock-mode-work/">&gt;&gt; Hibernate locking patterns – How does PESSIMISTIC_FORCE_INCREMENT Lock Mode work</a></strong></h4>
+<p>The Hibernate Masterclass is moving forward, this time with a solid piece <strong>on pessimistic locking</strong>.</p>
+<h4><strong><a href="https://plumbr.eu/blog/jvm-having-access-to-less-memory-than-xmx">&gt;&gt; Why is my JVM having access to less memory than specified via -Xmx?</a></strong></h4>
+<p>Deep dive into <strong>the JVM memory configuration options</strong> and how they translate to the runtime.</p>
+<p><strong><a href="http://marxsoftware.blogspot.ro/2015/02/jdk-8-collections-conversions.html">&gt;&gt; Using JDK 8 Streams to Convert Between Collections of Wrapped Objects and Collections of Wrapper Objects</a></strong></p>
+<p>An exploration of how to best leverage streams to deal with <strong>conversions between a value and a wrapper</strong> for that value.</p>
+<h4><strong><a href="http://www.alexecollins.com/selenium-visual-testing/">&gt;&gt; Visual Testing With Selenium WebDriver</a></strong></h4>
+<p>Just <strong>a little bit of UI testing</strong> can bring a whole lot of trust in the fact that your app is running the way it should, and WebDriver/Selenium is a fantastic tool for that.</p>
+<h4><strong><a href="http://www.thoughts-on-java.org/2015/02/jpa-21-overview.html">&gt;&gt; JPA 2.1 &#8211; 12 features every developer should know</a></strong></h4>
+<p>An solid overview of what JPA 2.1 brings to the table.</p>
+<p>Also worth reading:</p>
+<ul>
+<li>
+<h4><strong><a href="http://openjdk.java.net/jeps/238">&gt;&gt; JEP 238: Multi-Version JAR Files</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://marxsoftware.blogspot.ro/2015/02/determining-file-types-in-java.html">&gt;&gt; Determining File Types in Java</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://www.daedtech.com/chesstdd-26-at-last-acceptance-tests">&gt;&gt; ChessTDD 26: At Last, Acceptance Tests</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="https://advancedweb.hu/2015/02/17/log-review-guided-by-tests/">&gt;&gt; Log review guided by tests</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://www.infoq.com/articles/Highly-Distributed-Computations-Without-Synchronization">&gt;&gt; Highly Distributed Computations Without Synchronization</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://winterbe.com/posts/2015/02/16/isomorphic-react-webapps-on-the-jvm/">&gt;&gt; Building Isomorphic Webapps on the JVM with React.js and Spring Boot</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://www.elasticsearch.org/blog/frame-of-reference-and-roaring-bitmaps/">&gt;&gt; Frame Of Reference and Roaring bitmaps</a></strong></h4>
+</li>
+</ul>
+<p>Webinars and presentations:</p>
+<ul>
+<li>
+<h4><strong><a href="http://www.infoq.com/presentations/spring-caching-jcache">&gt;&gt; Caching with Spring: Advanced Topics and Best Practices</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://www.infoq.com/presentations/spring-data-rest">&gt;&gt; Spring Data REST &#8211; Data Meets Hypermedia</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://www.infoq.com/presentations/spring-boot-jersey-ratpack">&gt;&gt; Spring Boot for the Web Tier</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://www.infoq.com/presentations/streaming-data-back-pressure">&gt;&gt; Dr. Streamlove, or: How I Learned to Stop Worrying and Love the Flow</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://spring.io/blog/2015/02/17/springone2gx-2014-replay-bootiful-applications-with-spring-boot">&gt;&gt; &#8220;Bootiful&#8221; Applications with Spring Boot</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://spring.io/blog/2015/02/17/springone2gx-2014-replay-testing-with-spring-framework-4-x">&gt;&gt; Testing with Spring Framework 4.x </a></strong></h4>
+</li>
+</ul>
+<p>Time to upgrade:</p>
+<ul>
+<li>
+<h4><strong><a href="http://www.elasticsearch.org/blog/elasticsearch-1-4-4-and-1-3-9-released/">&gt;&gt; Elasticsearch 1.4.4 and 1.3.9 released</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://spring.io/blog/2015/02/18/reactor-2-0-0-rc1-with-native-reactive-streams-support-now-available">&gt;&gt; Reactor 2.0.0.RC1 with native Reactive Streams support now available!</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="https://github.com/mockito/mockito/blob/master/doc/release-notes/official.md">&gt;&gt; Mockito 2.0.4-beta</a> (Mockito 2 is coming on the 15th of March)</strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://mail-archives.apache.org/mod_mbox/www-announce/201502.mbox/%3CCAFmzfTUTAxE1%3DQaeWpBXNN%2BcNXOLs3oM7%2Buc_yegoQANES5BJg%40mail.gmail.com%3E">&gt;&gt; Tomcat 7.0.59 is out</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://xstream.codehaus.org/changes.html">&gt;&gt; XStream 1.4.8 is out</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://www.elasticsearch.org/blog/kibana-4-literally/">&gt;&gt; Kibana 4. Literally.</a></strong></h4>
+</li>
+</ul>
+<h2><strong>2. Technical and Musings</strong></h2>
+<h4><a href="https://www.mnot.net/blog/2015/02/18/http2">&gt;&gt; HTTP/2 is Done</a></h4>
+<p>I guess the title speaks for itself on this one.</p>
+<h4><strong><a href="http://techblog.bozho.net/do-it-either-way-well-refactor-it-later/">&gt;&gt; Do It Either Way, We’ll Refactor It Later</a></strong></h4>
+<p>A sensible and pragmatic mindset for designing an application. These kinds of architecture/design disagreements will come up in a team, so having the right kind of mindset makes a world of difference. That, and egoless programming (which is not as easy as it sounds).</p>
+<h4><strong><a href="http://www.daedtech.com/what-is-your-next-action">&gt;&gt; What is Your Next Action?</a></strong></h4>
+<p>A nuance of managing your TODO list better. Or I should say &#8211; my TODO list, since it&#8217;s something that I&#8217;m going to be mindful of and see if it makes a difference.</p>
+<h4><strong><a href="http://martinfowler.com/bliki/ConversationalStories.html">&gt;&gt; ConversationalStories</a></strong></h4>
+<p>An important (but tricky) aspect to get right when doing any form of Agile &#8211; <strong>the importance of good ol&#8217; dialog</strong>.</p>
+<h4><strong><a href="https://signalvnoise.com/posts/3854-why-the-hell-not">&gt;&gt; Why the hell not?</a></strong></h4>
+<p>A different way to think about stuff.</p>
+<h4><strong><a href="http://www.marco.org/2015/02/16/google-and-blogs-shit">&gt;&gt; Google and blogs: “Shit.”</a></strong></h4>
+<p>This one is a bit meta, but it was certainly an interesting read to see <strong>what other bloggers experience</strong> in terms of traffic and trends.</p>
+<h2><strong>3. Comics</strong></h2>
+<p>And my favorite Dilberts of the week:</p>
+<h4><strong><a href="http://dilbert.com/strip/2011-01-14">&gt;&gt; Your idea has already been tried</a></strong></h4>
+<h4><strong><a href="http://dilbert.com/strip/2015-01-11">&gt;&gt; &#8220;The Taper&#8221;</a></strong></h4>
+<h4><strong><a href="http://dilbert.com/strip/2014-11-30">&gt;&gt; Performance Feedback</a></strong></h4>
+<h2><strong>4. Pick of the Week</strong></h2>
+<p>Earlier this year I introduced the “Pick of the Week” section here in my “Weekly Review”. <strong>If you’re already on my email list – you got the pick already</strong> – hope you enjoyed it.</p>
+<p>If not – you can <strong>share the review</strong> and unlock it right here:</p>
+
+<!-- Start Shortcoder content --><p>&nbsp;</p>
+<h3><b>I usually post about Dev stuff on Twitter - you can follow me there: </b></h3>
+<p><a class="twitter-follow-button" href="https://twitter.com/baeldung" data-show-count="true" data-size="large" data-dnt="true">Follow @baeldung</a></p>
+<p>
+<script>// < ![CDATA[
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+// ]]&gt;</script>
+</p><!-- End Shortcoder content -->
+<img src="//feeds.feedburner.com/~r/Baeldung/~4/htpoVe8vVXQ" height="1" width="1" alt=""/>]]></content:encoded>
+			<wfw:commentRss>http://www.baeldung.com/2015-week-review-8/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		<feedburner:origLink>http://www.baeldung.com/2015-week-review-8</feedburner:origLink></item>
+		<item>
+		<title>Spring Security Authentication Tutorial</title>
+		<link>http://feedproxy.google.com/~r/Baeldung/~3/rXtIZhIY_Z4/spring-security-authentication-and-registration</link>
+		<comments>http://www.baeldung.com/spring-security-authentication-and-registration#comments</comments>
+		<pubDate>Sat, 14 Feb 2015 18:52:48 +0000</pubDate>
+		<dc:creator><![CDATA[Eugen Paraschiv]]></dc:creator>
+				<category><![CDATA[Security]]></category>
+		<category><![CDATA[Spring]]></category>
+
+		<guid isPermaLink="false">http://www.baeldung.com/?p=5748</guid>
+		<description><![CDATA[How to build a production-grade Registration process for new users, and Login flow for existing users.]]></description>
+				<content:encoded><![CDATA[<!-- Start Shortcoder content --><h3><b>I usually post about Security on Twitter - you can follow me there: <br /></b></h3>
+<p><a class="twitter-follow-button" href="https://twitter.com/baeldung" data-show-count="true" data-size="large" data-dnt="true">Follow @baeldung</a></p>
+<p>
+<script>// < ![CDATA[
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+// ]]&gt;</script>
+</p><!-- End Shortcoder content -->
+<h2><strong>Login / Authentication</strong></h2>
+<h4><strong><a href="http://www.baeldung.com/spring-security-login">&gt;&gt; Form Login</a></strong></h4>
+<h4><strong><a href="http://www.baeldung.com/spring-security-login-error-handling-localization">&gt;&gt; Login – Error Handling and Localization</a></strong></h4>
+<h4><strong><a href="http://www.baeldung.com/spring-security-block-brute-force-authentication-attempts">&gt;&gt; Prevent Brute Force Authentication Attempts</a></strong></h4>
+<h4><strong><a href="http://www.baeldung.com/role-and-privilege-for-spring-security-registration">&gt;&gt; Roles and Privileges</a></strong></h4>
+<h4><strong><a href="http://www.baeldung.com/spring-security-remember-me">&gt;&gt; Remember Me</a></strong></h4>
+<h4><strong><a href="http://www.baeldung.com/spring-security-persistent-remember-me">&gt;&gt; Persistent Remember Me</a></strong></h4>
+<h4><strong><a href="http://www.baeldung.com/spring_redirect_after_login">&gt;&gt; Redirect to different pages after Login</a></strong></h4>
+<h4><strong><a href="http://www.baeldung.com/spring-security-logout">&gt;&gt; Logout</a></strong></h4>
+<h2><strong>A Production-Grade Registration Process<br />
+</strong></h2>
+<p>Building a full-fledged, production ready registration for your web application is oh so much more than just putting together a simple registration page.</p>
+<p>Here&#8217;s just part of what you need to consider:</p>
+<h3><strong><a href="http://www.baeldung.com/spring-security-registration">&gt;&gt; Spring Security Registration Tutorial</a></strong></h3>
+<!-- Start Shortcoder content --><h3><b>I usually post about Security on Twitter - you can follow me there: <br /></b></h3>
+<p><a class="twitter-follow-button" href="https://twitter.com/baeldung" data-show-count="true" data-size="large" data-dnt="true">Follow @Baeldung</a><br />
+<script>// < ![CDATA[
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+// ]]&gt;</script>
+</p><!-- End Shortcoder content -->
+<img src="//feeds.feedburner.com/~r/Baeldung/~4/rXtIZhIY_Z4" height="1" width="1" alt=""/>]]></content:encoded>
+			<wfw:commentRss>http://www.baeldung.com/spring-security-authentication-and-registration/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		<feedburner:origLink>http://www.baeldung.com/spring-security-authentication-and-registration</feedburner:origLink></item>
+		<item>
+		<title>Spring Security – Reset Your Password</title>
+		<link>http://feedproxy.google.com/~r/Baeldung/~3/WtxrhjjmW4U/spring-security-registration-i-forgot-my-password</link>
+		<comments>http://www.baeldung.com/spring-security-registration-i-forgot-my-password#comments</comments>
+		<pubDate>Sat, 14 Feb 2015 17:10:36 +0000</pubDate>
+		<dc:creator><![CDATA[Eugen Paraschiv]]></dc:creator>
+				<category><![CDATA[Security]]></category>
+		<category><![CDATA[Spring]]></category>
+
+		<guid isPermaLink="false">http://www.baeldung.com/?p=5711</guid>
+		<description><![CDATA[Every app should enable users to change their own password in case they forget it.]]></description>
+				<content:encoded><![CDATA[<!-- Start Shortcoder content --><h3><b>I usually post about Security on Twitter - you can follow me there: <br /></b></h3>
+<p><a class="twitter-follow-button" href="https://twitter.com/baeldung" data-show-count="true" data-size="large" data-dnt="true">Follow @baeldung</a></p>
+<p>
+<script>// < ![CDATA[
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+// ]]&gt;</script>
+</p><!-- End Shortcoder content -->
+<h2><strong>1. Overview</strong></h2>
+<p>In this tutorial &#8211; we&#8217;re continuing the ongoing <strong><em>Registration with Spring Security</em> series</strong> with a look at <strong>the basic &#8220;<em>I forgot my password</em>&#8221; feature</strong> &#8211; so that the user can safely reset their own password when they need to.</p>
+<h2><strong>2. The Password Reset Token</strong></h2>
+<p>Let&#8217;s start by creating a <em>PasswordResetToken</em> entity to use it for resetting the users password:</p>
+<pre class="brush: java; gutter: true">@Entity
+public class PasswordResetToken {
+
+    private static final int EXPIRATION = 60 * 24;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    private String token;
+
+    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false, name = &quot;user_id&quot;)
+    private User user;
+
+    private Date expiryDate;
+}</pre>
+<p>When a password reset is triggered &#8211; a token will be created and <strong>a special link containing this token will be emailed to the user</strong>.</p>
+<p>The token and the link will only be valid for a set period of time (24 hours in this example).</p>
+<h2><strong>3. <em>forgotPassword.html</em></strong></h2>
+<p>The first page in the process is <strong>the &#8220;<em>I forgot my password</em>&#8221; page</strong> &#8211; where the user is prompted for their email address in order for the actual reset process to start.</p>
+<p>So &#8211; let&#8217;s craft a simple <em>forgotPassword.html</em> asking the user for an email address:</p>
+<pre class="brush: html; gutter: true">&lt;!DOCTYPE html&gt;
+&lt;%@ page contentType=&quot;text/html;charset=UTF-8&quot; language=&quot;java&quot;%&gt;
+&lt;%@ taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot;%&gt;
+&lt;%@ taglib prefix=&quot;form&quot; uri=&quot;http://www.springframework.org/tags/form&quot;%&gt;
+&lt;%@ taglib prefix=&quot;spring&quot; uri=&quot;http://www.springframework.org/tags&quot;%&gt;
+&lt;%@ taglib prefix=&quot;sec&quot;
+	uri=&quot;http://www.springframework.org/security/tags&quot;%&gt;
+&lt;%@ page session=&quot;false&quot;%&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;link href=&quot;&lt;c:url value=&quot;/resources/bootstrap.css&quot; /&gt;&quot; rel=&quot;stylesheet&quot;&gt;
+    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=US-ASCII&quot;&gt;
+    &lt;title&gt;&lt;spring:message code=&quot;message.resetPassword&quot;&gt;&lt;/spring:message&gt;&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class=&quot;container&quot;&gt;
+&lt;div class=&quot;span12&quot;&gt;
+&lt;h1&gt;
+    &lt;spring:message code=&quot;message.resetPassword&quot;&gt;&lt;/spring:message&gt;
+&lt;/h1&gt;
+&lt;div&gt;
+&lt;br&gt;
+
+&lt;tr&gt;
+    &lt;td&gt;&lt;label&gt;&lt;spring:message code=&quot;label.user.email&quot;&gt;&lt;/spring:message&gt;&lt;/label&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;input id=&quot;email&quot; name=&quot;email&quot; type=&quot;email&quot; value=&quot;&quot; /&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;button type=&quot;submit&quot; onclick=&quot;resetPass()&quot;&gt;
+    &lt;spring:message code=&quot;message.resetPassword&quot;&gt;&lt;/spring:message&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;br&gt; 
+&lt;a href=&quot;&lt;c:url value=&quot;/user/registration&quot; /&gt;&quot;&gt;
+   &lt;spring:message code=&quot;label.form.loginSignUp&quot;&gt;&lt;/spring:message&gt;
+&lt;/a&gt;
+&lt;br&gt;
+&lt;a href=&quot;&lt;c:url value=&quot;login.html&quot; /&gt;&quot;&gt;
+   &lt;spring:message code=&quot;label.form.loginLink&quot;&gt;&lt;/spring:message&gt;
+&lt;/a&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script src=&quot;http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+function resetPass(){
+    var email = $(&quot;#email&quot;).val();
+    $.post(&quot;&lt;c:url value=&quot;/user/resetPassword&quot;&gt;&lt;/c:url&gt;&quot;,{email: email}, function(data){
+            window.location.href = 
+              &quot;&lt;c:url value=&quot;/login.html&quot;&gt;&lt;/c:url&gt;&quot; + &quot;?message=&quot; + data.message;
+    })
+    .fail(function(data) {
+    	if(data.responseJSON.error.indexOf(&quot;MailError&quot;) &gt; -1) {
+            window.location.href = 
+              &quot;&lt;c:url value=&quot;/emailError.html&quot;&gt;&lt;/c:url&gt;&quot;;
+        }
+        else {
+            window.location.href = 
+              &quot;&lt;c:url value=&quot;/login.html&quot;&gt;&lt;/c:url&gt;&quot; + &quot;?message=&quot; + data.responseJSON.message;
+        }
+    });
+}
+&lt;/script&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre>
+<p>We now need to link to this new &#8220;<em>reset password</em>&#8221; page from the login page:</p>
+<pre class="brush: html; gutter: true">Current Locale : ${pageContext.response.locale} 
+&lt;br&gt; 
+&lt;a href=&quot;&lt;c:url value=&quot;/user/registration&quot; /&gt;&quot;&gt;
+    &lt;spring:message code=&quot;label.form.loginSignUp&quot;&gt;&lt;/spring:message&gt;
+&lt;/a&gt;
+&lt;br&gt; 
+&lt;a href=&quot;&lt;c:url value=&quot;/forgotPassword.html&quot; /&gt;&quot;&gt;
+    &lt;spring:message code=&quot;message.resetPassword&quot;&gt;&lt;/spring:message&gt;
+&lt;/a&gt;
+</pre>
+<h2><strong>4. Create the <em>PasswordResetToken</em></strong></h2>
+<p>Let&#8217;s start by creating the new <em>PasswordResetToken</em> and send it via email to the user:</p>
+<pre class="brush: java; gutter: true">@RequestMapping(value = &quot;/user/resetPassword&quot;, method = RequestMethod.POST)
+@ResponseBody
+public GenericResponse resetPassword(
+  HttpServletRequest request, @RequestParam(&quot;email&quot;) String userEmail) {
+    
+    User user = userService.findUserByEmail(userEmail);
+    if (user == null) {
+        throw new UserNotFoundException();
+    }
+
+    String token = UUID.randomUUID().toString();
+    userService.createPasswordResetTokenForUser(user, token);
+    String appUrl = 
+      &quot;http://&quot; + request.getServerName() + &quot;:&quot; + request.getServerPort() + request.getContextPath();
+    SimpleMailMessage email = constructResetTokenEmail(appUrl, request.getLocale(), token, user);
+    mailSender.send(email);
+
+    return new GenericResponse(
+      messages.getMessage(&quot;message.resetPasswordEmail&quot;, null, request.getLocale()));
+}</pre>
+<p>And here is method <em>constructResetTokenEmail()</em> – used to send an email with the reset token:</p>
+<pre class="brush: java; gutter: true">private SimpleMailMessage constructResetTokenEmail(
+  String contextPath, Locale locale, String token, User user) {
+    String url = contextPath + &quot;/user/changePassword?id=&quot; + user.getId() + &quot;&amp;token=&quot; + token;
+    String message = messages.getMessage(&quot;message.resetPassword&quot;, null, locale);
+    SimpleMailMessage email = new SimpleMailMessage();
+    email.setTo(user.getEmail());
+    email.setSubject(&quot;Reset Password&quot;);
+    email.setText(message + &quot; \r\n&quot; + url);
+    email.setFrom(env.getProperty(&quot;support.email&quot;));
+    return email;
+}</pre>
+<p>Note how we used a simple object <em>GenericResponse</em> to represent our response to the client:</p>
+<pre class="brush: java; gutter: true">public class GenericResponse {
+    private String message;
+    private String error;
+
+    public GenericResponse(String message) {
+        super();
+        this.message = message;
+    }
+
+    public GenericResponse(String message, String error) {
+        super();
+        this.message = message;
+        this.error = error;
+    }
+}</pre>
+<h2><strong>5. Process the <em>PasswordResetToken</em></strong></h2>
+<p>The user gets the email with the unique link for resetting their password, and clicks the link:</p>
+<pre class="brush: java; gutter: true">@RequestMapping(value = &quot;/user/changePassword&quot;, method = RequestMethod.GET)
+public String showChangePasswordPage(
+  Locale locale, Model model, @RequestParam(&quot;id&quot;) long id, @RequestParam(&quot;token&quot;) String token) {
+    
+    PasswordResetToken passToken = userService.getPasswordResetToken(token);
+    User user = passToken.getUser();
+    if (passToken == null || user.getId() != id) {
+        String message = messages.getMessage(&quot;auth.message.invalidToken&quot;, null, locale);
+        model.addAttribute(&quot;message&quot;, message);
+        return &quot;redirect:/login.html?lang=&quot; + locale.getLanguage();
+    }
+
+    Calendar cal = Calendar.getInstance();
+    if ((passToken.getExpiryDate().getTime() - cal.getTime().getTime()) &lt;= 0) {
+        model.addAttribute(&quot;message&quot;, messages.getMessage(&quot;auth.message.expired&quot;, null, locale));
+        return &quot;redirect:/login.html?lang=&quot; + locale.getLanguage();
+    }
+
+    Authentication auth = new UsernamePasswordAuthenticationToken(
+      user, null, userDetailsService.loadUserByUsername(user.getEmail()).getAuthorities());
+    SecurityContextHolder.getContext().setAuthentication(auth);
+
+    return &quot;redirect:/updatePassword.html?lang=&quot; + locale.getLanguage();
+}</pre>
+<p>As you can see &#8211; if the token is valid, the user will be authorized to change their password, and directed to a page to update their password.</p>
+<h2><strong>6. Change Password</strong></h2>
+<p>At this point, the user sees the simple <em>Password Reset</em> page &#8211; where the only possible option is to <strong>provide a new password</strong>:</p>
+<h3><strong>6.1. <em>updatePassword.html</em></strong></h3>
+<pre class="brush: html; gutter: true">&lt;!DOCTYPE html&gt;
+&lt;%@ page contentType=&quot;text/html;charset=UTF-8&quot; language=&quot;java&quot;%&gt;
+&lt;%@ taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot;%&gt;
+&lt;%@ taglib prefix=&quot;form&quot; uri=&quot;http://www.springframework.org/tags/form&quot;%&gt;
+&lt;%@ taglib prefix=&quot;spring&quot; uri=&quot;http://www.springframework.org/tags&quot;%&gt;
+&lt;%@ taglib prefix=&quot;sec&quot;
+    uri=&quot;http://www.springframework.org/security/tags&quot;%&gt;
+&lt;%@ page session=&quot;false&quot;%&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;link href=&quot;&lt;c:url value=&quot;/resources/bootstrap.css&quot; /&gt;&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=US-ASCII&quot;&gt;
+&lt;title&gt;&lt;spring:message code=&quot;message.updatePassword&quot;&gt;&lt;/spring:message&gt;&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;sec:authorize access=&quot;hasRole(&#039;READ_PRIVILEGE&#039;)&quot;&gt;
+    &lt;div class=&quot;container&quot;&gt;
+        &lt;div class=&quot;span12&quot;&gt;
+            &lt;H1&gt;
+                &lt;spring:message code=&quot;message.resetYourPassword&quot;&gt;&lt;/spring:message&gt;
+            &lt;/H1&gt;
+            &lt;div &gt;
+                &lt;br&gt;
+                
+                &lt;tr&gt;
+                    &lt;td&gt;&lt;label&gt;
+                        &lt;spring:message code=&quot;label.user.password&quot;&gt;&lt;/spring:message&gt;
+                    &lt;/label&gt;&lt;/td&gt;
+                    &lt;td&gt;&lt;input id=&quot;pass&quot; name=&quot;password&quot; type=&quot;password&quot; value=&quot;&quot; /&gt;&lt;/td&gt;
+                &lt;/tr&gt;
+                &lt;tr&gt;
+                    &lt;td&gt;&lt;label&gt;
+                      &lt;spring:message code=&quot;label.user.confirmPass&quot;&gt;&lt;/spring:message&gt;
+                    &lt;/label&gt;&lt;/td&gt;
+                    &lt;td&gt;
+                        &lt;input id=&quot;passConfirm&quot; type=&quot;password&quot; value=&quot;&quot; /&gt;
+                        &lt;span id=&quot;error&quot; class=&quot;alert alert-error&quot; style=&quot;display:none&quot;&gt;
+                            &lt;spring:message code=&quot;PasswordMatches.user&quot;&gt;&lt;/spring:message&gt;
+                        &lt;/span&gt;
+                    &lt;/td&gt;
+                &lt;/tr&gt;
+                &lt;br&gt;&lt;br&gt;
+                &lt;button type=&quot;submit&quot; onclick=&quot;savePass()&quot;&gt;
+                    &lt;spring:message code=&quot;message.updatePassword&quot;&gt;&lt;/spring:message&gt;
+                &lt;/button&gt;
+            &lt;/div&gt;
+            
+        &lt;/div&gt;
+    &lt;/div&gt;
+    
+&lt;script src=&quot;http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+function savePass(){
+    var pass = $(&quot;#pass&quot;).val();
+    var valid = pass == $(&quot;#passConfirm&quot;).val();
+    if(!valid) {
+      $(&quot;#error&quot;).show();
+      return;
+    }
+    $.post(&quot;&lt;c:url value=&quot;/user/savePassword&quot;&gt;&lt;/c:url&gt;&quot;,{password: pass}, function(data){
+            window.location.href = &quot;&lt;c:url value=&quot;/login.html&quot;&gt;&lt;/c:url&gt;&quot; + &quot;?message=&quot;+data.message;
+    })
+    .fail(function(data) {
+        window.location.href = 
+          &quot;&lt;c:url value=&quot;/login.html&quot;&gt;&lt;/c:url&gt;&quot; + &quot;?message=&quot; + data.responseJSON.message;
+    });
+}
+&lt;/script&gt;    
+&lt;/sec:authorize&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre>
+<h3><strong>6.2. Save User Password</strong></h3>
+<p>Finally, when the previous post request is submitted &#8211; the new user password is saved:</p>
+<pre class="brush: java; gutter: true">@RequestMapping(value = &quot;/user/savePassword&quot;, method = RequestMethod.POST)
+@PreAuthorize(&quot;hasRole(&#039;READ_PRIVILEGE&#039;)&quot;)
+@ResponseBody
+public GenericResponse savePassword(Locale locale, @RequestParam(&quot;password&quot;) String password) {
+    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    userService.changeUserPassword(user, password);
+    return new GenericResponse(messages.getMessage(&quot;message.resetPasswordSuc&quot;, null, locale));
+}</pre>
+<h2><strong>7. Conclusion</strong></h2>
+<p>In this article we implemented a simple but very useful feature for a mature Authentication process &#8211; the option to reset your own password, as a user of the system.</p>
+<p>The <strong>full implementation</strong> of this tutorial can be found in <a title="The Full Registration/Authentication Example Project on Github " href="https://github.com/eugenp/tutorials/tree/master/spring-security-login-and-registration" target="_blank" rel="nofollow">the github project</a> – this is an Eclipse based project, so it should be easy to import and run as it is.</p>
+<!-- Start Shortcoder content --><h3><b>I usually post about Security on Twitter - you can follow me there: <br /></b></h3>
+<p><a class="twitter-follow-button" href="https://twitter.com/baeldung" data-show-count="true" data-size="large" data-dnt="true">Follow @Baeldung</a><br />
+<script>// < ![CDATA[
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+// ]]&gt;</script>
+</p><!-- End Shortcoder content -->
+<img src="//feeds.feedburner.com/~r/Baeldung/~4/WtxrhjjmW4U" height="1" width="1" alt=""/>]]></content:encoded>
+			<wfw:commentRss>http://www.baeldung.com/spring-security-registration-i-forgot-my-password/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		<feedburner:origLink>http://www.baeldung.com/spring-security-registration-i-forgot-my-password</feedburner:origLink></item>
+		<item>
+		<title>Prevent Brute Force Authentication Attempts with Spring Security</title>
+		<link>http://feedproxy.google.com/~r/Baeldung/~3/DWaSStBCP-o/spring-security-block-brute-force-authentication-attempts</link>
+		<comments>http://www.baeldung.com/spring-security-block-brute-force-authentication-attempts#comments</comments>
+		<pubDate>Sat, 14 Feb 2015 13:30:47 +0000</pubDate>
+		<dc:creator><![CDATA[Eugen Paraschiv]]></dc:creator>
+				<category><![CDATA[Security]]></category>
+		<category><![CDATA[Spring]]></category>
+
+		<guid isPermaLink="false">http://www.baeldung.com/?p=5731</guid>
+		<description><![CDATA[Block users by IP after a number of failed authentication attempts &#8211; a simple mechanism implemented with Spring Security.]]></description>
+				<content:encoded><![CDATA[<!-- Start Shortcoder content --><h3><b>I usually post about Security on Twitter - you can follow me there: <br /></b></h3>
+<p><a class="twitter-follow-button" href="https://twitter.com/baeldung" data-show-count="true" data-size="large" data-dnt="true">Follow @baeldung</a></p>
+<p>
+<script>// < ![CDATA[
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+// ]]&gt;</script>
+</p><!-- End Shortcoder content -->
+<h2><strong>1. Overview</strong></h2>
+<p>In this quick tutorial, we&#8217;ll implement a basic solution for <strong>preventing brute force authentication attempts</strong> using Spring Security.</p>
+<p>Simply put &#8211; we&#8217;ll keep a record of the number of failed attempts originating from a single IP address. If that particular IP goes over a set number of requests &#8211; it will be blocked for 24 hours.</p>
+<h2><strong>2. An <em>AuthenticationFailureEventListener</em></strong></h2>
+<p>Let&#8217;s start by defining a <em>AuthenticationFailureEventListener</em> &#8211; to listen to <em>AuthenticationFailureBadCredentialsEvent</em> events and notify us of of an authentication failure:</p>
+<pre class="brush: java; gutter: true">@Component
+public class AuthenticationFailureListener 
+  implements ApplicationListener&lt;AuthenticationFailureBadCredentialsEvent&gt; {
+
+    @Autowired
+    private LoginAttemptService loginAttemptService;
+
+    public void onApplicationEvent(AuthenticationFailureBadCredentialsEvent e) {
+        WebAuthenticationDetails auth = (WebAuthenticationDetails) e.getAuthentication().getDetails();
+        loginAttemptService.loginFailed(auth.getRemoteAddress());
+    }
+}</pre>
+<p>Note how, when authentication fails, we inform the <em>LoginAttemptService</em> of the IP address from where the unsuccessful attempt originated.</p>
+<h2><strong>3. An <em>AuthenticationSuccessEventListener</em></strong></h2>
+<p>Let&#8217;s also define a <em>AuthenticationSuccessEventListener </em>- which listens for <em>AuthenticationSuccessEvent</em> events and notifies us of a successful authentication:</p>
+<pre class="brush: java; gutter: true">@Component
+public class AuthenticationSuccessEventListener 
+  implements ApplicationListener&lt;AuthenticationSuccessEvent&gt; {
+
+    @Autowired
+    private LoginAttemptService loginAttemptService;
+
+    public void onApplicationEvent(AuthenticationSuccessEvent e) {
+        WebAuthenticationDetails auth = (WebAuthenticationDetails) e.getAuthentication().getDetails();
+        loginAttemptService.loginSucceeded(auth.getRemoteAddress());
+    }
+}</pre>
+<p>Note how &#8211; similar to the failure listener, we&#8217;re notifying the <em>LoginAttemptService</em> of the IP address from which the authentication request originated.</p>
+<h2><strong>4. The <em>LoginAttemptService</em></strong></h2>
+<p>Now &#8211; let&#8217;s discuss our <em>LoginAttemptService</em> implementation; simply put &#8211; we keep the number of wrong attempts per IP address for 24 hours:</p>
+<pre class="brush: java; gutter: true">@Service
+public class LoginAttemptService {
+
+    private final int MAX_ATTEMPT = 10;
+    private LoadingCache&lt;String, Integer&gt; attemptsCache;
+
+    public LoginAttemptService() {
+        super();
+        attemptsCache = CacheBuilder.newBuilder().
+          expireAfterWrite(1, TimeUnit.DAYS).build(new CacheLoader&lt;String, Integer&gt;() {
+            public Integer load(String key) {
+                return 0;
+            }
+        });
+    }
+
+    public void loginSucceeded(String key) {
+        attemptsCache.invalidate(key);
+    }
+
+    public void loginFailed(String key) {
+        int attempts = 0;
+        try {
+            attempts = attemptsCache.get(key);
+        } catch (ExecutionException e) {
+            attempts = 0;
+        }
+        attempts++;
+        attemptsCache.put(key, attempts);
+    }
+
+    public boolean isBlocked(String key) {
+        try {
+            return attemptsCache.get(key) &gt;= MAX_ATTEMPT;
+        } catch (ExecutionException e) {
+            return false;
+        }
+    }
+}</pre>
+<p>Notice how <strong>an unsuccessful authentication attempt increases the number of attempts for that IP</strong>, and the successful authentication resets that counter.</p>
+<p>From this point, it&#8217;s simply a matter of <strong>checking the counter when we authenticate</strong>.</p>
+<h2><strong>5. Modify the <em>UserDetailsService</em></strong></h2>
+<p>Now, let&#8217;s ad the extra check in our custom <em>UserDetailsService</em> implementation; when we load the <em>UserDetails</em>, we first check if this IP address is blocked:</p>
+<pre class="brush: java; gutter: true">@Service(&quot;userDetailsService&quot;)
+@Transactional
+public class MyUserDetailsService implements UserDetailsService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private LoginAttemptService loginAttemptService;
+
+    @Autowired
+    private HttpServletRequest request;
+
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        String ip = request.getRemoteAddr();
+        if (loginAttemptService.isBlocked(ip)) {
+            throw new RuntimeException(&quot;blocked&quot;);
+        }
+
+        try {
+            User user = userRepository.findByEmail(email);
+            if (user == null) {
+                return new org.springframework.security.core.userdetails.User(
+                  &quot; &quot;, &quot; &quot;, true, true, true, true, 
+                  getAuthorities(Arrays.asList(roleRepository.findByName(&quot;ROLE_USER&quot;))));
+            }
+
+            return new org.springframework.security.core.userdetails.User(
+              user.getEmail(), user.getPassword(), user.isEnabled(), true, true, true, 
+              getAuthorities(user.getRoles()));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+}</pre>
+<p>The interesting part is is how we are autowiring in the HTTP request; we do this because we need to access the IP address and we cannot modify the signature of the <em>loadUserByUsername</em> method. In order to be able to do this, we need to add some additional logic into our <em>web.xml</em>.</p>
+<h2><strong>6. The <em>web.xml</em></strong></h2>
+<p>We need to add <em>RequestContextListener</em> to our <em>web.xml</em> to be able to access the request from the <em>UserDetailsService</em>:</p>
+<pre class="brush: xml; gutter: true">&lt;listener&gt;
+    &lt;listener-class&gt;
+        org.springframework.web.context.request.RequestContextListener
+    &lt;/listener-class&gt;
+&lt;/listener&gt;</pre>
+<h2><strong>7. Modify <em>login.jsp</em></strong></h2>
+<p>Finally &#8211; let&#8217;s take care of the front-end and modify our <em>login.jsp</em>.</p>
+<p>We&#8217;re handling the situation when the user actually does get blocked for 24 hours &#8211; and we&#8217;re informing the user that his IP is blocked because he exceeded the maximum allowed wrong authentication attempts:</p>
+<pre class="brush: html; gutter: true">&lt;c:if test=&quot;${param.error != null}&quot;&gt;
+    &lt;c:choose&gt;
+        &lt;c:when test=&quot;${SPRING_SECURITY_LAST_EXCEPTION.message == &#039;User is disabled&#039;}&quot;&gt;
+	    &lt;div class=&quot;alert alert-error&quot;&gt;
+                &lt;spring:message code=&quot;auth.message.disabled&quot;&gt;&lt;/spring:message&gt;
+	    &lt;/div&gt;
+	&lt;/c:when&gt;
+	&lt;c:when test=&quot;${SPRING_SECURITY_LAST_EXCEPTION.message == &#039;User account has expired&#039;}&quot;&gt;
+	    &lt;div class=&quot;alert alert-error&quot;&gt;
+	        &lt;spring:message code=&quot;auth.message.expired&quot;&gt;&lt;/spring:message&gt;
+	    &lt;/div&gt;
+	&lt;/c:when&gt;
+	&lt;c:when test=&quot;${SPRING_SECURITY_LAST_EXCEPTION.message == &#039;blocked&#039;}&quot;&gt;
+            &lt;div class=&quot;alert alert-error&quot;&gt;
+                &lt;spring:message code=&quot;auth.message.blocked&quot;&gt;&lt;/spring:message&gt;
+            &lt;/div&gt;
+        &lt;/c:when&gt;
+	&lt;c:otherwise&gt;
+	    &lt;div class=&quot;alert alert-error&quot;&gt;
+	        &lt;spring:message code=&quot;message.badCredentials&quot;&gt;&lt;/spring:message&gt;
+            &lt;/div&gt;
+        &lt;/c:otherwise&gt;
+    &lt;/c:choose&gt;
+&lt;/c:if&gt;</pre>
+<h2><strong>8. Conclusion</strong></h2>
+<p>It&#8217;s important to understand that this is a good first step in <strong>dealing with brute-force password attempts</strong>, but also that there&#8217;s a room for improvement. A production grade brute-force prevention strategy may involve more than elements that an IP block.</p>
+<p>The <strong>full implementation</strong> of this tutorial can be found in <a title="The Full Brute-Force Prevention Example Project on Github " href="https://github.com/eugenp/tutorials/tree/master/spring-security-login-and-registration" target="_blank" rel="nofollow">the github project</a> – this is an Eclipse based project, so it should be easy to import and run as it is.</p>
+<!-- Start Shortcoder content --><h3><b>I usually post about Security on Twitter - you can follow me there: <br /></b></h3>
+<p><a class="twitter-follow-button" href="https://twitter.com/baeldung" data-show-count="true" data-size="large" data-dnt="true">Follow @Baeldung</a><br />
+<script>// < ![CDATA[
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+// ]]&gt;</script>
+</p><!-- End Shortcoder content -->
+<img src="//feeds.feedburner.com/~r/Baeldung/~4/DWaSStBCP-o" height="1" width="1" alt=""/>]]></content:encoded>
+			<wfw:commentRss>http://www.baeldung.com/spring-security-block-brute-force-authentication-attempts/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		<feedburner:origLink>http://www.baeldung.com/spring-security-block-brute-force-authentication-attempts</feedburner:origLink></item>
+		<item>
+		<title>Baeldung Weekly Review 7</title>
+		<link>http://feedproxy.google.com/~r/Baeldung/~3/3pZhzLsxYQk/2015-week-review-7</link>
+		<comments>http://www.baeldung.com/2015-week-review-7#comments</comments>
+		<pubDate>Fri, 13 Feb 2015 12:00:27 +0000</pubDate>
+		<dc:creator><![CDATA[Eugen Paraschiv]]></dc:creator>
+				<category><![CDATA[Weekly Review]]></category>
+
+		<guid isPermaLink="false">http://www.baeldung.com/?p=5716</guid>
+		<description><![CDATA[A busy week for the Spring ecosystem, with Spring 4.2 getting closer and closer. A discussion about timezones as well &#8211; what more do we need?]]></description>
+				<content:encoded><![CDATA[<!-- Start Shortcoder content --><h3><b>I usually post about Dev stuff on Twitter - you can follow me there: </b></h3>
+<a href="https://twitter.com/baeldung" class="twitter-follow-button" data-show-count="true" data-size="large" data-dnt="true">Follow @baeldung</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+<!-- End Shortcoder content -->
+<p>At the very beginning of 2014 I decided to track my reading habits and <strong>share the best stuff here, on Baeldung</strong>.</p>
+<p>2014 has been quite the year, covering each week with a review. I&#8217;ve been doing a lot more reading to make sure I cover and curate stuff that has value and is actually interesting.</p>
+<p><strong>Let me know in the comments</strong> if you&#8217;re finding my reviews interesting and useful.</p>
+<p><strong>Here we go…</strong></p>
+<h2><strong>1. Spring and Java</strong></h2>
+<h4><strong><a href="http://spring.io/blog/2015/02/11/better-application-events-in-spring-framework-4-2">&gt;&gt; Better application events in Spring Framework 4.2</a></strong></h4>
+<p><strong>Events in Spring</strong> are getting a much needed upgrade &#8211; this is going to make events a lot more powerful and useful.</p>
+<h4><strong><a href="http://spring.io/blog/2015/02/10/introducing-jhipster">&gt;&gt; Introducing JHipster</a></strong></h4>
+<p>A quick and solid <strong>intro go JHipster</strong>, a stack that I&#8217;ve been following for a while.</p>
+<h4><strong><a href="http://vladmihalcea.com/2015/02/09/hibernate-locking-patterns-how-does-optimistic_force_increment-lock-mode-work/">&gt;&gt; Hibernate locking patterns – How does OPTIMISTIC_FORCE_INCREMENT Lock Mode work</a></strong></h4>
+<p>Yet another code driven, in-depth exploration of <strong>locking strategies in Hibernate</strong> &#8211; this one about the the <em>OPTIMISTIC_FORCE_INCREMENT</em> mode.</p>
+<h4><strong><a href="http://spring.io/blog/2015/02/11/java-doesn-t-suck-rockin-the-jvm">&gt;&gt; Java Doesn’t Suck &#8211; Rockin&#8217; the JVM</a></strong></h4>
+<p>An interesting rundown of how the Spring ecosystem makes <strong>java development easy and lightweight</strong>.</p>
+<p>Also worth reading:</p>
+<ul>
+<li>
+<h4><strong><a href="http://c4j.be/blog/jsp-thymeleaf">&gt;&gt; From JSP to Thymeleaf</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://blog.takipi.com/ignore-the-hype-5-docker-misconceptions-java-developers-should-consider/">&gt;&gt; Ignore the Hype: 5 Docker Misconceptions Java Developers Should Consider</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://www.java-allandsundry.com/2015/02/standing-up-local-netflix-eureka.html">&gt;&gt; Standing up a local Netflix Eureka</a></strong></h4>
+</li>
+</ul>
+<p>Webinars and presentations:</p>
+<ul>
+<li>
+<h4><strong><a href="http://spring.io/blog/2015/02/10/webinar-replay-documenting-rest-ful-apis">&gt;&gt; Documenting REST-ful APIs</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://spring.io/blog/2015/02/10/springone2gx-2014-replay-ratpack-web-framework">&gt;&gt; Ratpack Web Framework</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://spring.io/blog/2015/02/09/springone2gx-2014-replay-testing-java-groovy-spring-and-web-applications-with-spock">&gt;&gt; Testing Java, Groovy, Spring and Web Applications with Spock</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://spring.io/blog/2015/02/10/springone2gx-2014-replay-rethinking-api-design-with-traits">&gt;&gt; Rethinking API Design with Traits</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://spring.io/blog/2015/02/10/springone2gx-2014-replay-building-a-continuous-delivery-pipeline-with-gradle-and-jenkins">&gt;&gt; Building a Continuous Delivery Pipeline with Gradle and Jenkins</a></strong></h4>
+</li>
+</ul>
+<p>Time to upgrade:</p>
+<ul>
+<li>
+<h4><strong><a href="http://www.elasticsearch.org/blog/elasticsearch-1-4-3-and-1-3-8-released/">&gt;&gt; Elasticsearch 1.4.3 and 1.3.8 released</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://www.elasticsearch.org/blog/kibana-4-rc1-is-now-available/">&gt;&gt; Kibana 4 RC1 is freshly baked</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://projectlombok.org/changelog.html">&gt;&gt; Project Lombok v1.16.2</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://spring.io/blog/2015/02/12/spring-xd-1-1-ga-and-1-0-4-released">&gt;&gt; Spring XD 1.1 GA and 1.0.4 released</a> (<a href="http://spring.io/blog/2015/02/12/spring-xd-data-driven-connectivity-within-a-unified-platform">+details</a>)</strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://spring.io/blog/2015/02/09/spring-for-apache-hadoop-2-1-released">&gt;&gt; Spring for Apache Hadoop 2.1 Released</a></strong></h4>
+</li>
+</ul>
+<h2><strong>2. Technical and Musings</strong></h2>
+<h4><strong><a href="http://www.elasticsearch.org/blog/spotting-bad-actors-what-your-logs-can-tell-you-about-protecting-your-business/">&gt;&gt; Spotting Bad Actors: What Your Logs Can Tell You About Protecting Your Business</a></strong></h4>
+<p>Very cool usecases for using Elasticsearch to <strong>determine bad traffic to your site</strong>. Invaluable information to have when mitigating an attack or just sanitizing your network input.</p>
+<h4><strong><a href="http://www.petrikainulainen.net/software-development/processes/writing-just-enough-documentation/">&gt;&gt; Writing Just Enough Documentation</a></strong></h4>
+<p>Doing Agile and writing documentation are certainly not mutually exclusive &#8211; but <strong>it does take some experience to navigate the situation</strong>. This article will get you one stop closer to doing that well.</p>
+<h4><strong><a href="http://techblog.bozho.net/time-zone-use-cases/">&gt;&gt; Time Zone Use Cases</a></strong></h4>
+<p>Sound advice on how to deal with the necessary evil that is timezones.</p>
+<h4><strong><a href="http://zachholman.com/posts/uncanny-valley/">&gt;&gt; This Uncanny Valley of Voice Recognition</a></strong></h4>
+<p><strong>Voice recognition is great when it works</strong> and infuriating the rest of the time. Have a read and explore the why, or it least if you want to actually laugh out loud.</p>
+<h4><strong><a href="http://www.daedtech.com/aggregation-of-indignities">&gt;&gt; Aggregation of Indignities</a></strong></h4>
+<p>Sometimes, this is why people quit.</p>
+<h2><strong>3. Comics</strong></h2>
+<p>And my favorite Dilberts of the week:</p>
+<h4><strong><a href="http://dilbert.com/strip/2015-01-05">&gt;&gt; Dating as A/B Testing</a></strong></h4>
+<h4><strong><a href="http://dilbert.com/strip/2012-05-31">&gt;&gt; Something called Blame</a></strong></h4>
+<h4><strong><a href="http://dilbert.com/strip/2014-12-07">&gt;&gt; I like dancing; I&#8217;m out</a></strong></h4>
+<h2><strong>4. Pick of the Week</strong></h2>
+<p>Earlier this year I introduced the “Pick of the Week” section here in my “Weekly Review”. <strong>If you’re already on my email list – you got the pick already</strong> – hope you enjoyed it.</p>
+<p>If not – you can <strong>share the review</strong> and unlock it right here:</p>
+
+<p><strong>PS</strong>: I&#8217;m very happy that I&#8217;m going to be <a href="http://www.springio.net/sessions/">speaking at Spring.io</a> in Barcelona at the end of April. It&#8217;s a great event and lineup, so I hope to do the conference justice.</p>
+<!-- Start Shortcoder content --><p>&nbsp;</p>
+<h3><b>I usually post about Dev stuff on Twitter - you can follow me there: </b></h3>
+<p><a class="twitter-follow-button" href="https://twitter.com/baeldung" data-show-count="true" data-size="large" data-dnt="true">Follow @baeldung</a></p>
+<p>
+<script>// < ![CDATA[
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+// ]]&gt;</script>
+</p><!-- End Shortcoder content -->
+<img src="//feeds.feedburner.com/~r/Baeldung/~4/3pZhzLsxYQk" height="1" width="1" alt=""/>]]></content:encoded>
+			<wfw:commentRss>http://www.baeldung.com/2015-week-review-7/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		<feedburner:origLink>http://www.baeldung.com/2015-week-review-7</feedburner:origLink></item>
+		<item>
+		<title>Baeldung Weekly Review 6</title>
+		<link>http://feedproxy.google.com/~r/Baeldung/~3/CaiBxKs_4cI/2015-week-review-6</link>
+		<comments>http://www.baeldung.com/2015-week-review-6#comments</comments>
+		<pubDate>Fri, 06 Feb 2015 12:42:58 +0000</pubDate>
+		<dc:creator><![CDATA[Eugen Paraschiv]]></dc:creator>
+				<category><![CDATA[Weekly Review]]></category>
+
+		<guid isPermaLink="false">http://www.baeldung.com/?p=5692</guid>
+		<description><![CDATA[Some great Java back-to-basic articles, insights into building APIs and a discussion about backups. Good first week of February in my book.]]></description>
+				<content:encoded><![CDATA[<!-- Start Shortcoder content --><h3><b>I usually post about Dev stuff on Twitter - you can follow me there: </b></h3>
+<a href="https://twitter.com/baeldung" class="twitter-follow-button" data-show-count="true" data-size="large" data-dnt="true">Follow @baeldung</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+<!-- End Shortcoder content -->
+<p>At the very beginning of 2014 I decided to track my reading habits and <strong>share the best stuff here, on Baeldung</strong>.</p>
+<p>2014 has been quite the year, covering each week with a review. I&#8217;ve been doing a lot more reading to make sure I cover and curate stuff that has value and is actually interesting.</p>
+<p><strong>Let me know in the comments</strong> if you&#8217;re finding my reviews interesting and useful.</p>
+<p><strong>Here we go…</strong></p>
+<h2><strong>1. Spring and Java</strong></h2>
+<h4><strong><a href="http://vladmihalcea.com/2015/02/03/how-to-fix-optimistic-locking-race-conditions-with-pessimistic-locking/">&gt;&gt; How to fix optimistic locking race conditions with pessimistic locking</a></strong></h4>
+<p>Combining <strong>pessimistic and optimistic locking</strong> with Hibernate to keep the integrity of your data.</p>
+<h4><strong><a href="http://blog.jooq.org/2015/02/02/top-5-use-cases-for-nested-types/">&gt;&gt; Top 5 Use-Cases For Nested Types</a></strong></h4>
+<p>With the advent of lambdas, a deep dive, <strong>back-to-roots piece on Java nested classes</strong> is quite helpful, at least for a solid grasp of the basics.</p>
+<h4><strong><a href="http://vanillajava.blogspot.com/2015/02/inconsistent-operation-widen-rules-in.html?view=classic">&gt;&gt; Inconsistent operation widen rules in Java</a></strong></h4>
+<p>Another back-to-basics with Java &#8211; a nice reminder on working with numerical primitives.</p>
+<h4><strong><a href="http://marxsoftware.blogspot.ro/2015/01/programatically-determining-jdk-version-class-compiled.html">&gt;&gt; Programmatically Determining Java Class&#8217;s JDK Compilation Version</a></strong></h4>
+<p>Another cool, low level Java article &#8211; this time about <strong>determining the version of the JDK that compiled a class</strong>. I didn&#8217;t even know it was possible.</p>
+<h4><strong><a href="http://www.nurkiewicz.com/2015/02/storing-months-of-historical-metrics.html">&gt;&gt; Storing months of historical metrics from Hystrix in Graphite</a></strong></h4>
+<p>Very cool solution for <strong>monitoring your app</strong>.</p>
+<p>I&#8217;ve been using various permutations for monitoring &#8211; CollectD and Graphite (and more recently Kibana) being the most common &#8211; but this looks quite slick.</p>
+<h4><strong><a href="http://spring.io/blog/2015/02/03/sso-with-oauth2-angular-js-and-spring-security-part-v">&gt;&gt; SSO with OAuth2: Angular JS and Spring Security Part V</a></strong></h4>
+<p>Getting into more advanced topics with the 5th part of the <em>AngularJS and Spring Security</em> series &#8211; with <strong>a deep dive into OAuth and SSO</strong>.</p>
+<h4><strong><a href="http://spring.io/blog/2015/01/30/why-12-factor-application-patterns-microservices-and-cloudfoundry-matter">&gt;&gt; Why 12 Factor Application Patterns, Microservices and CloudFoundry Matter</a></strong></h4>
+<p>Complicated, manual and error prone deployment processes &#8211; that brings me back; the industry has come a long way since the early days.</p>
+<p>And some good talks to have fun with during the weekend:</p>
+<ul>
+<li>
+<h4><strong><a href="http://www.infoq.com/presentations/testing-spring-4x">&gt;&gt; Testing with Spring 4.x</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://www.infoq.com/presentations/cd-gradle-jenkins-2014">&gt;&gt; Building a Continuous Delivery Pipeline with Gradle and Jenkins</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="http://spring.io/blog/2015/02/02/springone2gx-2014-replay-groovy-in-the-light-of-java-8">&gt;&gt; Groovy, in the light of Java 8</a></strong></h4>
+</li>
+</ul>
+<p>Time to upgrade:</p>
+<ul>
+<li>
+<h4><strong><a href="//spring.io/blog/2015/02/02/spring-security-oauth-2-0-6-release-available-now">&gt;&gt; Spring Security OAuth 2.0.6.RELEASE Available Now</a></strong></h4>
+</li>
+<li>
+<h4><strong><a href="https://github.com/swagger-api/swagger-core/releases/tag/v1.5.0-M1">&gt;&gt; Swagger-core v1.5.0-M1 Released!</a> and <a href="https://github.com/swagger-api/swagger-ui/releases/tag/v2.1.1-M1">&gt;&gt; Swagger-UI v2.1.1-M1 Released!</a></strong></h4>
+</li>
+</ul>
+<h2><strong>2. Technical and Musings</strong></h2>
+<h4><strong><a href="http://www.daedtech.com/cutting-down-on-code-telepathy">&gt;&gt; Cutting Down on Code Telepathy</a></strong></h4>
+<p><strong>&#8220;Out of Band&#8221; required knowledge to interact with an API</strong> is usually not good. A REST architecture addresses the problem via the HATEOAS constraint and Media Types. However this is not a REST-only issue, but a question to be asked when designing any API:</p>
+<p><em>Does the caller require any out of band knowledge to consume the API?</em></p>
+<p>If so, this is a cost; depending on the situation, it may be a cost you want to take on, <strong>but it should always be an intentional decision</strong>.</p>
+<h4><strong><a href="http://jacquesmattheij.com/the-army-of-the-new-independents">&gt;&gt; The Army of the New Independents</a></strong></h4>
+<p>The job / employment landscape is changing, and fast. So, <strong>if you are already independent or thinking about it</strong>, this is a good one to read to give you some context.</p>
+<p><strong><a href="http://www.daedtech.com/programmer-is-a-career-path-thank-you">&gt;&gt; Programmer IS A Career Path, Thank You</a></strong></p>
+<p>The <em>Musings</em> section is good advice this week &#8211; have a read.</p>
+<h4><strong><a href="http://jacquesmattheij.com/lets-talk-about-your-backups">&gt;&gt; Let&#8217;s Talk About Your Backups</a></strong></h4>
+<p>Wake up call?</p>
+<h2><strong>3. Comics</strong></h2>
+<p>And my favorite Dilberts of the week:</p>
+<h4><strong><a href="http://dilbert.com/strip/2001-10-25">&gt;&gt; The Problem with Randomness (you can never be sure)</a></strong></h4>
+<h4><strong><a href="http://dilbert.com/strip/2010-10-25">&gt;&gt; Buzzwords</a></strong></h4>
+<h4><strong><a href="http://dilbert.com/strip/2015-01-13">&gt;&gt; Empty Jargon</a></strong></h4>
+<h2><strong>4. Pick of the Week</strong></h2>
+<p>Earlier this year I introduced the “Pick of the Week” section here in my “Weekly Review”. <strong>If you’re already on my email list – you got the pick already</strong> – hope you enjoyed it.</p>
+<p>If not – you can <strong>share the review</strong> and unlock it right here:</p>
+
+<!-- Start Shortcoder content --><p>&nbsp;</p>
+<h3><b>I usually post about Dev stuff on Twitter - you can follow me there: </b></h3>
+<p><a class="twitter-follow-button" href="https://twitter.com/baeldung" data-show-count="true" data-size="large" data-dnt="true">Follow @baeldung</a></p>
+<p>
+<script>// < ![CDATA[
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+// ]]&gt;</script>
+</p><!-- End Shortcoder content -->
+<img src="//feeds.feedburner.com/~r/Baeldung/~4/CaiBxKs_4cI" height="1" width="1" alt=""/>]]></content:encoded>
+			<wfw:commentRss>http://www.baeldung.com/2015-week-review-6/feed/</wfw:commentRss>
+		<slash:comments>2</slash:comments>
+		<feedburner:origLink>http://www.baeldung.com/2015-week-review-6</feedburner:origLink></item>
+	</channel>
+</rss><!-- Performance optimized by W3 Total Cache. Learn more: http://www.w3-edge.com/wordpress-plugins/
+
+Minified using disk
+Page Caching using disk: enhanced
+Database Caching using disk
+Object Caching 2727/3005 objects using disk
+
+ Served from: baeldung.com @ 2015-02-28 00:14:14 by W3 Total Cache -->
