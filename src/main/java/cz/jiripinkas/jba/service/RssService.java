@@ -52,7 +52,7 @@ public class RssService {
 	static {
 		try {
 			System.setProperty("com.sun.net.ssl.checkRevocation", "false");
-			JAXBContext jaxbContextRss = JAXBContext.newInstance(cz.jiripinkas.jba.rss.ObjectFactory.class);
+			JAXBContext jaxbContextRss = JAXBContext.newInstance(TRss.class, TRssChannel.class, TRssItem.class);
 			unmarshallerRss = jaxbContextRss.createUnmarshaller();
 			JAXBContext jaxbContextAtom = JAXBContext.newInstance(Feed.class, Entry.class);
 			unmarshallerAtom = jaxbContextAtom.createUnmarshaller();
@@ -105,7 +105,6 @@ public class RssService {
 	}
 
 	public List<Item> getItems(String location, boolean localFile) throws RssException {
-
 		Node node = null;
 
 		try {
@@ -158,16 +157,15 @@ public class RssService {
 	}
 
 	private List<Item> getRssItems(Node node) throws RssException {
-
 		ArrayList<Item> list = new ArrayList<Item>();
 		try {
 			JAXBElement<TRss> jaxbElement = unmarshallerRss.unmarshal(node, TRss.class);
 			TRss rss = jaxbElement.getValue();
 
-			List<TRssChannel> channels = rss.getChannel();
+			List<TRssChannel> channels = rss.getChannels();
 
 			for (TRssChannel channel : channels) {
-				List<TRssItem> items = channel.getItem();
+				List<TRssItem> items = channel.getItems();
 				for (TRssItem rssItem : items) {
 					Item item = new Item();
 					item.setTitle(cleanTitle(rssItem.getTitle()));
@@ -207,7 +205,12 @@ public class RssService {
 				}
 				item.setDescription(cleanDescription(description));
 				item.setLink(entry.getLink().getHref());
-				Date pubDate = entry.getUpdated().toGregorianCalendar().getTime();
+				Date pubDate = null;
+				if(entry.getPublished() != null) {
+					pubDate = entry.getPublished().toGregorianCalendar().getTime();
+				} else {
+					pubDate = entry.getUpdated().toGregorianCalendar().getTime();
+				}
 				item.setPublishedDate(pubDate);
 				list.add(item);
 			}
@@ -241,7 +244,7 @@ public class RssService {
 		unescapedDescription = unescapedDescription.replace("<![CDATA[", "").replace("]]>", "");
 		String cleanDescription = Jsoup.parse(Jsoup.clean(unescapedDescription, Whitelist.none())).text();
 		// fix for Tomcat blog
-		cleanDescription = cleanDescription.replace("~", ""); 
+		cleanDescription = cleanDescription.replace("~", "");
 		ArrayList<String> links = pullLinks(cleanDescription);
 		for (String link : links) {
 			cleanDescription = cleanDescription.replace(link, "");

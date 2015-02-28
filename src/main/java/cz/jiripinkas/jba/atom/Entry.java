@@ -13,9 +13,19 @@ public class Entry {
 
 	private XMLGregorianCalendar updated;
 
+	private XMLGregorianCalendar published;
+
 	private String content;
 
 	private String summary;
+
+	public XMLGregorianCalendar getPublished() {
+		return published;
+	}
+
+	public void setPublished(XMLGregorianCalendar published) {
+		this.published = published;
+	}
 
 	public String getSummary() {
 		return summary;

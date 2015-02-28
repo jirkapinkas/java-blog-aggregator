@@ -105,4 +105,11 @@ public class RssServiceTest {
 		assertEquals("test", rssService.cleanDescription("test <script> alert('hello')</script>"));
 	}
 
+	@Test
+	public void testGetItemsFileInstanceofJavaPublishedDate() throws RssException {
+		List<Item> items = rssService.getItems("test-rss/instanceofjava.xml", true);
+		Item firstItem = items.get(0);
+		assertEquals("22 02 2015 13:35:00", new SimpleDateFormat("dd MM yyyy HH:mm:ss").format(firstItem.getPublishedDate()));
+	}
+
 }
