@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
 
@@ -49,11 +50,22 @@ public class Item {
 	@Column(name = "dislike_count", nullable = false)
 	private Integer dislikeCount;
 
+	@Transient
+	private String error;
+
 	public Item() {
 		setEnabled(true);
 		setClickCount(0);
 		setLikeCount(0);
 		setDislikeCount(0);
+	}
+
+	public String getError() {
+		return error;
+	}
+
+	public void setError(String error) {
+		this.error = error;
 	}
 
 	public Integer getLikeCount() {

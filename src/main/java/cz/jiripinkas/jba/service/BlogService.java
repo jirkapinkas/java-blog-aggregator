@@ -8,6 +8,7 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,9 +47,15 @@ public class BlogService {
 	private Date lastIndexedDateFinish;
 
 	public void saveItems(Blog blog) {
+		StringBuilder errors = new StringBuilder();
 		try {
 			List<Item> items = rssService.getItems(blog.getUrl());
 			for (Item item : items) {
+				if (item.getError() != null) {
+					errors.append(item.getError());
+					errors.append(", ");
+					continue;
+				}
 				if (!itemService.isTooOld(item.getPublishedDate())) {
 					Item savedItem = itemRepository.findByBlogAndLink(blog, item.getLink());
 					if (savedItem == null) {
@@ -61,7 +68,10 @@ public class BlogService {
 		} catch (Exception e) {
 			System.out.println("exception during downloading: " + blog.getUrl());
 			System.out.println("message: " + e.getMessage());
-			blogResultService.saveFail(blog, e.getMessage());
+			errors.append(e.getMessage());
+		}
+		if (errors.length() != 0) {
+			blogResultService.saveFail(blog, errors.toString());
 		}
 	}
 
@@ -72,6 +82,7 @@ public class BlogService {
 		return (int) ((new Date().getTime() - lastIndexedDateFinish.getTime()) / (1000 * 60));
 	}
 
+	@Async
 	public void save(Blog blog, String name) {
 		User user = userRepository.findByName(name);
 		blog.setUser(user);

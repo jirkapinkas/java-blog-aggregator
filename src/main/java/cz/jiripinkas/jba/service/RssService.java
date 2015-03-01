@@ -2,6 +2,7 @@ package cz.jiripinkas.jba.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.nio.charset.Charset;
@@ -27,6 +28,7 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.config.RequestConfig.Builder;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
@@ -40,6 +42,7 @@ import cz.jiripinkas.jba.atom.Entry;
 import cz.jiripinkas.jba.atom.Feed;
 import cz.jiripinkas.jba.entity.Item;
 import cz.jiripinkas.jba.exception.RssException;
+import cz.jiripinkas.jba.exception.UrlException;
 import cz.jiripinkas.jba.rss.TRss;
 import cz.jiripinkas.jba.rss.TRssChannel;
 import cz.jiripinkas.jba.rss.TRssItem;
@@ -50,7 +53,7 @@ public class RssService {
 	private static Unmarshaller unmarshallerRss;
 	private static Unmarshaller unmarshallerAtom;
 	private static DocumentBuilder db;
-	
+
 	static {
 		try {
 			System.setProperty("com.sun.net.ssl.checkRevocation", "false");
@@ -106,6 +109,15 @@ public class RssService {
 		return result;
 	}
 
+	private HttpGet constructGet(String location) {
+		HttpGet get = new HttpGet(location);
+		Builder requestConfigBuilder = RequestConfig.custom().setSocketTimeout(100000).setConnectTimeout(100000);
+		get.setConfig(requestConfigBuilder.build());
+		get.setHeader("Accept", "application/xml,application/rss+xml,text/html,*/*");
+		get.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36");
+		return get;
+	}
+
 	public List<Item> getItems(String location, boolean localFile) throws RssException {
 		Node node = null;
 		Reader reader = null;
@@ -120,11 +132,7 @@ public class RssService {
 				CloseableHttpClient httpClient = null;
 				try {
 					httpClient = HttpClients.createDefault();
-					HttpGet get = new HttpGet(location);
-					Builder requestConfigBuilder = RequestConfig.custom().setSocketTimeout(100000).setConnectTimeout(100000);
-					get.setConfig(requestConfigBuilder.build());
-					get.setHeader("Accept", "application/xml,application/rss+xml,text/html,*/*");
-					get.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1667.0 Safari/537.36");
+					HttpGet get = constructGet(location);
 					CloseableHttpResponse response = null;
 					try {
 						response = httpClient.execute(get);
@@ -159,7 +167,46 @@ public class RssService {
 		} else {
 			throw new RssException("unknown RSS type");
 		}
+	}
 
+	protected String getRealLink(String link) throws UrlException {
+		String realLink = null;
+		CloseableHttpClient httpClient = null;
+		try {
+			httpClient = HttpClients.createDefault();
+			HttpGet get = constructGet(link);
+			CloseableHttpResponse response = null;
+			try {
+				HttpClientContext context = HttpClientContext.create();
+				response = httpClient.execute(get, context);
+				HttpEntity entity = response.getEntity();
+				EntityUtils.toString(entity); // consume page
+				if (response.getStatusLine().getStatusCode() != 200) {
+					throw new UrlException("Link: " + link + " returned: " + response.getStatusLine().getStatusCode());
+				}
+				if (context.getRedirectLocations() == null) {
+					// no redirections performed
+					realLink = link;
+				} else {
+					realLink = context.getRedirectLocations().get(context.getRedirectLocations().size() - 1).toString();
+				}
+			} finally {
+				if (response != null) {
+					response.close();
+				}
+			}
+		} catch (Exception e) {
+			throw new UrlException("Exception during downloading: " + link);
+		} finally {
+			if (httpClient != null) {
+				try {
+					httpClient.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return realLink;
 	}
 
 	private List<Item> getRssItems(Reader reader) throws RssException {
@@ -175,13 +222,19 @@ public class RssService {
 					Item item = new Item();
 					item.setTitle(cleanTitle(rssItem.getTitle()));
 					item.setDescription(cleanDescription(rssItem.getDescription()));
-					if(rssItem.getOrigLink() != null) {
-						item.setLink(rssItem.getOrigLink());
-					} else {
-						item.setLink(rssItem.getLink());
-					}
 					Date pubDate = getRssDate(rssItem.getPubDate());
 					item.setPublishedDate(pubDate);
+					String link = null;
+					if (rssItem.getOrigLink() != null) {
+						link = rssItem.getOrigLink();
+					} else {
+						link = rssItem.getLink();
+					}
+					try {
+						item.setLink(getRealLink(link));
+					} catch (UrlException e) {
+						item.setError(e.getMessage());
+					}
 					list.add(item);
 				}
 			}
@@ -212,18 +265,24 @@ public class RssService {
 					description = entry.getContent();
 				}
 				item.setDescription(cleanDescription(description));
-				if(entry.getOrigLink() != null) {
-					item.setLink(entry.getOrigLink());
-				} else {
-					item.setLink(entry.getLink().getHref());
-				}
 				Date pubDate = null;
-				if(entry.getPublished() != null) {
+				if (entry.getPublished() != null) {
 					pubDate = entry.getPublished().toGregorianCalendar().getTime();
 				} else {
 					pubDate = entry.getUpdated().toGregorianCalendar().getTime();
 				}
 				item.setPublishedDate(pubDate);
+				String link = null;
+				if (entry.getOrigLink() != null) {
+					link = entry.getOrigLink();
+				} else {
+					link = entry.getLink().getHref();
+				}
+				try {
+					item.setLink(getRealLink(link));
+				} catch (UrlException e) {
+					item.setError(e.getMessage());
+				}
 				list.add(item);
 			}
 		} catch (JAXBException e) {

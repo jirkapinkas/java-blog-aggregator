@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import cz.jiripinkas.jba.entity.Item;
 import cz.jiripinkas.jba.exception.RssException;
+import cz.jiripinkas.jba.exception.UrlException;
 
 public class RssServiceTest {
 
@@ -73,7 +74,7 @@ public class RssServiceTest {
 		assertEquals(links.get(3), "ftp://repository.jboss.org/nexus/content/groups/public/org/hibernate");
 		assertEquals(links.get(4), "mailto:test@email.com");
 	}
-	
+
 	@Test
 	public void testCleanTitle() {
 		assertEquals("test", rssService.cleanTitle("   test   "));
@@ -81,27 +82,30 @@ public class RssServiceTest {
 		assertEquals("link:", rssService.cleanTitle("link: <a href='http://something.com'></a>"));
 		assertEquals("script:", rssService.cleanTitle("script: <script><!-- alert('hello'); --></script>"));
 	}
-	
+
 	@Test
 	public void testGetRssDate() throws ParseException {
 		assertEquals("Sun Mar 23 09:01:34 CET 2014", rssService.getRssDate("Sun, 23 Mar 2014 08:01:34 +0000").toString());
 		assertEquals("Sun Mar 23 00:00:00 CET 2014", rssService.getRssDate("Sun, 23 Mar 2014").toString());
 		assertEquals("Sun Jan 25 21:00:00 CET 2015", rssService.getRssDate("25 Jan 2015 20:00:00 GMT").toString());
 	}
-	
+
 	@Test
 	public void testFixDate() {
 		String fixDate = rssService.fixDate("<guid>http://www.jsfcentral.com/listings/R221940</guid><pubDate>    25 Jan 2015 20:00:00 GMT   </pubDate><description>");
 		assertEquals("<guid>http://www.jsfcentral.com/listings/R221940</guid><pubDate>25 Jan 2015 20:00:00 GMT</pubDate><description>", fixDate);
 	}
-	
+
 	@Test
 	public void testCleanDescription() {
 		assertEquals("test this is strong", rssService.cleanDescription("test <strong>this is strong</strong>"));
 		assertEquals("test this is strong", rssService.cleanDescription("test &lt;strong&gt;this is strong&lt;/strong&gt;"));
 		assertEquals("test this is strong", rssService.cleanDescription("<![CDATA[test &lt;strong&gt;this is strong&lt;/strong&gt;]]>"));
 		assertEquals("stupid description", rssService.cleanDescription("~~~~~~~~ stupid description ~~~~~~~~"));
-		assertEquals("This tutorial will show example codes on how to convert Java String To Long. This is a common scenario when programming with Core Java. [......", rssService.cleanDescription("<![CDATA[ This tutorial will show example codes on how to convert &lt;strong&gt;Java String To Long&lt;/strong&gt;. This is a common scenario when programming with Core Java. <a href='http://javadevnotes.com/java-string-to-long-examples' class='excerpt-more'>[...]</a> ]]>"));
+		assertEquals(
+				"This tutorial will show example codes on how to convert Java String To Long. This is a common scenario when programming with Core Java. [......",
+				rssService
+						.cleanDescription("<![CDATA[ This tutorial will show example codes on how to convert &lt;strong&gt;Java String To Long&lt;/strong&gt;. This is a common scenario when programming with Core Java. <a href='http://javadevnotes.com/java-string-to-long-examples' class='excerpt-more'>[...]</a> ]]>"));
 		assertEquals("test", rssService.cleanDescription("test <script> alert('hello')</script>"));
 	}
 
@@ -119,5 +123,22 @@ public class RssServiceTest {
 		Item firstItem = items.get(0);
 		assertEquals("http://www.baeldung.com/spring-security-oauth2-authentication-with-reddit", firstItem.getLink());
 	}
-	
+
+	@Test
+	public void testRedirect() throws Exception {
+		String realLink = rssService.getRealLink("http://www.java-skoleni.cz/skoleni.php?id=java");
+		assertEquals("http://www.java-skoleni.cz/kurz/java", realLink);
+	}
+
+	@Test(expected = UrlException.class)
+	public void test404() throws Exception {
+		rssService.getRealLink("http://www.java-skoleni.cz/xxxx");
+	}
+
+	@Test
+	public void test200() throws Exception {
+		String realLink = rssService.getRealLink("http://www.java-skoleni.cz");
+		assertEquals("http://www.java-skoleni.cz", realLink);
+	}
+
 }
