@@ -170,6 +170,7 @@ public class RssService {
 	}
 
 	protected String getRealLink(String link) throws UrlException {
+		link = link.trim();
 		String realLink = null;
 		CloseableHttpClient httpClient = null;
 		try {

@@ -141,4 +141,10 @@ public class RssServiceTest {
 		assertEquals("http://www.java-skoleni.cz", realLink);
 	}
 
+	@Test
+	public void testWhitespaces() throws Exception {
+		String realLink = rssService.getRealLink("   http://www.java-skoleni.cz   ");
+		assertEquals("http://www.java-skoleni.cz", realLink);
+	}
+
 }
