@@ -8,25 +8,46 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import cz.jiripinkas.jba.entity.Item;
 import cz.jiripinkas.jba.exception.RssException;
 import cz.jiripinkas.jba.exception.UrlException;
+import cz.jiripinkas.jba.repository.ItemRepository;
 
+@RunWith(MockitoJUnitRunner.class)
 public class RssServiceTest {
 
 	private RssService rssService;
 
+	@Mock
+	private ItemRepository itemRepository;
+	
+	private CloseableHttpClient httpClient = HttpClients.createDefault();
+	
+	@Mock
+	private CloseableHttpResponse httpResponse;
+	
 	@Before
 	public void setUp() throws Exception {
 		rssService = new RssService();
+		rssService.setItemRepository(itemRepository);
+		Mockito.when(itemRepository.findItemIdByLinkAndBlogId(Mockito.anyString(), Mockito.anyInt())).thenReturn(null);
+		// TODO change to mock
+		rssService.setHttpClient(httpClient);
 	}
 
 	@Test
 	public void testGetItemsFileJavaVids() throws RssException {
-		List<Item> items = rssService.getItems("test-rss/javavids.xml", true);
+		List<Item> items = rssService.getItems("test-rss/javavids.xml", true, 0);
 		assertEquals(10, items.size());
 		Item firstItem = items.get(0);
 		assertEquals("How to generate web.xml in Eclipse", firstItem.getTitle());
@@ -35,7 +56,7 @@ public class RssServiceTest {
 
 	@Test
 	public void testGetItemsFileSpring() throws RssException {
-		List<Item> items = rssService.getItems("test-rss/spring.xml", true);
+		List<Item> items = rssService.getItems("test-rss/spring.xml", true, 0);
 		assertEquals(20, items.size());
 		Item firstItem = items.get(0);
 		assertEquals("Spring Boot 1.0.1.RELEASE Available Now", firstItem.getTitle());
@@ -48,7 +69,7 @@ public class RssServiceTest {
 
 	@Test
 	public void testGetItemsFileHibernate() throws RssException {
-		List<Item> items = rssService.getItems("test-rss/hibernate.xml", true);
+		List<Item> items = rssService.getItems("test-rss/hibernate.xml", true, 0);
 		assertEquals(14, items.size());
 		Item firstItem = items.get(0);
 		assertEquals("Third milestone on the path for Hibernate Search 5", firstItem.getTitle());
@@ -111,7 +132,7 @@ public class RssServiceTest {
 
 	@Test
 	public void testGetItemsFileInstanceofJavaPublishedDate() throws RssException {
-		List<Item> items = rssService.getItems("test-rss/instanceofjava.xml", true);
+		List<Item> items = rssService.getItems("test-rss/instanceofjava.xml", true, 0);
 		Item firstItem = items.get(0);
 		assertEquals("22 02 2015 13:35:00", new SimpleDateFormat("dd MM yyyy HH:mm:ss").format(firstItem.getPublishedDate()));
 		assertEquals("http://www.instanceofjava.com/2015/02/java-8-interface-static-default-methods.html", firstItem.getLink());
@@ -119,7 +140,7 @@ public class RssServiceTest {
 
 	@Test
 	public void testGetItemsFileBaeldungFeedburnerOrigLink() throws RssException {
-		List<Item> items = rssService.getItems("test-rss/baeldung.xml", true);
+		List<Item> items = rssService.getItems("test-rss/baeldung.xml", true, 0);
 		Item firstItem = items.get(0);
 		assertEquals("http://www.baeldung.com/spring-security-oauth2-authentication-with-reddit", firstItem.getLink());
 	}
@@ -138,6 +159,12 @@ public class RssServiceTest {
 	@Test
 	public void test200() throws Exception {
 		String realLink = rssService.getRealLink("http://www.java-skoleni.cz");
+		assertEquals("http://www.java-skoleni.cz", realLink);
+	}
+
+	@Test
+	public void testWhitespaces() throws Exception {
+		String realLink = rssService.getRealLink("   http://www.java-skoleni.cz   ");
 		assertEquals("http://www.java-skoleni.cz", realLink);
 	}
 

@@ -2,7 +2,6 @@ package cz.jiripinkas.jba.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.nio.charset.Charset;
@@ -30,10 +29,10 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -43,6 +42,7 @@ import cz.jiripinkas.jba.atom.Feed;
 import cz.jiripinkas.jba.entity.Item;
 import cz.jiripinkas.jba.exception.RssException;
 import cz.jiripinkas.jba.exception.UrlException;
+import cz.jiripinkas.jba.repository.ItemRepository;
 import cz.jiripinkas.jba.rss.TRss;
 import cz.jiripinkas.jba.rss.TRssChannel;
 import cz.jiripinkas.jba.rss.TRssItem;
@@ -53,6 +53,12 @@ public class RssService {
 	private static Unmarshaller unmarshallerRss;
 	private static Unmarshaller unmarshallerAtom;
 	private static DocumentBuilder db;
+
+	@Autowired
+	private ItemRepository itemRepository;
+
+	@Autowired
+	private CloseableHttpClient httpClient;
 
 	static {
 		try {
@@ -69,8 +75,8 @@ public class RssService {
 		}
 	}
 
-	public List<Item> getItems(String location) throws RssException {
-		return getItems(location, false);
+	public List<Item> getItems(String location, int blogId) throws RssException {
+		return getItems(location, false, blogId);
 	}
 
 	/**
@@ -118,7 +124,7 @@ public class RssService {
 		return get;
 	}
 
-	public List<Item> getItems(String location, boolean localFile) throws RssException {
+	public List<Item> getItems(String location, boolean localFile, int blogId) throws RssException {
 		Node node = null;
 		Reader reader = null;
 
@@ -129,28 +135,20 @@ public class RssService {
 				document = db.parse(file);
 				reader = new StringReader(FileUtils.readFileToString(file));
 			} else {
-				CloseableHttpClient httpClient = null;
+				HttpGet get = constructGet(location);
+				CloseableHttpResponse response = null;
 				try {
-					httpClient = HttpClients.createDefault();
-					HttpGet get = constructGet(location);
-					CloseableHttpResponse response = null;
-					try {
-						response = httpClient.execute(get);
-						HttpEntity entity = response.getEntity();
-						String page = EntityUtils.toString(entity);
-						page = page.replace("&ndash;", "-");
-						page = stripNonValidXMLCharacters(page);
-						page = fixDate(page);
-						document = db.parse(new ByteArrayInputStream(page.getBytes(Charset.forName("UTF-8"))));
-						reader = new StringReader(page);
-					} finally {
-						if (response != null) {
-							response.close();
-						}
-					}
+					response = httpClient.execute(get);
+					HttpEntity entity = response.getEntity();
+					String page = EntityUtils.toString(entity);
+					page = page.replace("&ndash;", "-");
+					page = stripNonValidXMLCharacters(page);
+					page = fixDate(page);
+					document = db.parse(new ByteArrayInputStream(page.getBytes(Charset.forName("UTF-8"))));
+					reader = new StringReader(page);
 				} finally {
-					if (httpClient != null) {
-						httpClient.close();
+					if (response != null) {
+						response.close();
 					}
 				}
 			}
@@ -161,19 +159,18 @@ public class RssService {
 		}
 
 		if ("rss".equals(node.getNodeName())) {
-			return getRssItems(reader);
+			return getRssItems(reader, blogId);
 		} else if ("feed".equals(node.getNodeName())) {
-			return getAtomItems(reader);
+			return getAtomItems(reader, blogId);
 		} else {
 			throw new RssException("unknown RSS type");
 		}
 	}
 
 	protected String getRealLink(String link) throws UrlException {
+		link = link.trim();
 		String realLink = null;
-		CloseableHttpClient httpClient = null;
 		try {
-			httpClient = HttpClients.createDefault();
 			HttpGet get = constructGet(link);
 			CloseableHttpResponse response = null;
 			try {
@@ -197,19 +194,11 @@ public class RssService {
 			}
 		} catch (Exception e) {
 			throw new UrlException("Exception during downloading: " + link);
-		} finally {
-			if (httpClient != null) {
-				try {
-					httpClient.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
 		}
 		return realLink;
 	}
 
-	private List<Item> getRssItems(Reader reader) throws RssException {
+	private List<Item> getRssItems(Reader reader, int blogId) throws RssException {
 		ArrayList<Item> list = new ArrayList<Item>();
 		try {
 			TRss rss = (TRss) unmarshallerRss.unmarshal(reader);
@@ -230,6 +219,10 @@ public class RssService {
 					} else {
 						link = rssItem.getLink();
 					}
+					if (itemRepository.findItemIdByLinkAndBlogId(link, blogId) != null) {
+						// skip this item, it's already in the database
+						continue;
+					}
 					try {
 						item.setLink(getRealLink(link));
 					} catch (UrlException e) {
@@ -249,7 +242,7 @@ public class RssService {
 		return list;
 	}
 
-	private List<Item> getAtomItems(Reader reader) throws RssException {
+	private List<Item> getAtomItems(Reader reader, int blogId) throws RssException {
 		ArrayList<Item> list = new ArrayList<Item>();
 		try {
 			Feed atom = (Feed) unmarshallerAtom.unmarshal(reader);
@@ -277,6 +270,10 @@ public class RssService {
 					link = entry.getOrigLink();
 				} else {
 					link = entry.getLink().getHref();
+				}
+				if (itemRepository.findItemIdByLinkAndBlogId(link, blogId) != null) {
+					// skip this item, it's already in the database
+					continue;
 				}
 				try {
 					item.setLink(getRealLink(link));
@@ -342,6 +339,14 @@ public class RssService {
 			links.add(urlStr);
 		}
 		return links;
+	}
+
+	public void setItemRepository(ItemRepository itemRepository) {
+		this.itemRepository = itemRepository;
+	}
+
+	public void setHttpClient(CloseableHttpClient httpClient) {
+		this.httpClient = httpClient;
 	}
 
 }

@@ -49,7 +49,7 @@ public class BlogService {
 	public void saveItems(Blog blog) {
 		StringBuilder errors = new StringBuilder();
 		try {
-			List<Item> items = rssService.getItems(blog.getUrl());
+			List<Item> items = rssService.getItems(blog.getUrl(), blog.getId());
 			for (Item item : items) {
 				if (item.getError() != null) {
 					errors.append(item.getError());
