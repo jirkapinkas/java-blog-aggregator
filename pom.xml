@@ -36,7 +36,7 @@
 
 		<dependency>
 			<groupId>com.zaxxer</groupId>
-			<artifactId>HikariCP-java6</artifactId>
+			<artifactId>HikariCP</artifactId>
 			<version>2.3.2</version>
 		</dependency>
 
@@ -149,19 +149,6 @@
 			<artifactId>spring-webmvc</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest-all</artifactId>
-			<version>1.3</version>
-			<scope>test</scope>
-		</dependency>
-
 	</dependencies>
 
 	<profiles>
@@ -186,7 +173,7 @@
 				<dependency>
 					<groupId>org.postgresql</groupId>
 					<artifactId>postgresql</artifactId>
-					<version>9.3-1103-jdbc4</version>
+					<version>9.3-1103-jdbc41</version>
 				</dependency>
 			</dependencies>
 			<build>
@@ -223,6 +210,7 @@
 	<build>
 		<finalName>jba</finalName>
 		<plugins>
+		
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
