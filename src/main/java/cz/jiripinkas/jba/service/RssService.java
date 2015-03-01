@@ -231,13 +231,8 @@ public class RssService {
 					list.add(item);
 				}
 			}
-		} catch (JAXBException e) {
+		} catch (JAXBException | ParseException e) {
 			throw new RssException(e);
-		} catch (ParseException e) {
-			throw new RssException(e);
-		}
-		if (list.size() == 0) {
-			throw new RssException("Not supported RSS feed or without items");
 		}
 		return list;
 	}
@@ -284,9 +279,6 @@ public class RssService {
 			}
 		} catch (JAXBException e) {
 			throw new RssException(e);
-		}
-		if (list.size() == 0) {
-			throw new RssException("Not supported RSS feed or without items");
 		}
 		return list;
 	}
