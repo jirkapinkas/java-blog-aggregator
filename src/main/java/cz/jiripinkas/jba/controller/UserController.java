@@ -64,7 +64,7 @@ public class UserController {
 		return "redirect:/account.html";
 	}
 
-	@RequestMapping("/blog/remove/{id}")
+	@RequestMapping(value = "/blog/remove/{id}", method = RequestMethod.POST)
 	public String removeBlog(@PathVariable int id) {
 		Blog blog = blogService.findOneFetchUser(id);
 		blogService.delete(blog);

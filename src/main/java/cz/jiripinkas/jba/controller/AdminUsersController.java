@@ -23,7 +23,7 @@ public class AdminUsersController {
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private BlogService blogService;
 
@@ -39,13 +39,13 @@ public class AdminUsersController {
 		return "user-detail";
 	}
 
-	@RequestMapping("/remove/{id}")
+	@RequestMapping(value = "/remove/{id}", method = RequestMethod.POST)
 	public String removeUser(@PathVariable int id) {
 		userService.delete(id);
 		return "redirect:/users.html";
 	}
 
-	@RequestMapping(value = "/{id}", method=RequestMethod.POST)
+	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
 	public String uploadIcon(@RequestParam MultipartFile icon, @RequestHeader String referer, @RequestParam int blogId, @PathVariable("id") int userId) {
 		if (!icon.isEmpty()) {
 			try {
