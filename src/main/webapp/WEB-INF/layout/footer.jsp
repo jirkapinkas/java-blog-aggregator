@@ -40,20 +40,7 @@
 	</noscript>
 
 
-&copy; Jiri Pinkas 
-
-| this project on <a href="https://github.com/jirkapinkas/java-blog-aggregator" target="_blank">GitHub</a>
-
-| related: <a href="http://www.javavids.com" target="_blank">JavaVids</a>
-
-| <a href="http://www.java-skoleni.cz" target="_blank">Java školení</a>
-
-| monitored using: <a href="http://sitemonitoring.sourceforge.net/" target="_blank" title="free open source website monitoring software">sitemonitoring</a>
-
-<br />
-<br />
-
-Top Java Blogs is a Java blog aggregator (with English-written blogs only) focused on Java SE, Java EE, Spring Framework and Hibernate.
+${configuration.footer}
 
 <br />
 <br />

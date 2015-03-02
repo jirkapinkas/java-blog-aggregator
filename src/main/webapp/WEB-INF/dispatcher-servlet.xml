@@ -8,6 +8,10 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
 	<mvc:annotation-driven />
+	
+	<mvc:interceptors>
+		<bean class="cz.jiripinkas.jba.service.ConfigurationInterceptor" />
+	</mvc:interceptors>
 
 	<context:component-scan base-package="cz.jiripinkas.jba.controller" />
 	

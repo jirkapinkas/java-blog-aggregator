@@ -8,13 +8,13 @@
 	</definition>
 
 	<definition name="index" extends="common">
-		<put-attribute name="title" value="Java Blog Aggregator: Latest" />
+		<put-attribute name="title" value="Latest" />
 		<put-attribute name="body" value="/WEB-INF/jsp/index.jsp" />
 		<put-attribute name="current" value="index" />
 	</definition>
 
 	<definition name="top-views" extends="common">
-		<put-attribute name="title" value="Java Blog Aggregator: Most Viewed" />
+		<put-attribute name="title" value="Most Viewed" />
 		<put-attribute name="body" value="/WEB-INF/jsp/index.jsp" />
 		<put-attribute name="current" value="top-views" />
 	</definition>
@@ -71,6 +71,12 @@
 		<put-attribute name="title" value="Admin detail" />
 		<put-attribute name="body" value="/WEB-INF/jsp/admin-detail.jsp" />
 		<put-attribute name="current" value="admin-detail" />
+	</definition>
+
+	<definition name="configuration" extends="common">
+		<put-attribute name="title" value="Configuration" />
+		<put-attribute name="body" value="/WEB-INF/jsp/configuration.jsp" />
+		<put-attribute name="current" value="configuration" />
 	</definition>
 
 </tiles-definitions>
