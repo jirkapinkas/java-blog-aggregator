@@ -1,22 +1,12 @@
 package cz.jiripinkas.jba.dto;
 
-public class BlogDto {
+public class CategoryDto {
 
 	private String name;
 
 	private String shortName;
 
 	private int id;
-
-	private CategoryDto category;
-
-	public CategoryDto getCategory() {
-		return category;
-	}
-
-	public void setCategory(CategoryDto category) {
-		this.category = category;
-	}
 
 	public String getShortName() {
 		return shortName;

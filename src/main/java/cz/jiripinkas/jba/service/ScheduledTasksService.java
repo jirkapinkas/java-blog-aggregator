@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,7 @@ public class ScheduledTasksService {
 	 */
 	// 1 hour = 60 seconds * 60 minutes * 1000
 	@Scheduled(fixedDelay = 3600000)
+	@CacheEvict(value = "itemCount", allEntries = true)
 	public void reloadBlogs() {
 		List<Blog> blogs = blogRepository.findAll();
 		for (Blog blog : blogs) {
@@ -45,6 +47,7 @@ public class ScheduledTasksService {
 	 */
 	// 86400000 = one day = 60 * 60 * 24 * 1000
 	@Scheduled(initialDelay = 86400000, fixedDelay = 86400000)
+	@CacheEvict(value = "itemCount", allEntries = true)
 	public void cleanOldItems() {
 		List<Item> items = itemRepository.findAll();
 		for (Item item : items) {

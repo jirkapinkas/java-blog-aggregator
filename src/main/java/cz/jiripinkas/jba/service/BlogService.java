@@ -8,6 +8,7 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.method.P;
@@ -82,6 +83,7 @@ public class BlogService {
 		return (int) ((new Date().getTime() - lastIndexedDateFinish.getTime()) / (1000 * 60));
 	}
 
+	@CacheEvict(value = "blogCount", allEntries = true)
 	@Async
 	public void save(Blog blog, String name) {
 		User user = userRepository.findByName(name);
@@ -104,7 +106,7 @@ public class BlogService {
 		blogRepository.save(managedBlog);
 	}
 
-	@CacheEvict(value = "icons", allEntries = true)
+	@Caching(evict = { @CacheEvict(value = "blogCount", allEntries = true), @CacheEvict(value = "icons", allEntries = true) })
 	@Transactional
 	@PreAuthorize("#blog.user.name == authentication.name or hasRole('ROLE_ADMIN')")
 	public void delete(@P("blog") Blog blog) {
@@ -135,6 +137,7 @@ public class BlogService {
 		return blogRepository.findOneFetchUser(id);
 	}
 
+	@Cacheable("blogCount")
 	public long count() {
 		return blogRepository.count();
 	}

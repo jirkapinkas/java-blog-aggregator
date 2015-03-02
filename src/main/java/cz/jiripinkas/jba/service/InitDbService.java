@@ -11,10 +11,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import cz.jiripinkas.jba.entity.Blog;
+import cz.jiripinkas.jba.entity.Category;
 import cz.jiripinkas.jba.entity.Configuration;
 import cz.jiripinkas.jba.entity.Role;
 import cz.jiripinkas.jba.entity.User;
 import cz.jiripinkas.jba.repository.BlogRepository;
+import cz.jiripinkas.jba.repository.CategoryRepository;
 import cz.jiripinkas.jba.repository.ItemRepository;
 import cz.jiripinkas.jba.repository.RoleRepository;
 import cz.jiripinkas.jba.repository.UserRepository;
@@ -37,6 +39,9 @@ public class InitDbService {
 	
 	@Autowired
 	private ConfigurationService configurationService;
+	
+	@Autowired
+	private CategoryRepository categoryRepository;
 
 	@PostConstruct
 	public void init() {
@@ -77,12 +82,18 @@ public class InitDbService {
 			blogJavavids.setUser(userAdmin);
 			blogRepository.save(blogJavavids);
 
+			Category czechTrainingsCategory = new Category();
+			czechTrainingsCategory.setName("Czech Trainings");
+			czechTrainingsCategory.setShortName("czech-trainings");
+			czechTrainingsCategory = categoryRepository.save(czechTrainingsCategory);
+			
 			Blog blogJavaSkoleni = new Blog();
 			blogJavaSkoleni.setName("java skoleni");
 			blogJavaSkoleni.setUrl("http://novinky.seico.cz/java-skoleni");
 			blogJavaSkoleni.setHomepageUrl("http://www.java-skoleni.cz");
 			blogJavaSkoleni.setShortName("java-skoleni");
 			blogJavaSkoleni.setUser(userAdmin);
+			blogJavaSkoleni.setCategory(czechTrainingsCategory);
 			blogRepository.save(blogJavaSkoleni);
 
 			Blog blogSqlSkoleni = new Blog();
@@ -91,7 +102,10 @@ public class InitDbService {
 			blogSqlSkoleni.setHomepageUrl("http://www.sql-skoleni.cz");
 			blogSqlSkoleni.setShortName("sql-skoleni");
 			blogSqlSkoleni.setUser(userAdmin);
+			blogSqlSkoleni.setCategory(czechTrainingsCategory);
 			blogRepository.save(blogSqlSkoleni);
+			
+			
 		}
 
 		Configuration configuration = configurationService.find();

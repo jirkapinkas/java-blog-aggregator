@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
@@ -112,6 +113,7 @@ public class ItemService {
 		return item.isEnabled();
 	}
 
+	@Cacheable("itemCount")
 	public long count() {
 		return itemRepository.count();
 	}
@@ -158,6 +160,18 @@ public class ItemService {
 		ArrayList<ItemDto> result = new ArrayList<ItemDto>();
 		List<Item> items = null;
 		items = itemRepository.findBlogPageEnabled(blogShortName, new PageRequest(page, 10, Direction.DESC, "publishedDate"));
+		for (Item item : items) {
+			ItemDto itemDto = mapper.map(item, ItemDto.class);
+			result.add(itemDto);
+		}
+		return result;
+	}
+
+	@Transactional
+	public List<ItemDto> getCategoryDtoItems(int page, String categoryShortName) {
+		ArrayList<ItemDto> result = new ArrayList<ItemDto>();
+		List<Item> items = null;
+		items = itemRepository.findCategoryPageEnabled(categoryShortName, new PageRequest(page, 10, Direction.DESC, "publishedDate"));
 		for (Item item : items) {
 			ItemDto itemDto = mapper.map(item, ItemDto.class);
 			result.add(itemDto);

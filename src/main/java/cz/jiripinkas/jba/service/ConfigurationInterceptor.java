@@ -12,10 +12,29 @@ public class ConfigurationInterceptor extends HandlerInterceptorAdapter {
 	@Autowired
 	private ConfigurationService configurationService;
 
+	@Autowired
+	private CategoryService categoryService;
+
+	@Autowired
+	private BlogService blogService;
+
+	@Autowired
+	private UserService userService;
+	
+	@Autowired
+	private ItemService itemService;
+
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
 		if (modelAndView != null) {
 			modelAndView.getModelMap().addAttribute("configuration", configurationService.find());
+			modelAndView.getModelMap().addAttribute("categories", categoryService.findAll());
+			modelAndView.getModelMap().addAttribute("lastIndexDate", blogService.getLastIndexDateMinutes());
+			modelAndView.getModelMap().addAttribute("blogCount", blogService.count());
+			if (request.isUserInRole("ROLE_ADMIN")) {
+				modelAndView.getModelMap().addAttribute("itemCount", itemService.count());
+				modelAndView.getModelMap().addAttribute("userCount", userService.count());
+			}
 		}
 	}
 }

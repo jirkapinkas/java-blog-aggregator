@@ -19,6 +19,12 @@
 		<put-attribute name="current" value="top-views" />
 	</definition>
 
+	<definition name="category" extends="common">
+		<put-attribute name="title" value="Category" />
+		<put-attribute name="body" value="/WEB-INF/jsp/index.jsp" />
+		<put-attribute name="current" value="category" />
+	</definition>
+
 	<definition name="users" extends="common">
 		<put-attribute name="title" value="Users" />
 		<put-attribute name="body" value="/WEB-INF/jsp/users.jsp" />
@@ -71,6 +77,12 @@
 		<put-attribute name="title" value="Admin detail" />
 		<put-attribute name="body" value="/WEB-INF/jsp/admin-detail.jsp" />
 		<put-attribute name="current" value="admin-detail" />
+	</definition>
+
+	<definition name="admin-categories" extends="common">
+		<put-attribute name="title" value="Admin categories" />
+		<put-attribute name="body" value="/WEB-INF/jsp/admin-categories.jsp" />
+		<put-attribute name="current" value="admin-categories" />
 	</definition>
 
 	<definition name="configuration" extends="common">

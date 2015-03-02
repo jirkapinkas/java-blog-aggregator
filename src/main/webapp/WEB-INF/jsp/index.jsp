@@ -32,13 +32,7 @@
 	<tbody>
 		<tr>
 			<td>
-				<c:choose>
-					<c:when test="${blogDetail eq true}">
-					</c:when>
-					<c:otherwise>
-						<span class="badge">${blogCount} blogs</span>
-					</c:otherwise>
-				</c:choose>
+				<span class="badge">${blogCount} blogs</span>
 				<span class="badge">last update was ${lastIndexDate} minutes ago</span>
 				<security:authorize access="${isAdmin}">
 					<span class="badge">items: ${itemCount}</span>
@@ -106,9 +100,14 @@
 						<i class="fa fa-plus" title="today"></i>
 					</c:if>
 					<fmt:formatDate value="${item.publishedDate}" pattern="dd-MM-yyyy hh:mm:ss" />:
-					<strong>
-						<a href="<spring:url value='/blog/${item.blog.shortName}.html' />"><c:out value="${item.blog.name}" /></a>
-					</strong>
+					<span class="badge">
+						<a href="<spring:url value='/blog/${item.blog.shortName}.html' />" style="color: white"><c:out value="${item.blog.name}" /></a>
+					</span>
+					<c:if test="${item.blog.category.shortName != null}">
+						<span class="badge">
+							<a href="<spring:url value='/category/${item.blog.category.shortName}.html' />" style="color: white"><c:out value="${item.blog.category.name}" /></a>
+						</span>
+					</c:if>
 					<security:authorize access="${isAdmin}">
 						<a href="<spring:url value="/items/toggle-enabled/${item.id}.html" />" class="btn btn-primary btn-xs btnToggleEnabled">
 							<c:choose>
@@ -132,6 +131,9 @@
 					<c:choose>
 						<c:when test="${blogDetail eq true}">
 							<c:set var="noscriptNextPageUrl" value="?page=${nextPage}&shortName=${blogShortName}" />
+						</c:when>
+						<c:when test="${categoryDetail eq true}">
+							<c:set var="noscriptNextPageUrl" value="?page=${nextPage}&categoryShortName=${categoryShortName}" />
 						</c:when>
 						<c:when test="${topViews eq true}">
 							<c:choose>
@@ -195,6 +197,20 @@
 	</c:otherwise>
 </c:choose>
 
+<c:choose>
+	<c:when test="${categoryDetail eq true}">
+		<script>
+			var categoryDetail = true;
+			var categoryShortName = "${categoryShortName}";
+		</script>
+	</c:when>
+	<c:otherwise>
+		<script>
+			var categoryDetail = false;
+		</script>
+	</c:otherwise>
+</c:choose>
+
 <script>
 
 	$(function() {
@@ -210,16 +226,24 @@
 		var url = "<spring:url value='/page/' />" + nextPage + ".json";
 		var iconBaseUrl = "<spring:url value='/spring/icon/' />";
 		var blogDetailBaseUrl = "<spring:url value='/blog/' />";
+		var categoryBaseUrl = "<spring:url value='/category/' />";
 		if(topViews == true) {
 			url = url + "?topviews=true";
 			if(max == true) {
 				url = url + "&max=" + maxValue;
 			}
+			// TODO is this used??
 			if(blogDetail == true) {
 				url = url + "&shortName=" + blogShortName;
 			}
+			// TODO is this used??
+			if(categoryDetail == true) {
+				url = url + "&categoryShortName=" + categoryShortName;
+			}
 		} else if(blogDetail == true) {
 			url = url + "?shortName=" + blogShortName;
+		}  else if(categoryDetail == true) {
+			url = url + "?categoryShortName=" + categoryShortName;
 		}
 
 

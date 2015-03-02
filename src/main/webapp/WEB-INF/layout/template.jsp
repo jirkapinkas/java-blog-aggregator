@@ -5,9 +5,7 @@
 <html>
 <head>
 
-<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
-
-<%@ taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
+<%@ include file="taglib.jsp" %>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
@@ -64,9 +62,23 @@ ${configuration.googleAnalytics}
               </li>
 
               <security:authorize access="hasRole('ROLE_ADMIN')">
-              	<li class="${current == 'users' ? 'active' : ''}"><a href="<spring:url value="/users.html" />">Users</a></li>
-              	<li class="${current == 'configuration' ? 'active' : ''}"><a href="<spring:url value="/configuration.html" />">Configuration</a></li>
-              	<li class="${current == 'admin-detail' ? 'active' : ''}"><a href="<spring:url value="/admin-detail.html" />">Admin detail</a></li>
+                <li class="dropdown ${current == 'category' ? 'active' : ''}">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Categories <span class="caret"></span></a>
+                  <ul class="dropdown-menu" role="menu">
+                  	<c:forEach items="${categories}" var="category">
+                  		<li class="${current == 'category' && categoryShortName == category.shortName ? 'active' : ''}"><a href='<spring:url value="/category/${category.shortName}.html" />'>${category.name}</a></li>
+                  	</c:forEach>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Administer <span class="caret"></span></a>
+                  <ul class="dropdown-menu" role="menu">
+	              	<li class="${current == 'users' ? 'active' : ''}"><a href="<spring:url value="/users.html" />">Users</a></li>
+	              	<li class="${current == 'configuration' ? 'active' : ''}"><a href="<spring:url value="/configuration.html" />">Configuration</a></li>
+	              	<li class="${current == 'admin-detail' ? 'active' : ''}"><a href="<spring:url value="/admin-detail.html" />">Admin detail</a></li>
+	              	<li class="${current == 'admin-categories' ? 'active' : ''}"><a href="<spring:url value="/admin-categories.html" />">Categories</a></li>
+              	  </ul>
+              	</li>
               </security:authorize>
               <li class="${current == 'blogs' ? 'active' : ''}"><a href="<spring:url value="/blogs.html" />">Blogs</a></li>
             </ul>

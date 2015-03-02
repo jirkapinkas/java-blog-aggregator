@@ -22,14 +22,17 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 	@Query("select i.id from Item i where i.link = ?1 and i.blog.id = ?2")
 	Integer findItemIdByLinkAndBlogId(String link, int blogId);
 
-	@Query("select i from Item i join fetch i.blog where i.publishedDate >= ?1")
+	@Query("select i from Item i join fetch i.blog left join fetch i.blog.category where i.publishedDate >= ?1")
 	List<Item> findPageAllItems(Date publishedDate, Pageable pageable);
 
-	@Query("select i from Item i join fetch i.blog where i.enabled = true and i.publishedDate >= ?1")
+	@Query("select i from Item i join fetch i.blog left join fetch i.blog.category where i.enabled = true and i.publishedDate >= ?1")
 	List<Item> findPageEnabled(Date publishedDate, Pageable pageable);
 
-	@Query("select i from Item i join fetch i.blog where i.enabled = true and i.blog.shortName = ?1")
+	@Query("select i from Item i join fetch i.blog left join fetch i.blog.category where i.enabled = true and i.blog.shortName = ?1")
 	List<Item> findBlogPageEnabled(String shortName, Pageable pageable);
+
+	@Query("select i from Item i join fetch i.blog left join fetch i.blog.category cat where i.enabled = true and cat.shortName = ?1")
+	List<Item> findCategoryPageEnabled(String shortName, Pageable pageable);
 
 	@Transactional
 	@Modifying

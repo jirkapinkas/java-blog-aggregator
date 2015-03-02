@@ -22,17 +22,6 @@
 
 <br />
 
-<script type="text/javascript">
-$(document).ready(function() {
-    $("img.lazy").unveil(unveilTreshold);
-    $('#dataTable').DataTable( {
-		"fnDrawCallback": function( oSettings ) {
-			$("img.lazy").unveil(unveilTreshold);
-		}
-	});
-} );
-</script>
-
 <table class="table table-bordered table-hover table-striped display" id="dataTable">
 	<thead>
 		<tr>
@@ -71,9 +60,39 @@ $(document).ready(function() {
 						<a href="<spring:url value='/blog-form.html?blogId=${blog.id}' />">
 							edit
 						</a>
+						
+						<br />
+						category:
+						<select class="categorySelect" id="${blog.id}">
+							<c:if test="${blog.category.id != 0}">
+								<option value="" selected="selected" disabled="disabled"></option>
+							</c:if>
+							<c:forEach items="${categories}" var="category">
+								<option ${category.id eq blog.category.id ? 'selected = "selected"' : ''} value="${category.id}">
+									${category.name}
+								</option>
+							</c:forEach>
+						</select>
 					</td>
 				</security:authorize>
 			</tr>
 		</c:forEach>
 	</tbody>
 </table>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $("img.lazy").unveil(unveilTreshold);
+    $('#dataTable').DataTable( {
+		"fnDrawCallback": function( oSettings ) {
+			$("img.lazy").unveil(unveilTreshold);
+		}
+	});
+    $(".categorySelect").on("change", function() {
+    	var blogId = $(this).attr("id");
+    	var categoryId = this.value;
+    	$.post("admin-categories/set/" + blogId + "/cat/" + categoryId + ".json", function(data) { });
+    });
+} );
+</script>
+

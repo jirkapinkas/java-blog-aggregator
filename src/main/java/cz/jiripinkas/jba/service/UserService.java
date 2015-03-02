@@ -6,6 +6,8 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -56,6 +58,7 @@ public class UserService {
 		return user;
 	}
 
+	@CacheEvict(value = "userCount", allEntries = true)
 	public void save(User user) {
 		user.setEnabled(true);
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -85,6 +88,7 @@ public class UserService {
 		return findOneWithBlogs(user.getId());
 	}
 
+	@CacheEvict(value = "userCount", allEntries = true)
 	public void delete(int id) {
 		userRepository.delete(id);
 	}
@@ -93,6 +97,7 @@ public class UserService {
 		return userRepository.findByName(username);
 	}
 
+	@Cacheable("userCount")
 	public long count() {
 		return userRepository.count();
 	}

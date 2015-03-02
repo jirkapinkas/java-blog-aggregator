@@ -18,22 +18,16 @@ import cz.jiripinkas.jba.dto.ItemDto;
 import cz.jiripinkas.jba.entity.Blog;
 import cz.jiripinkas.jba.service.BlogService;
 import cz.jiripinkas.jba.service.ItemService;
-import cz.jiripinkas.jba.service.UserService;
 
 @Controller
 public class BlogController {
 
 	private static final class BlogNotFoundException extends RuntimeException {
-
 		private static final long serialVersionUID = 1L;
-
 	}
 
 	@Autowired
 	private ItemService itemService;
-
-	@Autowired
-	private UserService userService;
 
 	@Autowired
 	private BlogService blogService;
@@ -42,7 +36,7 @@ public class BlogController {
 	public void handleBlogNotFound(BlogNotFoundException exception, HttpServletResponse response) throws IOException {
 		response.sendError(HttpServletResponse.SC_NOT_FOUND);
 	}
-	
+
 	private void findBlog(String shortName, Model model) {
 		Blog blog = blogService.findByShortName(shortName);
 		if (blog == null) {
@@ -67,8 +61,6 @@ public class BlogController {
 	}
 
 	private String showFirstPage(Model model, String tilesPage, String shortName) {
-		model.addAttribute("lastIndexDate", blogService.getLastIndexDateMinutes());
-		model.addAttribute("blogCount", blogService.count());
 		return showPage(model, 0, tilesPage, shortName);
 	}
 
@@ -83,7 +75,7 @@ public class BlogController {
 	public List<ItemDto> getPageLatest(@PathVariable int page, @RequestParam String shortName) {
 		return itemService.getDtoItems(page, shortName);
 	}
-	
+
 	@RequestMapping("/blogs")
 	public String showBlogs(Model model) {
 		model.addAttribute("blogs", blogService.findAll());

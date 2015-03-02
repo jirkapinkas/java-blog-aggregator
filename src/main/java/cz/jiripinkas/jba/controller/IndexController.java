@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cz.jiripinkas.jba.dto.ItemDto;
-import cz.jiripinkas.jba.service.BlogService;
 import cz.jiripinkas.jba.service.ItemService;
-import cz.jiripinkas.jba.service.UserService;
 import cz.jiripinkas.jba.service.ItemService.MaxType;
 import cz.jiripinkas.jba.service.ItemService.OrderType;
 
@@ -26,19 +24,7 @@ public class IndexController {
 	@Autowired
 	private ItemService itemService;
 
-	@Autowired
-	private UserService userService;
-
-	@Autowired
-	private BlogService blogService;
-
 	private String showFirstPage(Model model, HttpServletRequest request, String tilesPage, OrderType orderType, MaxType maxType) {
-		model.addAttribute("lastIndexDate", blogService.getLastIndexDateMinutes());
-		model.addAttribute("blogCount", blogService.count());
-		if (request.isUserInRole("ROLE_ADMIN")) {
-			model.addAttribute("itemCount", itemService.count());
-			model.addAttribute("userCount", userService.count());
-		}
 		return showPage(model, request, 0, tilesPage, orderType, maxType);
 	}
 
