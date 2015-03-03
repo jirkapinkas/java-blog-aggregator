@@ -99,17 +99,14 @@
 					<c:if test="${item.publishedDate > yesterdayDate}">
 						<i class="fa fa-plus" title="today"></i>
 					</c:if>
-					<fmt:formatDate value="${item.publishedDate}" pattern="dd-MM-yyyy hh:mm:ss" />:
-					<span class="badge">
-						<a href="<spring:url value='/blog/${item.blog.shortName}.html' />" style="color: white"><c:out value="${item.blog.name}" /></a>
-					</span>
-					<c:if test="${item.blog.category.shortName != null}">
-						<span class="badge">
-							<a href="<spring:url value='/category/${item.blog.category.shortName}.html' />" style="color: white"><c:out value="${item.blog.category.name}" /></a>
-						</span>
-					</c:if>
+					<span class="label" style="color: grey;"><fmt:formatDate value="${item.publishedDate}" pattern="dd-MM-yyyy hh:mm:ss" /></span>
+					<span class="label label-default"><a href="<spring:url value='/blog/${item.blog.shortName}.html' />" style="color: white"><c:out value="${item.blog.name}" /></a></span>
 					<security:authorize access="${isAdmin}">
-						<a href="<spring:url value="/items/toggle-enabled/${item.id}.html" />" class="btn btn-primary btn-xs btnToggleEnabled">
+						<c:if test="${item.blog.category.shortName != null}">
+							<span class="label label-info" style="margin-left: 5px"><a href="<spring:url value='/category/${item.blog.category.shortName}.html' />" style="color: white"><c:out value="${item.blog.category.name}" /></a></span>
+						</c:if>
+						<span class="label label-default" style="margin-left: 5px">views: ${item.clickCount}</span>
+						<a href="<spring:url value="/items/toggle-enabled/${item.id}.html" />" class="btn btn-primary btn-xs btnToggleEnabled" style="margin-left:5px">
 							<c:choose>
 								<c:when test="${item.enabled}">
 									disable
@@ -119,7 +116,6 @@
 								</c:otherwise>
 							</c:choose>
 						</a>
-						<span class="badge">views: ${item.clickCount}</span>
 					</security:authorize>
 				</td>
 			</tr>
@@ -306,13 +302,11 @@
 				html += "";
 				html += ("0" + date.getDate()).slice(-2) + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + date.getFullYear();
 				html += " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2) + ":" + ("0" + date.getSeconds()).slice(-2);
-				html += ": ";
-				html += "<strong>";
-				html += "<a href='" + blogDetailBaseUrl + value.blog.shortName + ".html'>";
+				html += " ";
+				html += "<span class='label label-default' style='margin-left: 5px'><a href='" + blogDetailBaseUrl + value.blog.shortName + ".html' style='color: white;'>";
 				html += value.blog.name;
-				html += "</a>";
-				html += "</strong>";
-					html += adminMenu(value);
+				html += "</a></span>";
+				html += adminMenu(value);
 				html += "</td></tr>";
 			});
 			var newCode = $(".table tr:last").prev().after(html);
@@ -339,7 +333,11 @@
 		
 			// generate menu for administrator
 			function adminMenu(item) {
-				var html = " ";
+				var html = "";
+				if(item.blog.category != null) {
+					html += ' <span class="label label-info" style="margin-left: 5px"><a href="<spring:url value="/category/" />' + item.blog.category.shortName + '.html" style="color: white">' + item.blog.category.name + '</a></span>';
+				}
+				html += ' <span class="label label-default" style="margin-left: 5px">views: ' + item.clickCount + '</span> ';
 				html += '<a href="<spring:url value="/" />items/toggle-enabled/' + item.id + '.html" class="btn btn-primary btn-xs btnToggleEnabled">';
 				if(item.enabled) {
 					html += 'disable';
@@ -347,7 +345,6 @@
 					html += 'enable';
 				}
 				html += '</a>';
-				html += ' <span class="badge">views: ' + item.clickCount + '</span>';
 				return html;
 			}
 

@@ -20,7 +20,7 @@ public interface BlogRepository extends JpaRepository<Blog, Integer>{
 
 	Blog findByShortName(String shortName);
 
-	@Query("select b from Blog b join fetch b.user order by b.shortName")
+	@Query("select b from Blog b join fetch b.user left join fetch b.category order by b.shortName")
 	List<Blog> findAllFetchUser();
 
 	Blog findByIdAndUserName(int id, String username);
