@@ -46,7 +46,7 @@
 				<script type="text/javascript">
 					$(document).ready(function() {
 						$('.withTooltip').tooltip();
-						// TODO ulozit nastaveni do cookie a pak ho ziskavat!!!!
+						// TODO save settings to cookie
 						// select all categories
 						$.getJSON("<spring:url value='/all-categories.json' />", function(data) {
 							selectedCategories = data;
