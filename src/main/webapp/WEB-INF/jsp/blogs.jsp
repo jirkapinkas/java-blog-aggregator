@@ -63,7 +63,7 @@
 						
 						<br />
 						category:
-						<select class="categorySelect" id="${blog.id}">
+						<select class="categorySelect" id="${blog.id}" onchange="categorySelectChange(this)">
 							<c:if test="${blog.category.id != 0}">
 								<option value="" selected="selected" disabled="disabled"></option>
 							</c:if>
@@ -88,11 +88,11 @@ $(document).ready(function() {
 			$("img.lazy").unveil(unveilTreshold);
 		}
 	});
-    $(".categorySelect").on("change", function() {
-    	var blogId = $(this).attr("id");
-    	var categoryId = this.value;
-    	$.post("admin-categories/set/" + blogId + "/cat/" + categoryId + ".json", function(data) { });
-    });
 } );
+function categorySelectChange(element) {
+	var blogId = $(element).attr("id");
+	var categoryId = $(element).val();
+	$.post("admin-categories/set/" + blogId + "/cat/" + categoryId + ".json", function(data) { });
+}
 </script>
 
