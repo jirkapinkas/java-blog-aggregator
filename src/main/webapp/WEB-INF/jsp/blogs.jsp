@@ -26,6 +26,7 @@
 	<thead>
 		<tr>
 			<th>blog</th>
+			<th style="width:100px">category</th>
 			<security:authorize access="${isAdmin}">
 				<th>user</th>
 				<th>edit</th>
@@ -49,6 +50,9 @@
 							<c:out value="${blog.name}" />
 						</strong>
 					</a>
+				</td>
+				<td>
+					<span class="label label-default">${blog.category.name}</span>
 				</td>
 				<security:authorize access="${isAdmin}">
 					<td>
