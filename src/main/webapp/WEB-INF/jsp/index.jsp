@@ -32,11 +32,11 @@
 	<tbody>
 		<tr>
 			<td>
-				<span class="badge">${blogCount} blogs</span>
-				<span class="badge">last update was ${lastIndexDate} minutes ago</span>
+				<span class="label label-default">${blogCount} blogs</span>
+				<span class="label label-default">last update was ${lastIndexDate} minutes ago</span>
 				<security:authorize access="${isAdmin}">
-					<span class="badge">items: ${itemCount}</span>
-					<span class="badge">users: ${userCount}</span>
+					<span class="label label-default">items: ${itemCount}</span>
+					<span class="label label-default">users: ${userCount}</span>
 				</security:authorize>
 			</td> 
 		</tr>
@@ -103,9 +103,9 @@
 					<span class="label label-default"><a href="<spring:url value='/blog/${item.blog.shortName}.html' />" style="color: white"><c:out value="${item.blog.name}" /></a></span>
 					<security:authorize access="${isAdmin}">
 						<c:if test="${item.blog.category.shortName != null}">
-							<span class="label label-info" style="margin-left: 5px"><a href="<spring:url value='/category/${item.blog.category.shortName}.html' />" style="color: white"><c:out value="${item.blog.category.name}" /></a></span>
+							<span class="label label-info"><a href="<spring:url value='/category/${item.blog.category.shortName}.html' />" style="color: white"><c:out value="${item.blog.category.name}" /></a></span>
 						</c:if>
-						<span class="label label-default" style="margin-left: 5px">views: ${item.clickCount}</span>
+						<span class="label label-default">views: ${item.clickCount}</span>
 						<a href="<spring:url value="/items/toggle-enabled/${item.id}.html" />" class="btn btn-primary btn-xs btnToggleEnabled" style="margin-left:5px">
 							<c:choose>
 								<c:when test="${item.enabled}">
