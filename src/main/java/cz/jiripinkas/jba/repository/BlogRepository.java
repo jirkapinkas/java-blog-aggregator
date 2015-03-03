@@ -18,6 +18,7 @@ public interface BlogRepository extends JpaRepository<Blog, Integer>{
 	@Query("select b from Blog b join fetch b.user where b.id = ?1")
 	Blog findOneFetchUser(int id);
 
+	@Query("select b from Blog b left join fetch b.category where b.shortName = ?1")
 	Blog findByShortName(String shortName);
 
 	@Query("select b from Blog b join fetch b.user left join fetch b.category order by b.shortName")

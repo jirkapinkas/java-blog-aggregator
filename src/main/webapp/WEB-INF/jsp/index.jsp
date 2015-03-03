@@ -131,10 +131,10 @@
 					</c:if>
 					<span class="label" style="color: grey;"><fmt:formatDate value="${item.publishedDate}" pattern="dd-MM-yyyy hh:mm:ss" /></span>
 					<span class="label label-info"><a href="<spring:url value='/blog/${item.blog.shortName}.html' />" style="color: white"><c:out value="${item.blog.name}" /></a></span>
+					<c:if test="${item.blog.category.shortName != null}">
+						<span class="label label-default"><c:out value="${item.blog.category.name}" /></span>
+					</c:if>
 					<security:authorize access="${isAdmin}">
-						<c:if test="${item.blog.category.shortName != null}">
-							<span class="label label-default"><c:out value="${item.blog.category.name}" /></span>
-						</c:if>
 						<span class="label label-default">views: ${item.clickCount}</span>
 						<a href="<spring:url value="/items/toggle-enabled/${item.id}.html" />" class="btn btn-primary btn-xs btnToggleEnabled" style="margin-left:5px" onclick="event.preventDefault();toggleEnabledItem(this);">
 							<c:choose>
