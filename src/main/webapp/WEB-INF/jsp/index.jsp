@@ -240,10 +240,6 @@
 			if(max == true) {
 				url = url + "&max=" + maxValue;
 			}
-			// TODO is this used??
-			if(blogDetail == true) {
-				url = url + "&shortName=" + blogShortName;
-			}
 		} else if(blogDetail == true) {
 			url = url + "?shortName=" + blogShortName;
 		}
