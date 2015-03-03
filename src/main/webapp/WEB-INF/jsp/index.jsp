@@ -37,12 +37,12 @@
 				<security:authorize access="${isAdmin}">
 					<span class="label label-default">items: ${itemCount}</span>
 					<span class="label label-default">users: ${userCount}</span>
-					<c:if test="${blogDetail eq null}">
-						<c:forEach items="${categories}" var="category">
-							<span class="label label-primary categoryLabel withTooltip" id="${category.id}" style="cursor: pointer;" data-toggle="tooltip" data-placement="top" title="toggle category visibility">${category.name}</span>
-						</c:forEach>
-					</c:if>
 				</security:authorize>
+				<c:if test="${blogDetail eq null}">
+					<c:forEach items="${categories}" var="category">
+						<span class="label label-primary categoryLabel withTooltip" id="${category.id}" style="cursor: pointer;" data-toggle="tooltip" data-placement="top" title="toggle category visibility">${category.name}</span>
+					</c:forEach>
+				</c:if>
 				<script type="text/javascript">
 					$(document).ready(function() {
 						$('.withTooltip').tooltip();
@@ -318,6 +318,9 @@
 				html += "<span class='label label-info' style='margin-left: 5px'><a href='" + blogDetailBaseUrl + value.blog.shortName + ".html' style='color: white;'>";
 				html += value.blog.name;
 				html += "</a></span>";
+				if(value.blog.category != null) {
+					html += ' <span class="label label-default" style="margin-left: 5px">' + value.blog.category.name + '</span>';
+				}
 				html += adminMenu(value);
 				html += "</td></tr>";
 			});
@@ -341,9 +344,6 @@
 			// generate menu for administrator
 			function adminMenu(item) {
 				var html = "";
-				if(item.blog.category != null) {
-					html += ' <span class="label label-default" style="margin-left: 5px">' + item.blog.category.name + '</span>';
-				}
 				html += ' <span class="label label-default" style="margin-left: 5px">views: ' + item.clickCount + '</span> ';
 				html += '<a href="<spring:url value="/" />items/toggle-enabled/' + item.id + '.html" class="btn btn-primary btn-xs btnToggleEnabled" onclick="event.preventDefault();toggleEnabledItem(this);">';
 				if(item.enabled) {
