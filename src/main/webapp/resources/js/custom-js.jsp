@@ -6,6 +6,8 @@ var unveilTreshold = 200;
 
 var currentPage = 0;
 
+var selectedCategories;
+
 /*
  * Called when user clicks on item URL
  */

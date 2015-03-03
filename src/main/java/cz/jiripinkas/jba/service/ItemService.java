@@ -3,6 +3,7 @@ package cz.jiripinkas.jba.service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -39,7 +40,7 @@ public class ItemService {
 	}
 
 	@Transactional
-	public List<ItemDto> getDtoItems(int page, boolean showAll, OrderType orderType, MaxType maxType) {
+	public List<ItemDto> getDtoItems(int page, boolean showAll, OrderType orderType, MaxType maxType, Integer[] selectedCategories) {
 		Direction orderDirection = Direction.DESC;
 
 		String orderByProperty = null;
@@ -78,10 +79,19 @@ public class ItemService {
 		ArrayList<ItemDto> result = new ArrayList<ItemDto>();
 
 		List<Item> items = null;
+		
 		if (showAll) {
-			items = itemRepository.findPageAllItems(publishedDate, new PageRequest(page, 10, orderDirection, orderByProperty));
+			if(selectedCategories.length == 0) {
+				items = itemRepository.findPageAllItemsAllCategories(publishedDate, new PageRequest(page, 10, orderDirection, orderByProperty));
+			} else {
+				items = itemRepository.findPageAllItemsInCategory(publishedDate, Arrays.asList(selectedCategories), new PageRequest(page, 10, orderDirection, orderByProperty));
+			}
 		} else {
-			items = itemRepository.findPageEnabled(publishedDate, new PageRequest(page, 10, orderDirection, orderByProperty));
+			if(selectedCategories.length == 0) {
+				items = itemRepository.findPageEnabledAllCategories(publishedDate, new PageRequest(page, 10, orderDirection, orderByProperty));
+			} else {
+				items = itemRepository.findPageEnabledInCategory(publishedDate, Arrays.asList(selectedCategories), new PageRequest(page, 10, orderDirection, orderByProperty));
+			}
 		}
 		for (Item item : items) {
 			ItemDto itemDto = mapper.map(item, ItemDto.class);

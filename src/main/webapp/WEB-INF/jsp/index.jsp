@@ -28,7 +28,7 @@
 
 <br />
 
-<table class="table table-bordered table-hover table-striped">
+<table class="table table-bordered table-hover table-striped tableItems">
 	<tbody>
 		<tr>
 			<td>
@@ -37,7 +37,37 @@
 				<security:authorize access="${isAdmin}">
 					<span class="label label-default">items: ${itemCount}</span>
 					<span class="label label-default">users: ${userCount}</span>
+					<c:if test="${blogDetail eq null}">
+						<c:forEach items="${categories}" var="category">
+							<span class="label label-primary categoryLabel withTooltip" id="${category.id}" style="cursor: pointer;" data-toggle="tooltip" data-placement="top" title="toggle category visibility">${category.name}</span>
+						</c:forEach>
+					</c:if>
 				</security:authorize>
+				<script type="text/javascript">
+					$(document).ready(function() {
+						$('.withTooltip').tooltip();
+						// TODO ulozit nastaveni do cookie a pak ho ziskavat!!!!
+						// select all categories
+						$.getJSON("<spring:url value='/all-categories.json' />", function(data) {
+							selectedCategories = data;
+						});
+						$(".categoryLabel").click(function (e) {
+							var categoryId = parseInt($(this).attr("id"));
+							var arrIndex = $.inArray(categoryId, selectedCategories);
+							if(arrIndex != -1) {
+								selectedCategories.splice(arrIndex, 1);
+								$(this).css("text-decoration", "line-through");
+							} else {
+								selectedCategories.push(categoryId);
+								$(this).css("text-decoration", "none");
+							}
+							// reload first page
+							$(".tableItems tbody .item-row").remove();
+							currentPage = -1;
+							loadNextPage();
+						});
+					});
+				</script>
 			</td> 
 		</tr>
 		<c:forEach items="${items}" var="item">
@@ -100,13 +130,13 @@
 						<i class="fa fa-plus" title="today"></i>
 					</c:if>
 					<span class="label" style="color: grey;"><fmt:formatDate value="${item.publishedDate}" pattern="dd-MM-yyyy hh:mm:ss" /></span>
-					<span class="label label-default"><a href="<spring:url value='/blog/${item.blog.shortName}.html' />" style="color: white"><c:out value="${item.blog.name}" /></a></span>
+					<span class="label label-info"><a href="<spring:url value='/blog/${item.blog.shortName}.html' />" style="color: white"><c:out value="${item.blog.name}" /></a></span>
 					<security:authorize access="${isAdmin}">
 						<c:if test="${item.blog.category.shortName != null}">
-							<span class="label label-info"><a href="<spring:url value='/category/${item.blog.category.shortName}.html' />" style="color: white"><c:out value="${item.blog.category.name}" /></a></span>
+							<span class="label label-default"><c:out value="${item.blog.category.name}" /></span>
 						</c:if>
 						<span class="label label-default">views: ${item.clickCount}</span>
-						<a href="<spring:url value="/items/toggle-enabled/${item.id}.html" />" class="btn btn-primary btn-xs btnToggleEnabled" style="margin-left:5px">
+						<a href="<spring:url value="/items/toggle-enabled/${item.id}.html" />" class="btn btn-primary btn-xs btnToggleEnabled" style="margin-left:5px" onclick="event.preventDefault();toggleEnabledItem(this);">
 							<c:choose>
 								<c:when test="${item.enabled}">
 									disable
@@ -127,9 +157,6 @@
 					<c:choose>
 						<c:when test="${blogDetail eq true}">
 							<c:set var="noscriptNextPageUrl" value="?page=${nextPage}&shortName=${blogShortName}" />
-						</c:when>
-						<c:when test="${categoryDetail eq true}">
-							<c:set var="noscriptNextPageUrl" value="?page=${nextPage}&categoryShortName=${categoryShortName}" />
 						</c:when>
 						<c:when test="${topViews eq true}">
 							<c:choose>
@@ -193,20 +220,6 @@
 	</c:otherwise>
 </c:choose>
 
-<c:choose>
-	<c:when test="${categoryDetail eq true}">
-		<script>
-			var categoryDetail = true;
-			var categoryShortName = "${categoryShortName}";
-		</script>
-	</c:when>
-	<c:otherwise>
-		<script>
-			var categoryDetail = false;
-		</script>
-	</c:otherwise>
-</c:choose>
-
 <script>
 
 	$(function() {
@@ -222,7 +235,6 @@
 		var url = "<spring:url value='/page/' />" + nextPage + ".json";
 		var iconBaseUrl = "<spring:url value='/spring/icon/' />";
 		var blogDetailBaseUrl = "<spring:url value='/blog/' />";
-		var categoryBaseUrl = "<spring:url value='/category/' />";
 		if(topViews == true) {
 			url = url + "?topviews=true";
 			if(max == true) {
@@ -232,21 +244,20 @@
 			if(blogDetail == true) {
 				url = url + "&shortName=" + blogShortName;
 			}
-			// TODO is this used??
-			if(categoryDetail == true) {
-				url = url + "&categoryShortName=" + categoryShortName;
-			}
 		} else if(blogDetail == true) {
 			url = url + "?shortName=" + blogShortName;
-		}  else if(categoryDetail == true) {
-			url = url + "?categoryShortName=" + categoryShortName;
+		}
+		if(url.indexOf("?") == -1) {
+			url = url + "?selectedCategories=" + selectedCategories.join(',');
+		} else {
+			url = url + "&selectedCategories=" + selectedCategories.join(',');
 		}
 
 
 		$.getJSON( url, function( data ) {
 			var html = "";
 			$.each(data, function(key, value) {
-				html += "<tr><td>";
+				html += "<tr class='item-row'><td>";
 
 				// show like / dislike buttons
 				html += ' <table style="float:left;margin-right:5px">';
@@ -299,11 +310,12 @@
 				if(date.getTime() > "${yesterdayDate.time}") {
 					html += '<i class="fa fa-plus" title="today"></i> ';
 				}
-				html += "";
+
+				html += "<span class='label' style='color: grey;'>";
 				html += ("0" + date.getDate()).slice(-2) + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + date.getFullYear();
-				html += " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2) + ":" + ("0" + date.getSeconds()).slice(-2);
-				html += " ";
-				html += "<span class='label label-default' style='margin-left: 5px'><a href='" + blogDetailBaseUrl + value.blog.shortName + ".html' style='color: white;'>";
+				html += ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2) + ":" + ("0" + date.getSeconds()).slice(-2);
+				html += "</span>";
+				html += "<span class='label label-info' style='margin-left: 5px'><a href='" + blogDetailBaseUrl + value.blog.shortName + ".html' style='color: white;'>";
 				html += value.blog.name;
 				html += "</a></span>";
 				html += adminMenu(value);
@@ -311,7 +323,6 @@
 			});
 			var newCode = $(".table tr:last").prev().after(html);
 			$("img.lazy").unveil(unveilTreshold);
-			adminHandler(newCode);
 			// set like / dislike buttons state
 			$.each(data, function(key, value) {
 				showCurrentState(value.id);
@@ -327,18 +338,14 @@
 	<c:when test="${isAdmin eq true}">
 		<script type="text/javascript">
 		
-			$(document).ready(function() {
-				$(".btnToggleEnabled").click(toggleEnabledItem);
-			});
-		
 			// generate menu for administrator
 			function adminMenu(item) {
 				var html = "";
 				if(item.blog.category != null) {
-					html += ' <span class="label label-info" style="margin-left: 5px"><a href="<spring:url value="/category/" />' + item.blog.category.shortName + '.html" style="color: white">' + item.blog.category.name + '</a></span>';
+					html += ' <span class="label label-default" style="margin-left: 5px">' + item.blog.category.name + '</span>';
 				}
 				html += ' <span class="label label-default" style="margin-left: 5px">views: ' + item.clickCount + '</span> ';
-				html += '<a href="<spring:url value="/" />items/toggle-enabled/' + item.id + '.html" class="btn btn-primary btn-xs btnToggleEnabled">';
+				html += '<a href="<spring:url value="/" />items/toggle-enabled/' + item.id + '.html" class="btn btn-primary btn-xs btnToggleEnabled" onclick="event.preventDefault();toggleEnabledItem(this);">';
 				if(item.enabled) {
 					html += 'disable';
 				} else {
@@ -348,10 +355,9 @@
 				return html;
 			}
 
-			var toggleEnabledItem = function (e) {
-				e.preventDefault();
-				var href = $(this).attr("href");
-				var curr = $(this);
+			function toggleEnabledItem (e) {
+				var href = $(e).attr("href");
+				var curr = $(e);
 				$.getJSON( href, function(data) {
 					var css1 = "";
 					var css2 = "";
@@ -373,18 +379,12 @@
 				});
 			};
 
-			function adminHandler(newCode) {
-				$(".btnToggleEnabled").on("click", toggleEnabledItem);
-			}
-
 		</script>
 	</c:when>
 	<c:otherwise>
 		<script type="text/javascript">
 			function adminMenu(item) {
 				return "";
-			}
-			function adminHandler(newCode) {
 			}
 		</script>
 	</c:otherwise>

@@ -62,14 +62,6 @@ ${configuration.googleAnalytics}
               </li>
 
               <security:authorize access="hasRole('ROLE_ADMIN')">
-                <li class="dropdown ${current == 'category' ? 'active' : ''}">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Categories <span class="caret"></span></a>
-                  <ul class="dropdown-menu" role="menu">
-                  	<c:forEach items="${categories}" var="category">
-                  		<li class="${current == 'category' && categoryShortName == category.shortName ? 'active' : ''}"><a href='<spring:url value="/category/${category.shortName}.html" />'>${category.name}</a></li>
-                  	</c:forEach>
-                  </ul>
-                </li>
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Administer <span class="caret"></span></a>
                   <ul class="dropdown-menu" role="menu">

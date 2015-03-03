@@ -44,10 +44,6 @@ public class CategoryService {
 	public CategoryDto findOneDto(int id) {
 		return mapper.map(categoryRepository.findOne(id), CategoryDto.class);
 	}
-	
-	public Category findByShortName(String shortName) {
-		return categoryRepository.findByShortName(shortName);
-	}
 
 	public void addMapping(int blogId, int categoryId) {
 		Category category = categoryRepository.findOne(categoryId);

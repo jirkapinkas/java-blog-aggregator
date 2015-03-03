@@ -66,12 +66,19 @@ public class InitDbService {
 			userAdmin.setRoles(roles);
 			userRepository.save(userAdmin);
 
+			Category springCategory = new Category();
+			springCategory.setName("Spring");
+			springCategory.setShortName("spring");
+			springCategory = categoryRepository.save(springCategory);
+			
+
 			Blog blogSpring = new Blog();
 			blogSpring.setName("Spring");
 			blogSpring.setUrl("http://spring.io/blog.atom");
 			blogSpring.setHomepageUrl("http://spring.io/");
 			blogSpring.setShortName("spring");
 			blogSpring.setUser(userAdmin);
+			blogSpring.setCategory(springCategory);
 			blogRepository.save(blogSpring);
 
 			Blog blogJavavids = new Blog();

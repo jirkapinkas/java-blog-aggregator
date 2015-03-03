@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cz.jiripinkas.jba.dto.ItemDto;
+import cz.jiripinkas.jba.service.CategoryService;
 import cz.jiripinkas.jba.service.ItemService;
 import cz.jiripinkas.jba.service.ItemService.MaxType;
 import cz.jiripinkas.jba.service.ItemService.OrderType;
@@ -23,6 +24,9 @@ public class IndexController {
 
 	@Autowired
 	private ItemService itemService;
+	
+	@Autowired
+	private CategoryService categoryService;
 
 	private String showFirstPage(Model model, HttpServletRequest request, String tilesPage, OrderType orderType, MaxType maxType) {
 		return showPage(model, request, 0, tilesPage, orderType, maxType);
@@ -33,7 +37,7 @@ public class IndexController {
 		if (request.isUserInRole("ROLE_ADMIN")) {
 			showAll = true;
 		}
-		model.addAttribute("items", itemService.getDtoItems(page, showAll, orderType, maxType));
+		model.addAttribute("items", itemService.getDtoItems(page, showAll, orderType, maxType, new Integer[0]));
 		model.addAttribute("nextPage", page + 1);
 		return tilesPage;
 	}
@@ -101,22 +105,22 @@ public class IndexController {
 
 	@ResponseBody
 	@RequestMapping("/page/{page}")
-	public List<ItemDto> getPageLatest(@PathVariable int page, HttpServletRequest request) {
+	public List<ItemDto> getPageLatest(@PathVariable int page, HttpServletRequest request, @RequestParam Integer[] selectedCategories) {
 		boolean showAll = false;
 		if (request.isUserInRole("ROLE_ADMIN")) {
 			showAll = true;
 		}
-		return itemService.getDtoItems(page, showAll, OrderType.LATEST, MaxType.UNDEFINED);
+		return itemService.getDtoItems(page, showAll, OrderType.LATEST, MaxType.UNDEFINED, selectedCategories);
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "/page/{page}", params = "topviews")
-	public List<ItemDto> getPageMostViewed(@PathVariable int page, HttpServletRequest request, @RequestParam(required = false) String max) {
+	public List<ItemDto> getPageMostViewed(@PathVariable int page, HttpServletRequest request, @RequestParam(required = false) String max, @RequestParam Integer[] selectedCategories) {
 		boolean showAll = false;
 		if (request.isUserInRole("ROLE_ADMIN")) {
 			showAll = true;
 		}
-		return itemService.getDtoItems(page, showAll, OrderType.MOST_VIEWED, resolveMaxType(max));
+		return itemService.getDtoItems(page, showAll, OrderType.MOST_VIEWED, resolveMaxType(max), selectedCategories);
 	}
 
 	@ResponseBody
