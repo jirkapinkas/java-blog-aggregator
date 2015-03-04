@@ -141,7 +141,7 @@ public class RssService {
 				try {
 					response = httpClient.execute(get);
 					HttpEntity entity = response.getEntity();
-					page = EntityUtils.toString(entity);
+					page = EntityUtils.toString(entity, "UTF-8");
 				} finally {
 					if (response != null) {
 						response.close();
