@@ -119,6 +119,8 @@ public class InitDbService {
 		if(configuration == null) {
 			configuration = new Configuration();
 			configuration.setTitle("Java Blog Aggregator");
+			configuration.setHomepageHeading("Latest news from the Java world:");
+			configuration.setTopHeading("Best Java news");
 			configuration.setBrandName("top java blogs");
 			configuration.setFooter(
 					"&copy; Jiri Pinkas \n" + 

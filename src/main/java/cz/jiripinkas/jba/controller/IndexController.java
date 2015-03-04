@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cz.jiripinkas.jba.dto.ItemDto;
 import cz.jiripinkas.jba.service.CategoryService;
+import cz.jiripinkas.jba.service.ConfigurationService;
 import cz.jiripinkas.jba.service.ItemService;
 import cz.jiripinkas.jba.service.ItemService.MaxType;
 import cz.jiripinkas.jba.service.ItemService.OrderType;
@@ -27,6 +28,9 @@ public class IndexController {
 	
 	@Autowired
 	private CategoryService categoryService;
+	
+	@Autowired
+	private ConfigurationService configurationService;
 
 	private String showFirstPage(Model model, HttpServletRequest request, String tilesPage, OrderType orderType, MaxType maxType) {
 		return showPage(model, request, 0, tilesPage, orderType, maxType);
@@ -44,13 +48,13 @@ public class IndexController {
 
 	@RequestMapping("/index")
 	public String index(Model model, HttpServletRequest request) {
-		model.addAttribute("title", "Latest news from the Java world:");
+		model.addAttribute("title", configurationService.find().getHomepageHeading());
 		return showFirstPage(model, request, "index", OrderType.LATEST, MaxType.UNDEFINED);
 	}
 
 	@RequestMapping(value = "/index", params = "page")
 	public String index(Model model, @RequestParam int page, HttpServletRequest request) {
-		model.addAttribute("title", "Latest news from the Java world:");
+		model.addAttribute("title", configurationService.find().getHomepageHeading());
 		return showPage(model, request, page, "index", OrderType.LATEST, MaxType.UNDEFINED);
 	}
 
@@ -65,7 +69,7 @@ public class IndexController {
 	}
 
 	private String resolveTitle(MaxType maxType) {
-		String finalTitle = "Best Java news";
+		String finalTitle = configurationService.find().getTopHeading();
 		switch (maxType) {
 		case MONTH:
 			finalTitle += " this month: ";

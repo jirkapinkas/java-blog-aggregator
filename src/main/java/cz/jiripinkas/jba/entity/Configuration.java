@@ -30,6 +30,28 @@ public class Configuration {
 	@Lob
 	private String googleAnalytics;
 
+	@Column(name = "homepage_heading")
+	private String homepageHeading;
+
+	@Column(name = "top_heading")
+	private String topHeading;
+
+	public void setHomepageHeading(String homepageHeading) {
+		this.homepageHeading = homepageHeading;
+	}
+
+	public String getHomepageHeading() {
+		return homepageHeading;
+	}
+
+	public void setTopHeading(String topHeading) {
+		this.topHeading = topHeading;
+	}
+
+	public String getTopHeading() {
+		return topHeading;
+	}
+
 	public int getId() {
 		return id;
 	}

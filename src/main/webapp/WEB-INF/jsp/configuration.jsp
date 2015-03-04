@@ -24,6 +24,20 @@
 		</div>
 
 		<div class="form-group">
+			<label for="title" class="col-sm-2 control-label">Homepage heading:</label>
+			<div class="col-sm-10">
+				<form:input path="homepageHeading" cssClass="form-control" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="title" class="col-sm-2 control-label">Top page heading:</label>
+			<div class="col-sm-10">
+				<form:input path="topHeading" cssClass="form-control" />
+			</div>
+		</div>
+
+		<div class="form-group">
 			<label for="footer" class="col-sm-2 control-label">Footer:</label>
 			<div class="col-sm-10">
 				<form:textarea path="footer" rows="5" cssClass="form-control" />
