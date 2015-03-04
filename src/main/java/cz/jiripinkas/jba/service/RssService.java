@@ -265,7 +265,6 @@ public class RssService {
 				if (entry.getOrigLink() != null) {
 					link = entry.getOrigLink();
 				} else {
-//					link = entry.getLink().getHref();
 					for (Link atomLink : entry.getLinks()) {
 						if("alternate".equals(atomLink.getRel())) {
 							link = atomLink.getHref();
