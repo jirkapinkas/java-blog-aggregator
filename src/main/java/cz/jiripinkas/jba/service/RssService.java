@@ -265,13 +265,16 @@ public class RssService {
 				if (entry.getOrigLink() != null) {
 					link = entry.getOrigLink();
 				} else {
-					for (Link atomLink : entry.getLinks()) {
-						if("alternate".equals(atomLink.getRel())) {
-							link = atomLink.getHref();
-							break;
+					if (entry.getLinks().size() == 1) {
+						link = entry.getLinks().get(0).getHref();
+					} else {
+						for (Link atomLink : entry.getLinks()) {
+							if ("alternate".equals(atomLink.getRel())) {
+								link = atomLink.getHref();
+								break;
+							}
 						}
 					}
-					
 				}
 				if (itemRepository.findItemIdByLinkAndBlogId(link, blogId) != null) {
 					// skip this item, it's already in the database
