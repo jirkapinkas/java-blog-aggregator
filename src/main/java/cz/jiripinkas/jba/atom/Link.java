@@ -8,7 +8,18 @@ import javax.xml.bind.annotation.XmlAttribute;
 public class Link {
 
 	@XmlAttribute
+	private String rel;
+
+	@XmlAttribute
 	private String href;
+
+	public String getRel() {
+		return rel;
+	}
+
+	public void setRel(String rel) {
+		this.rel = rel;
+	}
 
 	public String getHref() {
 		return href;

@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8"?><feed
+  xmlns="http://www.w3.org/2005/Atom"
+  xmlns:thr="http://purl.org/syndication/thread/1.0"
+  xml:lang="en-US"
+  xml:base="http://www.knitelius.com/wp-atom.php"
+   >
+	<title type="text">{Stephan}Knitelius</title>
+	<subtitle type="text">Winter is coming</subtitle>
+
+	<updated>2015-03-03T23:15:22Z</updated>
+
+	<link rel="alternate" type="text/html" href="http://www.knitelius.com" />
+	<id>http://www.knitelius.com/feed/atom/</id>
+	<link rel="self" type="application/atom+xml" href="http://www.knitelius.com/feed/atom/" />
+
+	<generator uri="http://wordpress.org/" version="4.1.1">WordPress</generator>
+	<entry>
+		<author>
+			<name>Stephan Knitelius</name>
+						<uri>http://www.knitelius.com</uri>
+					</author>
+		<title type="html"><![CDATA[JSF 2 AJAX/Submit issues with @ConversationScoped Beans]]></title>
+		<link rel="alternate" type="text/html" href="http://www.knitelius.com/2015/03/03/jsf-2-ajaxsubmit-issues-with-conversationscoped-beans/" />
+		<id>http://www.knitelius.com/?p=278</id>
+		<updated>2015-03-03T23:13:16Z</updated>
+		<published>2015-03-03T21:50:19Z</published>
+		<category scheme="http://www.knitelius.com" term="Uncategorized" /><category scheme="http://www.knitelius.com" term="CDI" /><category scheme="http://www.knitelius.com" term="JavaScript" /><category scheme="http://www.knitelius.com" term="JSF 2" />		<summary type="html"><![CDATA[When working with ConversationScoped Beans and AJAX, you always have to be careful not to run into BusyConversationExceptions. Lets consider the following scenario where the inputField triggers an ajax event when the value is changed: When you change the input and click on the commandButton, without triggering the change event by exiting the field first, &#8230; <a href="http://www.knitelius.com/2015/03/03/jsf-2-ajaxsubmit-issues-with-conversationscoped-beans/" class="more-link">Continue reading <span class="screen-reader-text">JSF 2 AJAX/Submit issues with @ConversationScoped Beans</span> <span class="meta-nav">&#8594;</span></a>]]></summary>
+		<content type="html" xml:base="http://www.knitelius.com/2015/03/03/jsf-2-ajaxsubmit-issues-with-conversationscoped-beans/"><![CDATA[<p>When working with ConversationScoped Beans and AJAX, you always have to be careful not to run into BusyConversationExceptions.</p>
+<p>Lets consider the following scenario where the inputField triggers an ajax event when the value is changed:</p>
+<pre class="brush: xml; title: ; notranslate">
+&lt;h:inputField value=&quot;#{conversationScopedBean.bar}&quot; ...&gt;
+  &lt;f:ajax event=&quot;change&quot; render=&quot;@this&quot; ... /&gt;
+&lt;/h:inputfield&gt;
+...
+
+&lt;h:commandButton ... action=&quot;fooAction.proceed&quot; /&gt;
+</pre>
+<p>When you change the input and click on the commandButton, without triggering the change event by exiting the field first, you will encounter a BusyConversationException. This happens because the click triggers the change event firing an AJAX request, immediately followed by the button&#8217;s submit.<br />
+<span id="more-278"></span><br />
+Richfaces 4 a4j library offers a solution for this issue in the form of a4j:commandButton and a4j:commandLink (a4j:queue may also be of interest). If you are using RichFaces/a4j or are willing to add the required library I would strongly suggest that you use these instead of the described custom implementation.</p>
+<p>As described, the issue occurs due to the two request hitting the server in short succession. The AJAX request hasn&#8217;t finished processing yet and so the submit runs into a BusyConversationException.</p>
+<p>To avoid this we have to postpone the submit until the AJAX event is completed successfully.<br />
+This can be achieved by adding an onclick action to the commandButton that checks if an AJAX requests is waiting for a response.</p>
+<pre class="brush: xml; title: ; notranslate">
+&lt;h:commandButton onclick=&quot;deferSubmit(event)&quot; ... /&gt;
+</pre>
+<p>The onclick action will have to return false if an AJAX request is pending which will stop the submit from being executed.</p>
+<p>As I have previously demonstrated in my post about <a href="http://www.knitelius.com/2014/07/15/keeping-focus-on-element-with-jsf-2-ajax-render/" target="_blank">JSF 2 AJAX Element Focus</a>, it is possible to register a listener on JSF ajax events.</p>
+<pre class="brush: jscript; title: ; notranslate">
+var ajaxBusy = false;
+jsf.ajax.addOnEvent(function(data) {
+  var status = data.status;
+  switch(status) {
+   case &quot;begin&quot;:
+     ajaxBusy = true;
+     break;
+   case &quot;complete&quot;:
+     ajaxBusy = false;
+     break;
+   ...
+  }  
+}
+</pre>
+<p>Just as was the case with <a href="http://www.knitelius.com/2014/07/15/keeping-focus-on-element-with-jsf-2-ajax-render/" target="_blank">JSF 2 AJAX Element Focus</a> we can use this to check if an AJAX request is currently pending.</p>
+<p>Since JavaScript execution in browsers run single threaded, you cannot simply keep the submit executing thread in a busy wait until the response arrives. Otherwise the JSF AJAX event listener will never be triggered and the busy wait will never be informed that the response has arrived.</p>
+<p>It is therefore necessary to release the thread with a return false (stops the submit) and store the submit for later execution. Whilst waiting for the response, further requests should be avoided, AJAX or otherwise. In this case I have decided to block the UI with the jQuery extension <a href="https://github.com/malsup/blockui/" target="_blank">BlockUI</a> by Mike Alsup.</p>
+<pre class="brush: jscript; title: ; notranslate">
+function deferSubmit(event) {
+  $.blockUI({message:'', overlayCSS:{opacity:0, cursur:'wait'}});
+
+  if(ajaxBusy) {
+    deferedSubmit = function() {
+      var element = event.srcElement;
+      element.click();
+    };
+    return false;
+  } 
+  return true;
+}
+</pre>
+<p>The submit will be executed as soon as the JSF AJAX request is completed. It is not necessary to unblock the UI or reset the deferedSubmit function since the submit results in a new document overwriting all document client state.</p>
+<pre class="brush: jscript; title: ; notranslate">
+...
+var deferedSubmit = function() {};
+
+jsf.ajax.addOnEvent(function(data) {
+  var status = data.status;	
+  switch (status) {
+    case &quot;begin&quot;:
+      ajaxBusy = true;
+      break;
+    case &quot;complete&quot;:
+      // invoked after AJAX response is returned.
+      ajaxBusy = false;
+      deferedSubmit();
+      break;
+  }
+});
+...
+</pre>
+<p>You can find the complete JavaScript <a href="https://github.com/sknitelius/JSF2ajsub/blob/master/jsf2ajsub.js" target="_blank">here</a>.</p>
+<p><strong>Related resources:</strong><br />
+<a href="http://download.oracle.com/otndocs/jcp/jsf-2.0-fr-full-oth-JSpec/" target="_blank">JSR-314 JavaServer Faces 2.0 Final Release</a><br />
+<a href="http://www.knitelius.com/2014/07/15/keeping-focus-on-element-with-jsf-2-ajax-render/" target="_blank">Keeping focus on element with JSF 2 AJAX render</a></p>
+<script type="text/javascript" src="http://platform.linkedin.com/in.js"></script><script type="in/share" data-url="http://www.knitelius.com/2015/03/03/jsf-2-ajaxsubmit-issues-with-conversationscoped-beans/"></script>]]></content>
+			<link rel="replies" type="text/html" href="http://www.knitelius.com/2015/03/03/jsf-2-ajaxsubmit-issues-with-conversationscoped-beans/#comments" thr:count="0"/>
+		<link rel="replies" type="application/atom+xml" href="http://www.knitelius.com/2015/03/03/jsf-2-ajaxsubmit-issues-with-conversationscoped-beans/feed/atom/" thr:count="0"/>
+		<thr:total>0</thr:total>
+	</entry>
+		<entry>
+		<author>
+			<name>Stephan Knitelius</name>
+						<uri>http://www.knitelius.com</uri>
+					</author>
+		<title type="html"><![CDATA[Keeping focus on element with JSF 2 AJAX render]]></title>
+		<link rel="alternate" type="text/html" href="http://www.knitelius.com/2014/07/15/keeping-focus-on-element-with-jsf-2-ajax-render/" />
+		<id>http://www.knitelius.com/?p=27</id>
+		<updated>2015-03-03T23:14:18Z</updated>
+		<published>2014-07-15T18:04:17Z</published>
+		<category scheme="http://www.knitelius.com" term="Uncategorized" /><category scheme="http://www.knitelius.com" term="AJAX" /><category scheme="http://www.knitelius.com" term="JavaScript" /><category scheme="http://www.knitelius.com" term="JSF" /><category scheme="http://www.knitelius.com" term="JSF 2" />		<summary type="html"><![CDATA[Anyone who has developed JSF 2 applications for any length of time, will have come across the issue that element focus may get lost when AJAX rendering is preformed. So what is the cause of this? I have constructed a simple webapp to demonstrate the issue and show a potential solution. One of the simplest possible &#8230; <a href="http://www.knitelius.com/2014/07/15/keeping-focus-on-element-with-jsf-2-ajax-render/" class="more-link">Continue reading <span class="screen-reader-text">Keeping focus on element with JSF 2 AJAX render</span> <span class="meta-nav">&#8594;</span></a>]]></summary>
+		<content type="html" xml:base="http://www.knitelius.com/2014/07/15/keeping-focus-on-element-with-jsf-2-ajax-render/"><![CDATA[<p>Anyone who has developed JSF 2 applications for any length of time, will have come across the issue that element focus may get lost when AJAX rendering is preformed.<br />
+So what is the cause of this? I have constructed a simple webapp to demonstrate the issue and show a potential solution.</p>
+<p>One of the simplest possible scenario is a simple value change event that triggers a render on the following field:</p>
+<pre class="brush: xml; title: ; notranslate">
+     &lt;h:outputLabel value=&quot;Input field: &quot; /&gt;
+     &lt;h:inputText id=&quot;firstValue&quot; value=&quot;#{sessionBean.firstValue}&quot; tabindex=&quot;1&quot;&gt;
+        &lt;f:ajax event=&quot;change&quot; render=&quot;secondValue thirdValue&quot; /&gt;
+     &lt;/h:inputText&gt;
+     &lt;h:outputLabel value=&quot;Render to Upper field: &quot; /&gt;
+     &lt;h:inputText id=&quot;secondValue&quot; value=&quot;#{sessionBean.secondValue}&quot; tabindex=&quot;2&quot; /&gt;
+</pre>
+<p>On the server side we are simply preforming a toUpper on the firstInput and assigning it to the secondValue. In this case implemented as a simple session scoped CDI bean, the underlying backing bean infrastructure has no influence on the response that JSF produces or how it is treated by the client.<br />
+<span id="more-27"></span></p>
+<pre class="brush: java; title: ; notranslate">
+@Named
+@SessionScoped
+public class SessionBean implements Serializable {
+    ...
+    public void setFirstValue(String firstValue) throws InterruptedException {
+        Thread.sleep(2400);
+        this.firstValue = firstValue;
+        this.secondValue = firstValue != null ? firstValue.toUpperCase() : &quot;&quot;;
+    }
+    ...
+}
+</pre>
+<p>To understand what is happening we have to take a look at the response the client browser receives:</p>
+<pre class="brush: xml; title: ; notranslate">
+&lt;?xml version='1.0' encoding='UTF-8'?&gt;
+&lt;partial-response&gt;
+   &lt;changes&gt;
+      &lt;update id=&quot;frmFieldRender:secondValue&quot;&gt;
+          &lt;![CDATA[
+              &lt;input id=&quot;secondValue&quot; ...  value=&quot;ASDF&quot; tabindex=&quot;2&quot; /&gt;
+          ]]&gt;
+      &lt;/update&gt;
+      ...
+   &lt;/changes&gt;
+&lt;/partial-response&gt;
+</pre>
+<p>As can be seen, although only the value was updated on the server side, the entire element is written into the response (specified in <a href="http://download.oracle.com/otndocs/jcp/jsf-2.0-fr-full-oth-JSpec/" target="_blank">JSR314 JSF 2.0</a> Chapter 13.4.4 Sending The Response to The Client). This is used by the client sided JavaScript to switch out the element in the DOM tree.</p>
+<p>Interestingly this does not result in the browser loosing focus, all modern browsers that I tried (Firefox 30. Chrome 35, IE 10) were able to preform direct replacement of simple input element whilst keeping focus. This only happens when JSF AJAX render requests are preformed on elements that nest input elements or when render is preformed on entire sections.</p>
+<p>However even when dealing with JSF AJAX re-render on simple input elements you have to be aware of another related issue. Depending on processing time and network latency, the user may already have started entering data into the input field that is about to be replaced. All inputs made will be overwritten as soon as the response is received and processed by the browser. To simulate this I have added a Thread.sleep(2400) to the setter method in the backing bean.</p>
+<p>So we have yet another issue with the way that JSF AJAX render works. Not only do you have to deal with the focus disappearing, but also data being overwritten by server responses.</p>
+<p>JSF 2 allows us to register JavaScript listeners on JSF AJAX events (see <a href="http://docs.oracle.com/cd/E17802_01/j2ee/javaee/javaserverfaces/2.0/docs/js-api/symbols/jsf.ajax.html#.addOnEvent" target="_blank">JsDoc</a>, specified in <a href="http://download.oracle.com/otndocs/jcp/jsf-2.0-fr-full-oth-JSpec/" target="_blank">JSR-314 JSF 2.0</a>  Chapter 14.4.1 Request/Response Event Handling). </p>
+<pre class="brush: jscript; title: ; notranslate">
+var ajaxStatus = {busy: false};
+
+jsf.ajax.addOnEvent(function onStatusChange(data) {
+    var status = data.status;
+    if (status &amp;&amp; status !== 'complete' &amp;&amp; status !== 'success') {
+        ajaxStatus.busy = true;
+    } else if (status === 'success') {
+        ajaxStatus.busy = false;
+    }
+});
+
+$(document).on('keydown', function(event) {
+    if (ajaxStatus.busy) {
+        event.preventDefault();
+    }
+});
+</pre>
+<p>This simple bit of JavaScript, with the help of jQuery, allows us to prevent further user input until the render is completed. This is sufficient to support re-render on simple input fields.</p>
+<p>However as soon as you preform the render operation on more complex objects or entire sections, the browser will lose focus. To demonstrate this behavior I am preforming a render on a panelGroup that is nesting an input element.</p>
+<pre class="brush: xml; title: ; notranslate">
+   &lt;h:outputLabel value=&quot;Input field: &quot; /&gt;
+   &lt;h:inputText id=&quot;firstValue&quot; value=&quot;#{sessionBean.firstValue}&quot; tabindex=&quot;4&quot;&gt;
+      &lt;f:ajax event=&quot;change&quot; render=&quot;nestingElement&quot; /&gt;
+   &lt;/h:inputText&gt;
+   &lt;h:outputLabel value=&quot;Nested input field: &quot; /&gt;
+   &lt;h:panelGroup id=&quot;nestingElement&quot;&gt;
+      &lt;h:inputText id=&quot;nestedInputField&quot; value=&quot;#{sessionBean.secondValue}&quot; tabindex=&quot;5&quot;/&gt;
+   &lt;/h:panelGroup&gt;
+</pre>
+<p>In this case we have to keep track of the focused element ourself and restore the focus once the ajax render request is complete.<br />
+We can do this by extending the keydown listener to register Tab, Shift+Tab and click events and store the resulting tabindex of the focused element.</p>
+<pre class="brush: jscript; title: ; notranslate">
+$(document).on('keydown', function(event) {
+    if (ajaxStatus.busy) {
+        event.preventDefault();
+    } else {
+        if (!event.shiftKey &amp;&amp; keyCode === KEY_CODE.TAB) {
+            registerTabForward();
+        }
+        else if (event.shiftKey &amp;&amp; keyCode === KEY_CODE.TAB) {
+            registerTabBackward();
+        }
+    }
+});
+
+$(document).click(function(event) {
+    if (ajaxStatus.busy) {
+        event.preventDefault();
+    } else {
+        registerClick();
+    }
+});
+
+function registerClick() {
+    focus.tabIndex = document.activeElement.getAttribute('tabindex');
+    focus.forward = false;
+    focus.backward = false;
+}
+
+function registerTabForward() {
+    focus.tabIndex = document.activeElement.getAttribute('tabindex');
+    focus.forward = true;
+    focus.backward = false;
+}
+
+function registerTabBackward() {
+    focus.tabIndex = document.activeElement.getAttribute('tabindex');
+    focus.forward = false;
+    focus.backward = true;
+}
+</pre>
+<p>You may be wondering why we&#8217;re storing the tabindex instead of the reference to the actual element? As already explained, JSF AJAX render request cause the replacement of entire elements (including nested elements). Hence a direct reference would disappear when the element is switched out.</p>
+<p>Finally we need to set the focus when the ajax render request is completed.</p>
+<pre class="brush: jscript; title: ; notranslate">
+jsf.ajax.addOnEvent(function onStatusChange(data) {
+    ...
+    } else if (status === 'success') {
+        refocus();
+        ajaxStatus.busy = false;
+    }
+});
+function refocus() {
+    var targetTabIndex = focus.tabIndex;
+    if(focus.forward) {
+        targetTabIndex = parseInt(targetTabIndex) + 1;
+    } else if(focus.backward) {
+        targetTabIndex = parseInt(targetTabIndex) - 1;
+    }
+    $('[tabindex='+ targetTabIndex +']').focus();
+}
+</pre>
+<p>Since the tabindex was stored on keyDown event, the tabindex of the AJAX request triggering element was stored and not the target elements, hence in the case of Tab or Shift+Tab we have to select the following or prior element.</p>
+<p>Please note that the refocus method has been kept simple to illustrate the essence of the implementation required for the desired behaviour.</p>
+<p>As a bare minimum this method has to be extended to cover disabled and hidden fields. It also may be desirable to allow for non linear tabindex progression (e.g. 1,5,8,12,&#8230;). This is particular useful for modular web page layouts so that a tabindex range can be assigned to the different sections of the page (e.g. the customer input fields have a range starting at 100 where the navigation buttons at the end always start at 1000).</p>
+<p>You can find a sample application demonstrating the issue and solution <a href="https://github.com/sknitelius/example-JSFElementFocus" target="_blank">here</a>.</p>
+<p><strong>Related resources:</strong><br />
+<a href="http://download.oracle.com/otndocs/jcp/jsf-2.0-fr-full-oth-JSpec/" target="_blank">JSR-314 JavaServer Faces 2.0 Final Release</a></p>
+<script type="text/javascript" src="http://platform.linkedin.com/in.js"></script><script type="in/share" data-url="http://www.knitelius.com/2014/07/15/keeping-focus-on-element-with-jsf-2-ajax-render/"></script>]]></content>
+			<link rel="replies" type="text/html" href="http://www.knitelius.com/2014/07/15/keeping-focus-on-element-with-jsf-2-ajax-render/#comments" thr:count="3"/>
+		<link rel="replies" type="application/atom+xml" href="http://www.knitelius.com/2014/07/15/keeping-focus-on-element-with-jsf-2-ajax-render/feed/atom/" thr:count="3"/>
+		<thr:total>3</thr:total>
+	</entry>
+		<entry>
+		<author>
+			<name>Stephan Knitelius</name>
+						<uri>http://www.knitelius.com</uri>
+					</author>
+		<title type="html"><![CDATA[Push notifications with JEE 6]]></title>
+		<link rel="alternate" type="text/html" href="http://www.knitelius.com/2014/07/01/push-notifications-with-jee-6/" />
+		<id>http://www.knitelius.com/?p=24</id>
+		<updated>2015-03-03T23:15:22Z</updated>
+		<published>2014-07-01T20:10:24Z</published>
+		<category scheme="http://www.knitelius.com" term="Uncategorized" /><category scheme="http://www.knitelius.com" term="EJB" /><category scheme="http://www.knitelius.com" term="JEE" /><category scheme="http://www.knitelius.com" term="JEE 6" /><category scheme="http://www.knitelius.com" term="Servlet" /><category scheme="http://www.knitelius.com" term="Servlet 3.0" />		<summary type="html"><![CDATA[For most modern webapps push notifications have become a standard requirement. WebSockets would be my first choice, however it has only become available with JEE 7. It will take some time until JEE 7 compliant servers reach main stream production environments. In the mean time we can achieve similar behavior with Servlet 3.0, which has &#8230; <a href="http://www.knitelius.com/2014/07/01/push-notifications-with-jee-6/" class="more-link">Continue reading <span class="screen-reader-text">Push notifications with JEE 6</span> <span class="meta-nav">&#8594;</span></a>]]></summary>
+		<content type="html" xml:base="http://www.knitelius.com/2014/07/01/push-notifications-with-jee-6/"><![CDATA[<p>For most modern webapps push notifications have become a standard requirement. WebSockets would be my first choice, however it has only become available with JEE 7. It will take some time until JEE 7 compliant servers reach main stream production environments. </p>
+<p>In the mean time we can achieve similar behavior with Servlet 3.0, which has become part of the JEE 6 specification, either by polling or long polling.</p>
+<p>Polling relies on the client repeatedly sending requests to the server, polling for new messages. This will often result in empty responses, to avoid this unnecessary traffic we can hold on to the request until a new message is available or time-out is reached (long polling). </p>
+<p>Effectively long polling requires the client to send a request, which is kept alive by the server until a response is available or a time out occurs. It is up to the client to initiate another request in both cases. </p>
+<p>To do this we have to accept incoming GET requests and set asyncSupported to true. This stops the response object from being committed on method exit.<br />
+<span id="more-24"></span><br />
+Calling startAsync() on the response returns an AsyncContext object which holds the request and response objects. The AsyncContext is registered with the Notification bean for further processing. This allows the requesting thread to be freed up immediately on method exit, instead of waiting for the response to be completed.</p>
+<p>The HTTP code 202 is sent to the client to signal that the request has been accepted and is awaiting processing. </p>
+<pre class="brush: java; title: ; notranslate">
+@WebServlet(urlPatterns = {&quot;/longpolling&quot;}, asyncSupported = true, loadOnStartup = 1)
+public class SampleLongPollingRegistration extends HttpServlet {
+
+    @EJB
+    private SampleLongPollingNotifier notifier;
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        response.setContentType(MediaType.TEXT_PLAIN);
+        response.setStatus(202);
+        response.setHeader(&quot;Pragma&quot;, &quot;no-cache&quot;);
+        response.setCharacterEncoding(&quot;UTF-8&quot;);
+        response.flushBuffer();
+
+        final AsyncContext asyncContext = request.startAsync();
+        asyncContext.setTimeout(30000);
+
+        notifier.addAsyncContext(asyncContext);
+    }
+}
+</pre>
+<p>From here the AsyncContext will be handled by different threads which in our case it is a triggered by a CDI event firing.<br />
+In our example we are &#8220;pushing&#8221; the same event to multiple clients, hence we registered the AsyncContext with a singleton bean.   </p>
+<p>As you can see we are listening for CDI events that fires an object of type Date. For each CDI event we loop through all registered peers and write the event to the response and complete the async request (as mentioned, it is up to the client to initiate another request).  </p>
+<pre class="brush: java; title: ; notranslate">
+@Singleton
+public class SampleLongPollingNotifier {
+
+    private final Queue&lt;AsyncContext&gt; peers = new ConcurrentLinkedQueue();
+
+    public void notifyPeers(@Observes Date date) {
+        for (AsyncContext ac : peers) {
+            try {
+                final ServletOutputStream os = ac.getResponse().getOutputStream();
+                os.println(date.toString());
+                ac.complete();
+            } catch (IOException ex) {
+                // Nothing ToDo: Connection was most likely closed by client.
+            } finally {
+                peers.remove(ac);
+            }
+        }
+    }
+
+    public void addAsyncContext(final AsyncContext ac) {
+        ac.addListener(new AsyncListener() {
+            @Override
+            public void onComplete(AsyncEvent event) throws IOException {
+                peers.remove(ac);
+            }
+
+            @Override
+            public void onTimeout(AsyncEvent event) throws IOException {
+                peers.remove(ac);
+            }
+
+            @Override
+            public void onError(AsyncEvent event) throws IOException {
+                peers.remove(ac);
+            }
+
+            @Override
+            public void onStartAsync(AsyncEvent event) throws IOException {
+            }
+        });
+        peers.add(ac);
+    }
+}
+</pre>
+<p>To avoid unnecessary exceptions, I have added a AsyncListener to the AsyncContext that removes it in case of error or time-out.</p>
+<p>For demonstration purposes I am using the JEE 6 @Schedule to fire CDI events every 10 seconds.  </p>
+<pre class="brush: java; title: ; notranslate">
+@Singleton
+public class EventGenerator {
+    @Inject
+    private Event&lt;Date&gt; dateEvent;
+
+    @Schedule(hour = &quot;*&quot;, minute = &quot;*&quot;, second = &quot;*/10&quot;)
+    public void fireScheduledEvent() {
+        dateEvent.fire(new Date());
+    }
+}
+</pre>
+<p>The client side can be implemented easily using plain xhtml and jquery.</p>
+<pre class="brush: xml; title: ; notranslate">
+&lt;!DOCTYPE html&gt;
+&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
+    &lt;head&gt;
+        &lt;title&gt;JEE 6 Long Polling Sample Application&lt;/title&gt;
+        &lt;script src=&quot;js/libs/jquery/jquery.js&quot; /&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        Long Polling result:
+        &lt;div id=&quot;longPollingResult&quot;&gt;&lt;/div&gt;;
+        &lt;script&gt;
+            var output = document.getElementById('longPollingResult');
+            (function poll() {
+               $.ajax({url: &quot;http://localhost:8080/examplejee6longpolling/longpolling&quot;, 
+                    success: function(data) {
+                        output.innerHTML = data;
+                    }, dataType: &quot;text&quot;, complete: poll, timeout: 30000});
+            })();
+        &lt;/script&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p>You can find the project on <a href="https://github.com/sknitelius/example-JEE6LongPolling">github</a>.</p>
+<p><strong>Related resources:</strong><br />
+<a href="https://jcp.org/en/jsr/detail?id=315" target="_blank">JSR 315: Java Servlet 3.0 Specification</a><br />
+<a href="http://www.javaworld.com/article/2077995/java-concurrency/asynchronous-processing-support-in-servlet-3-0.html" target="_blank">Asynchronous processing support in Servlet 3.0</a></p>
+<script type="text/javascript" src="http://platform.linkedin.com/in.js"></script><script type="in/share" data-url="http://www.knitelius.com/2014/07/01/push-notifications-with-jee-6/"></script>]]></content>
+			<link rel="replies" type="text/html" href="http://www.knitelius.com/2014/07/01/push-notifications-with-jee-6/#comments" thr:count="2"/>
+		<link rel="replies" type="application/atom+xml" href="http://www.knitelius.com/2014/07/01/push-notifications-with-jee-6/feed/atom/" thr:count="2"/>
+		<thr:total>2</thr:total>
+	</entry>
+	</feed>

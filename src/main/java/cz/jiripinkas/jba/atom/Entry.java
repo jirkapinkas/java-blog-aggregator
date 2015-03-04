@@ -1,5 +1,7 @@
 package cz.jiripinkas.jba.atom;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -10,7 +12,8 @@ public class Entry {
 
 	private String title;
 
-	private Link link;
+	@XmlElement(name = "link")
+	private List<Link> links;
 
 	@XmlElement(namespace = "http://rssnamespace.org/feedburner/ext/1.0")
 	private String origLink;
@@ -55,12 +58,12 @@ public class Entry {
 		this.title = title;
 	}
 
-	public Link getLink() {
-		return link;
+	public List<Link> getLinks() {
+		return links;
 	}
 
-	public void setLink(Link link) {
-		this.link = link;
+	public void setLinks(List<Link> links) {
+		this.links = links;
 	}
 
 	public String getContent() {

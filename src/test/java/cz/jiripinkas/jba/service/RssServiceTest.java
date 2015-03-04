@@ -168,4 +168,11 @@ public class RssServiceTest {
 		assertEquals("http://www.java-skoleni.cz", realLink);
 	}
 
+	@Test
+	public void testAtomAlternate() throws RssException {
+		List<Item> items = rssService.getItems("test-rss/knitelius.xml", true, 0);
+		Item firstItem = items.get(0);
+		assertEquals("http://www.knitelius.com/2015/03/03/jsf-2-ajaxsubmit-issues-with-conversationscoped-beans/", firstItem.getLink());
+	}
+
 }

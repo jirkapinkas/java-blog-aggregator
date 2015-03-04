@@ -39,6 +39,7 @@ import org.w3c.dom.Node;
 
 import cz.jiripinkas.jba.atom.Entry;
 import cz.jiripinkas.jba.atom.Feed;
+import cz.jiripinkas.jba.atom.Link;
 import cz.jiripinkas.jba.entity.Item;
 import cz.jiripinkas.jba.exception.RssException;
 import cz.jiripinkas.jba.exception.UrlException;
@@ -264,7 +265,14 @@ public class RssService {
 				if (entry.getOrigLink() != null) {
 					link = entry.getOrigLink();
 				} else {
-					link = entry.getLink().getHref();
+//					link = entry.getLink().getHref();
+					for (Link atomLink : entry.getLinks()) {
+						if("alternate".equals(atomLink.getRel())) {
+							link = atomLink.getHref();
+							break;
+						}
+					}
+					
 				}
 				if (itemRepository.findItemIdByLinkAndBlogId(link, blogId) != null) {
 					// skip this item, it's already in the database
