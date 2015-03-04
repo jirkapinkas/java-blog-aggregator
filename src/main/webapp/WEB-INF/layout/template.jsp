@@ -83,7 +83,6 @@ ${configuration.googleAnalytics}
               	<li class="${current == 'account' ? 'active' : ''}"><a href="<spring:url value="/account.html" />">My account</a></li>
               	<li><a href="<spring:url value="/logout" />">Logout ${pageContext.request.remoteUser}</a></li>
               </security:authorize>
-              <li class="${current == 'roadmap' ? 'active' : ''}"><a href="<spring:url value="/roadmap.html" />">Roadmap</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
