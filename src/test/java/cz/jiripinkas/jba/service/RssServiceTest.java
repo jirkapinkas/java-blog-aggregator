@@ -174,5 +174,14 @@ public class RssServiceTest {
 		Item firstItem = items.get(0);
 		assertEquals("http://www.knitelius.com/2015/03/03/jsf-2-ajaxsubmit-issues-with-conversationscoped-beans/", firstItem.getLink());
 	}
+	
+	@Test
+	public void testPlanetMysqlSpecialCharacters() throws RssException {
+		List<Item> items = rssService.getItems("test-rss/planetmysql.xml", true, 0);
+		assertEquals("Introducing 'MySQL 101,' a 2-day intensive educational track at Percona Live this April 15-16", items.get(5).getTitle());
+		assertEquals("MySQL Character encoding - part 2", items.get(8).getTitle());
+		// TODO make this work
+//		assertEquals("In MySQL Character encoding - part 1 we stated that the myriad of ways in which character encoding can be controlled can lead to many situat...", items.get(8).getDescription());
+	}
 
 }

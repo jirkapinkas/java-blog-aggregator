@@ -91,8 +91,8 @@ public class RssService {
 	 *            The String whose non-valid characters we want to remove.
 	 * @return The in String, stripped of non-valid characters.
 	 */
-	private String stripNonValidXMLCharacters(String in) {
-		StringBuffer out = new StringBuffer(); // Used to hold the output.
+	private String stripNonValidCharacters(String in) {
+		StringBuilder out = new StringBuilder(); // Used to hold the output.
 		char current; // Used to reference the current character.
 
 		if (in == null || ("".equals(in)))
@@ -104,7 +104,8 @@ public class RssService {
 					|| ((current >= 0x10000) && (current <= 0x10FFFF)))
 				out.append(current);
 		}
-		return out.toString();
+		String outString = fixDate(out.toString());
+		return outString.replaceAll("\\s", " ").replace("‘", "'").replace("’", "'").replace("“", "\"").replace("”", "\"").replace("–", "-").replace("‼", "-").replace("&ndash;", "-");
 	}
 
 	/**
@@ -127,32 +128,28 @@ public class RssService {
 
 	public List<Item> getItems(String location, boolean localFile, int blogId) throws RssException {
 		Node node = null;
-		Reader reader = null;
+		String page = null;
 
 		try {
 			Document document = null;
 			if (localFile) {
 				File file = new File(location);
-				document = db.parse(file);
-				reader = new StringReader(FileUtils.readFileToString(file));
+				page = FileUtils.readFileToString(file);
 			} else {
 				HttpGet get = constructGet(location);
 				CloseableHttpResponse response = null;
 				try {
 					response = httpClient.execute(get);
 					HttpEntity entity = response.getEntity();
-					String page = EntityUtils.toString(entity);
-					page = page.replace("&ndash;", "-");
-					page = stripNonValidXMLCharacters(page);
-					page = fixDate(page);
-					document = db.parse(new ByteArrayInputStream(page.getBytes(Charset.forName("UTF-8"))));
-					reader = new StringReader(page);
+					page = EntityUtils.toString(entity);
 				} finally {
 					if (response != null) {
 						response.close();
 					}
 				}
 			}
+			page = stripNonValidCharacters(page);
+			document = db.parse(new ByteArrayInputStream(page.getBytes(Charset.forName("UTF-8"))));
 			node = document.getDocumentElement();
 		} catch (Exception ex) {
 			System.out.println("error parsing XML file");
@@ -160,9 +157,9 @@ public class RssService {
 		}
 
 		if ("rss".equals(node.getNodeName())) {
-			return getRssItems(reader, blogId);
+			return getRssItems(new StringReader(page), blogId);
 		} else if ("feed".equals(node.getNodeName())) {
-			return getAtomItems(reader, blogId);
+			return getAtomItems(new StringReader(page), blogId);
 		} else {
 			throw new RssException("unknown RSS type");
 		}
