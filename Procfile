@@ -1,1 +1,1 @@
-web:    java $JAVA_OPTS -jar target/dependency/webapp-runner.jar --port $PORT --enable-compression --uri-encoding UTF-8 target/*.war
+web:    java $JAVA_OPTS -jar target/dependency/webapp-runner.jar --port $PORT --enable-compression --compressable-mime-types text/html,text/xml,text/plain,text/css,application/json,application/xml,text/javascript,application/javascript --uri-encoding UTF-8 target/*.war
