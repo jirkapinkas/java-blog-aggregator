@@ -19,8 +19,8 @@
 		<script type="text/javascript" src="<spring:url value='/resources/js/jquery.cookie.js' />"></script>
 		<script type="text/javascript" src="<spring:url value="/resources/js/ads.js" />"></script>
 		<script type="text/javascript" src="<spring:url value="/resources/js/bootstrap-dialog.min.js" />"></script>
+		<script type="text/javascript" src="<spring:url value="/resources/js/custom.js" />"></script>
 	</granule:compress>
-	<script type="text/javascript" src="<spring:url value="/resources/js/custom-js.jsp" />"></script>
 	<granule:compress>
 		<link rel="stylesheet" href="<spring:url value='/resources/css/bootstrap-dialog.min.css' />" />
 		<link rel="stylesheet" href="<spring:url value='/resources/css/custom.css' />" />

@@ -1,7 +1,3 @@
-<%@ page language="java" contentType="text/javascript; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
-
 var unveilTreshold = 200;
 
 var currentPage = 0;
@@ -9,12 +5,25 @@ var currentPage = 0;
 var selectedCategories;
 
 /*
+ * clever way to get homepage in javascript, thanks to:
+ * http://james.padolsey.com/snippets/getting-a-fully-qualified-url/
+ */
+function qualifyURL(url){
+    var img = document.createElement('img');
+    img.src = url; // set string url
+    url = img.src; // get qualified url
+    img.src = "http://"; // no server request
+    return url;
+}
+
+/*
  * Called when user clicks on item URL
  */
 function itemClick(e) {
 	var itemId = $(e.target).attr("id");
+	var url = qualifyURL("/") + "inc-count.html";
 	$.post(
-			"<spring:url value='/inc-count.html' />", 
+			url,
 			{ itemId: itemId },
 			function(data, status) {
 			}
@@ -81,8 +90,9 @@ function like(itemId) {
 	}
 	$(".icon_like_" + itemId).removeClass("fa-thumbs-o-up").addClass("fa-thumbs-up");
 	arrLikeProgress.push(itemId);
+	var url = qualifyURL("/") + "social/like.html";
 	$.post(
-			"<spring:url value='/social/like.html' />", 
+			url, 
 			{ itemId: itemId },
 			function(data, status) {
 				$(".likeCount_" + itemId).text(data);
@@ -99,8 +109,9 @@ function unlike(itemId) {
 	}
 	$(".icon_like_" + itemId).removeClass("fa-thumbs-up").addClass("fa-thumbs-o-up");
 	arrLikeProgress.push(itemId);
+	var url = qualifyURL("/") + "social/unlike.html";
 	$.post(
-			"<spring:url value='/social/unlike.html' />", 
+			url, 
 			{ itemId: itemId },
 			function(data, status) {
 				$(".likeCount_" + itemId).text(data);
@@ -116,8 +127,9 @@ function dislike(itemId) {
 	}
 	$(".icon_dislike_" + itemId).removeClass("fa-thumbs-o-down").addClass("fa-thumbs-down");
 	arrLikeProgress.push(itemId);
+	var url = qualifyURL("/") + "social/dislike.html";
 	$.post(
-			"<spring:url value='/social/dislike.html' />", 
+			url, 
 			{ itemId: itemId },
 			function(data, status) {
 				$(".dislikeCount_" + itemId).text(data);
@@ -134,8 +146,9 @@ function undislike(itemId) {
 	}
 	$(".icon_dislike_" + itemId).removeClass("fa-thumbs-down").addClass("fa-thumbs-o-down");
 	arrLikeProgress.push(itemId);
+	var url = qualifyURL("/") + "social/undislike.html";
 	$.post(
-			"<spring:url value='/social/undislike.html' />", 
+			url, 
 			{ itemId: itemId },
 			function(data, status) {
 				$(".dislikeCount_" + itemId).text(data);
