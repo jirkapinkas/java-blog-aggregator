@@ -208,6 +208,38 @@
 							</execution>
 						</executions>
 					</plugin>
+					<plugin>
+						<groupId>com.samaxes.maven</groupId>
+						<artifactId>minify-maven-plugin</artifactId>
+						<version>1.7.4</version>
+						<executions>
+							<execution>
+								<id>default-minify</id>
+								<configuration>
+									<charset>UTF-8</charset>
+									<cssSourceDir>resources/css</cssSourceDir>
+									<cssSourceFiles>
+										<cssSourceFile>bootstrap-dialog.min.css</cssSourceFile>
+										<cssSourceFile>custom.css</cssSourceFile>
+									</cssSourceFiles>
+									<cssFinalFile>style.css</cssFinalFile>
+									<jsSourceDir>resources/js</jsSourceDir>
+									<jsSourceFiles>
+										<jsSourceFile>ads.js</jsSourceFile>
+										<jsSourceFile>bootstrap-dialog.min.js</jsSourceFile>
+										<jsSourceFile>custom.js</jsSourceFile>
+										<jsSourceFile>jquery.cookie.js</jsSourceFile>
+										<jsSourceFile>jquery.unveil.js</jsSourceFile>
+									</jsSourceFiles>
+									<jsFinalFile>script.js</jsFinalFile>
+									<jsEngine>CLOSURE</jsEngine>
+								</configuration>
+								<goals>
+									<goal>minify</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
 				</plugins>
 			</build>
 		</profile>
