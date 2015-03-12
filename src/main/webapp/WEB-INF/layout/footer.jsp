@@ -17,8 +17,9 @@
 	<script type="text/javascript" src="<spring:url value='/resources/js/jquery.cookie.js' />"></script>
 	<script type="text/javascript" src="<spring:url value="/resources/js/ads.js" />"></script>
 	<script type="text/javascript" src="<spring:url value="/resources/js/custom-js.jsp" />"></script>
-	<script type="text/javascript" src="/resources/js/bootstrap-dialog.min.js"></script>
-	<link href="/resources/css/bootstrap-dialog.min.css" rel="stylesheet" />
+	<script type="text/javascript" src="<spring:url value="/resources/js/bootstrap-dialog.min.js" />"></script>
+	<link rel="stylesheet" href="<spring:url value='/resources/css/bootstrap-dialog.min.css' />" />
+	<link rel="stylesheet" href="<spring:url value='/resources/css/custom.css' />" />
 
 	<div id="footer"></div>
 	<script type="text/javascript">

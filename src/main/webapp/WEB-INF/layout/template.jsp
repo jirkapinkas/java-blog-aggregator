@@ -13,7 +13,6 @@
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css" />
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
 <link href="//cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css" rel="stylesheet" />
-<link rel="stylesheet" href="<spring:url value='/resources/css/custom.css' />" />
 
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
