@@ -13,19 +13,19 @@
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
 
-	<servlet>
-		<servlet-name>CompressServlet</servlet-name>
-		<servlet-class>com.granule.CompressServlet</servlet-class>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>CompressServlet</servlet-name>
-		<url-pattern>/combined.js</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>CompressServlet</servlet-name>
-		<url-pattern>/combined.css</url-pattern>
-	</servlet-mapping>
+<!-- 	<servlet> -->
+<!-- 		<servlet-name>CompressServlet</servlet-name> -->
+<!-- 		<servlet-class>com.granule.CompressServlet</servlet-class> -->
+<!-- 		<load-on-startup>1</load-on-startup> -->
+<!-- 	</servlet> -->
+<!-- 	<servlet-mapping> -->
+<!-- 		<servlet-name>CompressServlet</servlet-name> -->
+<!-- 		<url-pattern>/combined.js</url-pattern> -->
+<!-- 	</servlet-mapping> -->
+<!-- 	<servlet-mapping> -->
+<!-- 		<servlet-name>CompressServlet</servlet-name> -->
+<!-- 		<url-pattern>/combined.css</url-pattern> -->
+<!-- 	</servlet-mapping> -->
 
 	<servlet>
 		<servlet-name>dispatcher</servlet-name>
