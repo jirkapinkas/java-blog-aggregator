@@ -41,7 +41,7 @@ public class IndexController {
 		if (request.isUserInRole("ROLE_ADMIN")) {
 			showAll = true;
 		}
-		model.addAttribute("items", itemService.getDtoItems(page, showAll, orderType, maxType, new Integer[0]));
+		model.addAttribute("items", itemService.getDtoItems(page, showAll, orderType, maxType, categoryService.getAllCategoryIds()));
 		model.addAttribute("nextPage", page + 1);
 		return tilesPage;
 	}

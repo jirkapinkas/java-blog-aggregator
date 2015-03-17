@@ -15,7 +15,7 @@ public class CategoryController {
 
 	@RequestMapping("/all-categories")
 	@ResponseBody
-	public int[] getCategories() {
+	public Integer[] getCategories() {
 		return categoryService.getAllCategoryIds();
 	}
 

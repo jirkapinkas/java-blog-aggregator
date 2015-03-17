@@ -52,9 +52,9 @@ public class CategoryService {
 		blogRepository.save(blog);
 	}
 
-	public int[] getAllCategoryIds() {
+	public Integer[] getAllCategoryIds() {
 		List<Category> categories = categoryRepository.findAll();
-		int[] result = new int[categories.size()];
+		Integer[] result = new Integer[categories.size()];
 		for (int i = 0; i < categories.size(); i++) {
 			result[i] = categories.get(i).getId();
 		}

@@ -79,19 +79,11 @@ public class ItemService {
 		ArrayList<ItemDto> result = new ArrayList<ItemDto>();
 
 		List<Item> items = null;
-		
+
 		if (showAll) {
-			if(selectedCategories.length == 0) {
-				items = itemRepository.findPageAllItemsAllCategories(publishedDate, new PageRequest(page, 10, orderDirection, orderByProperty));
-			} else {
-				items = itemRepository.findPageAllItemsInCategory(publishedDate, Arrays.asList(selectedCategories), new PageRequest(page, 10, orderDirection, orderByProperty));
-			}
+			items = itemRepository.findPageAllItemsInCategory(publishedDate, Arrays.asList(selectedCategories), new PageRequest(page, 10, orderDirection, orderByProperty));
 		} else {
-			if(selectedCategories.length == 0) {
-				items = itemRepository.findPageEnabledAllCategories(publishedDate, new PageRequest(page, 10, orderDirection, orderByProperty));
-			} else {
-				items = itemRepository.findPageEnabledInCategory(publishedDate, Arrays.asList(selectedCategories), new PageRequest(page, 10, orderDirection, orderByProperty));
-			}
+			items = itemRepository.findPageEnabledInCategory(publishedDate, Arrays.asList(selectedCategories), new PageRequest(page, 10, orderDirection, orderByProperty));
 		}
 		for (Item item : items) {
 			ItemDto itemDto = mapper.map(item, ItemDto.class);
@@ -101,11 +93,11 @@ public class ItemService {
 		}
 		return result;
 	}
-	
+
 	private int calculateLikeCount(int likeCount, int clickCount) {
-		return likeCount + (int)(clickCount / 5);
+		return likeCount + (int) (clickCount / 5);
 	}
-	
+
 	public boolean isTooOld(Date date) {
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.add(Calendar.MONTH, -2);
@@ -143,7 +135,7 @@ public class ItemService {
 	public int decLike(int itemId) {
 		return like(itemId, -1);
 	}
-	
+
 	private int like(int itemId, int amount) {
 		itemRepository.changeLike(itemId, amount);
 		Map<String, Integer> likeAndClickCount = itemRepository.getLikeAndClickCount(itemId);
@@ -159,7 +151,7 @@ public class ItemService {
 	public int decDislike(int itemId) {
 		return dislike(itemId, -1);
 	}
-	
+
 	private int dislike(int itemId, int amount) {
 		itemRepository.changeDislike(itemId, amount);
 		return itemRepository.getDislikeCount(itemId);
