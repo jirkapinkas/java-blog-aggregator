@@ -32,7 +32,7 @@ public class ScheduledTasksService {
 	 * For each blog retrieve latest items and store them into database.
 	 */
 	// 1 hour = 60 seconds * 60 minutes * 1000
-	@Scheduled(fixedDelay = 3600000)
+	@Scheduled(fixedDelay = 60 * 60 * 1000)
 	@CacheEvict(value = "itemCount", allEntries = true)
 	public void reloadBlogs() {
 		List<Blog> blogs = blogRepository.findAll();
@@ -45,8 +45,8 @@ public class ScheduledTasksService {
 	/**
 	 * Remove too old items without any clicks ... nobody will see them anyway.
 	 */
-	// 86400000 = one day = 60 * 60 * 24 * 1000
-	@Scheduled(initialDelay = 86400000, fixedDelay = 86400000)
+	// one day = 60 * 60 * 24 * 1000
+	@Scheduled(initialDelay = 60 * 60 * 24 * 1000, fixedDelay = 60 * 60 * 24 * 1000)
 	@CacheEvict(value = "itemCount", allEntries = true)
 	public void cleanOldItems() {
 		List<Item> items = itemRepository.findAll();
