@@ -297,7 +297,11 @@ public class RssService {
 			try {
 				return new SimpleDateFormat("EEE, dd MMM yyyy", Locale.ENGLISH).parse(stringDate);
 			} catch (ParseException e2) {
-				return new SimpleDateFormat("dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH).parse(stringDate);
+				try {
+					return new SimpleDateFormat("dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH).parse(stringDate);
+				} catch (ParseException e3) {
+					return new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(stringDate);
+				}
 			}
 		}
 	}
