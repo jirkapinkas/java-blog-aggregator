@@ -58,8 +58,18 @@ public class BlogService {
 					continue;
 				}
 				if (!itemService.isTooOld(item.getPublishedDate())) {
-					Item savedItem = itemRepository.findByBlogAndLink(blog, item.getLink());
-					if (savedItem == null) {
+					// search for duplicities in the database
+					boolean duplicate = false;
+					if (!itemRepository.findByBlogAndLink(blog, item.getLink()).isEmpty()) {
+						duplicate = true;
+					}
+					if (!itemRepository.findByBlogAndTitleIgnoreCase(blog, item.getTitle()).isEmpty()) {
+						duplicate = true;
+					}
+					if (Boolean.TRUE.equals(blog.getAggregator()) && !itemRepository.findByTitleIgnoreCase(item.getTitle()).isEmpty()) {
+						duplicate = true;
+					}
+					if (!duplicate) {
 						item.setBlog(blog);
 						itemRepository.save(item);
 					}
