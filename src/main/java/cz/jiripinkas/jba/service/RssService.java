@@ -134,14 +134,14 @@ public class RssService {
 			Document document = null;
 			if (localFile) {
 				File file = new File(location);
-				page = FileUtils.readFileToString(file);
+				page = FileUtils.readFileToString(file).trim();
 			} else {
 				HttpGet get = constructGet(location);
 				CloseableHttpResponse response = null;
 				try {
 					response = httpClient.execute(get);
 					HttpEntity entity = response.getEntity();
-					page = EntityUtils.toString(entity, "UTF-8");
+					page = EntityUtils.toString(entity, "UTF-8").trim();
 				} finally {
 					if (response != null) {
 						response.close();

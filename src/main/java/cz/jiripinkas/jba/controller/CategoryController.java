@@ -5,18 +5,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cz.jiripinkas.jba.service.CategoryService;
+import cz.jiripinkas.jba.service.AllCategoriesService;
 
 @Controller
 public class CategoryController {
 
 	@Autowired
-	private CategoryService categoryService;
+	private AllCategoriesService allCategoriesService;
 
 	@RequestMapping("/all-categories")
 	@ResponseBody
 	public Integer[] getCategories() {
-		return categoryService.getAllCategoryIds();
+		return allCategoriesService.getAllCategoryIds();
 	}
 
 }

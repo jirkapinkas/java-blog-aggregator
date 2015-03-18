@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cz.jiripinkas.jba.dto.ItemDto;
-import cz.jiripinkas.jba.service.CategoryService;
+import cz.jiripinkas.jba.service.AllCategoriesService;
 import cz.jiripinkas.jba.service.ConfigurationService;
 import cz.jiripinkas.jba.service.ItemService;
 import cz.jiripinkas.jba.service.ItemService.MaxType;
@@ -27,7 +27,7 @@ public class IndexController {
 	private ItemService itemService;
 	
 	@Autowired
-	private CategoryService categoryService;
+	private AllCategoriesService allCategoriesService;
 	
 	@Autowired
 	private ConfigurationService configurationService;
@@ -41,7 +41,7 @@ public class IndexController {
 		if (request.isUserInRole("ROLE_ADMIN")) {
 			showAll = true;
 		}
-		model.addAttribute("items", itemService.getDtoItems(page, showAll, orderType, maxType, categoryService.getAllCategoryIds()));
+		model.addAttribute("items", itemService.getDtoItems(page, showAll, orderType, maxType, allCategoriesService.getAllCategoryIds()));
 		model.addAttribute("nextPage", page + 1);
 		return tilesPage;
 	}
