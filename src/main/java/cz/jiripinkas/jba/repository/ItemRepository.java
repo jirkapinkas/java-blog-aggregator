@@ -19,6 +19,10 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 
 	Item findByBlogAndLink(Blog blog, String link);
 
+	Item findByBlogAndTitleIgnoreCase(Blog blog, String title);
+
+	Item findByTitleIgnoreCase(String title);
+
 	@Query("select i.id from Item i where i.link = ?1 and i.blog.id = ?2")
 	Integer findItemIdByLinkAndBlogId(String link, int blogId);
 
@@ -57,5 +61,6 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 
 	@Query("select i.clickCount from Item i where i.id = ?1")
 	int getClickCount(int id);
+
 
 }

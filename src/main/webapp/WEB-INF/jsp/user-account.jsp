@@ -55,6 +55,12 @@
 							<form:errors path="homepageUrl" />
 						</div>
 					</div>
+					<div class="form-group">
+						<label for="aggregator" class="col-sm-3 control-label">Aggregator:</label>
+						<div class="col-sm-9">
+							<form:checkbox path="aggregator" />
+						</div>
+					</div>
 
 				</div>
 				<div class="modal-footer">
