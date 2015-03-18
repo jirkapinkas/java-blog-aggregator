@@ -20,12 +20,15 @@ public class ConfigurationInterceptor extends HandlerInterceptorAdapter {
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private ItemService itemService;
 
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+		/*
+		 * Attributes will be available in every page.
+		 */
 		if (modelAndView != null) {
 			modelAndView.getModelMap().addAttribute("configuration", configurationService.find());
 			modelAndView.getModelMap().addAttribute("categories", categoryService.findAll());

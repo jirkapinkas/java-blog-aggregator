@@ -1,4 +1,4 @@
-package cz.jiripinkas.jba.service;
+package cz.jiripinkas.jba.service.initdb;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +20,7 @@ import cz.jiripinkas.jba.repository.CategoryRepository;
 import cz.jiripinkas.jba.repository.ItemRepository;
 import cz.jiripinkas.jba.repository.RoleRepository;
 import cz.jiripinkas.jba.repository.UserRepository;
+import cz.jiripinkas.jba.service.ConfigurationService;
 
 @Transactional
 @Service

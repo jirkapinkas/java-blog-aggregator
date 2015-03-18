@@ -1,4 +1,4 @@
-package cz.jiripinkas.jba.service;
+package cz.jiripinkas.jba.service.scheduled;
 
 import java.util.Date;
 import java.util.List;
@@ -12,6 +12,8 @@ import cz.jiripinkas.jba.entity.Blog;
 import cz.jiripinkas.jba.entity.Item;
 import cz.jiripinkas.jba.repository.BlogRepository;
 import cz.jiripinkas.jba.repository.ItemRepository;
+import cz.jiripinkas.jba.service.BlogService;
+import cz.jiripinkas.jba.service.ItemService;
 
 @Service
 public class ScheduledTasksService {

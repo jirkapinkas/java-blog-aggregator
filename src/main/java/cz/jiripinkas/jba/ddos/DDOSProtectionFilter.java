@@ -1,4 +1,4 @@
-package cz.jiripinkas.jba.DDOS;
+package cz.jiripinkas.jba.ddos;
 
 import java.io.IOException;
 import java.util.HashMap;

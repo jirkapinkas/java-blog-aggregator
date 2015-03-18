@@ -1,4 +1,4 @@
-package cz.jiripinkas.jba.controller;
+package cz.jiripinkas.jba.controller.admin;
 
 import javax.validation.Valid;
 
