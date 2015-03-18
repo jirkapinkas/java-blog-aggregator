@@ -103,6 +103,7 @@ public class BlogService {
 		managedBlog.setShortName(blog.getShortName());
 		managedBlog.setUrl(blog.getUrl());
 		managedBlog.setHomepageUrl(blog.getHomepageUrl());
+		managedBlog.setAggregator(blog.getAggregator());
 		blogRepository.save(managedBlog);
 	}
 

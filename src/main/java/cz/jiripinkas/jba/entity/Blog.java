@@ -71,6 +71,16 @@ public class Blog {
 	@JoinColumn(name = "category_id")
 	private Category category;
 
+	private Boolean aggregator;
+
+	public void setAggregator(Boolean aggregator) {
+		this.aggregator = aggregator;
+	}
+
+	public Boolean getAggregator() {
+		return aggregator;
+	}
+
 	public void setCategory(Category category) {
 		this.category = category;
 	}
