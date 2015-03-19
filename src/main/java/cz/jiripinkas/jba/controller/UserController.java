@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import cz.jiripinkas.jba.entity.Blog;
 import cz.jiripinkas.jba.service.BlogService;
@@ -41,10 +42,11 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/blog-form", method = RequestMethod.POST)
-	public String editBlog(@RequestParam int blogId, @ModelAttribute Blog blog, Model model, Principal principal, HttpServletRequest request) {
+	public String editBlog(@RequestParam int blogId, RedirectAttributes redirectAttributes, @ModelAttribute Blog blog, Model model, Principal principal, HttpServletRequest request) {
+		redirectAttributes.addFlashAttribute("success", true);
 		blog.setId(blogId);
 		blogService.update(blog, principal.getName(), request.isUserInRole("ROLE_ADMIN"));
-		return "redirect:/account.html";
+		return "redirect:/blog-form.html?blogId=" + blogId;
 	}
 
 	@RequestMapping("/account")

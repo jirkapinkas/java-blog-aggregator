@@ -3,6 +3,24 @@
 
 <%@ include file="../layout/taglib.jsp"%>
 
+<c:if test="${success eq true}">
+	<div class="alert alert-success">Saved!</div>
+</c:if>
+
+<security:authorize access="${isAdmin}">
+	<img src="<spring:url value="/spring/icon/${blog.id}" />" style="float:left;padding-right:10px" />
+	
+	<form method="post" enctype="multipart/form-data" action="users/upload-icon/${blog.id}.html">
+		<span class="btn btn-default btn-file">
+			Select icon (50 x 50 px) <input type="file" name="icon" />
+		</span>
+		<input type="submit" value="Upload" class="btn btn-primary" />
+	</form>
+	
+	<div style="clear:both"></div>
+	
+	<br /><br />
+</security:authorize>
 
 <form:form commandName="blog" cssClass="form-horizontal blogForm">
 

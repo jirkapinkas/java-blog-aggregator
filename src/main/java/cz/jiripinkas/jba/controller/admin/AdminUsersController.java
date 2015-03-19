@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import cz.jiripinkas.jba.service.BlogService;
 import cz.jiripinkas.jba.service.UserService;
@@ -45,11 +46,11 @@ public class AdminUsersController {
 		return "redirect:/users.html";
 	}
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
-	public String uploadIcon(@RequestParam MultipartFile icon, @RequestHeader String referer, @RequestParam int blogId, @PathVariable("id") int userId) {
+	@RequestMapping(value = "/upload-icon/{id}", method = RequestMethod.POST)
+	public String uploadIcon(@RequestParam MultipartFile icon, RedirectAttributes redirectAttributes, @RequestHeader String referer, @PathVariable("id") int blogId) {
+		redirectAttributes.addFlashAttribute("success", true);
 		if (!icon.isEmpty()) {
 			try {
-				System.out.println("save blog " + blogId);
 				blogService.saveIcon(blogId, icon.getBytes());
 			} catch (Exception e) {
 				log.error("could not upload icon", e);
@@ -57,7 +58,7 @@ public class AdminUsersController {
 		} else {
 			log.error("could not upload icon");
 		}
-		return "redirect:" + referer;
+		return "redirect:/blog-form.html?blogId=" + blogId;
 	}
 
 }
