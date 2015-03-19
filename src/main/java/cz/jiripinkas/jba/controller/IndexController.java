@@ -1,10 +1,12 @@
 package cz.jiripinkas.jba.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -132,4 +134,10 @@ public class IndexController {
 	public String incItemCount(@RequestParam int itemId) {
 		return Integer.toString(itemService.incCount(itemId));
 	}
+
+	@RequestMapping(value = "/icon", produces = MediaType.IMAGE_PNG_VALUE)
+	public @ResponseBody byte[] getIcon() throws IOException {
+		return configurationService.find().getIcon();
+	}
+
 }

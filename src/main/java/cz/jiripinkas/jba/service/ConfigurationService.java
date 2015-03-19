@@ -28,6 +28,13 @@ public class ConfigurationService {
 	}
 
 	@CacheEvict(value = "configuration", allEntries = true)
+	public void saveIcon(byte[] bytes) {
+		Configuration configuration = find();
+		configuration.setIcon(bytes);
+		save(configuration);
+	}
+
+	@CacheEvict(value = "configuration", allEntries = true)
 	public void save(Configuration newConfiguration) {
 		Configuration managedConfiguration = find();
 		if (managedConfiguration != null) {

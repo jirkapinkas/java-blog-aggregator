@@ -43,7 +43,7 @@ ${configuration.googleAnalytics}
               <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" style="padding:10px" href="<spring:url value="/" />">
-            	<img src="<spring:url value="/resources/images/logo.png" />" alt="logo" />
+            	<img src="<spring:url value="/spring/icon" />" alt="logo" />
             	${configuration.brandName}
             </a>
           </div>

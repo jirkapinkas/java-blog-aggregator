@@ -7,6 +7,19 @@
 	<div class="alert alert-success">Saved!</div>
 </c:if>
 
+<img src="<spring:url value="/spring/icon" />" alt="logo" style="float:left;padding-right:10px" />
+
+<form method="post" enctype="multipart/form-data" action="configuration/upload-icon.html">
+	<span class="btn btn-default btn-file">
+		Select icon (50 x 50 px) <input type="file" name="icon" />
+	</span>
+	<input type="submit" value="Upload" class="btn btn-primary" />
+</form>
+
+<div style="clear:both"></div>
+
+<br /><br />
+
 <form:form commandName="configuration" cssClass="form-horizontal" autocomplete="off">
 
 		<div class="form-group">

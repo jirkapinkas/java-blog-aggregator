@@ -1,11 +1,13 @@
 package cz.jiripinkas.jba.service.initdb;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -45,7 +47,7 @@ public class InitDbService {
 	private CategoryRepository categoryRepository;
 
 	@PostConstruct
-	public void init() {
+	public void init() throws IOException {
 		if (roleRepository.findByName("ROLE_ADMIN") == null) {
 			Role roleUser = new Role();
 			roleUser.setName("ROLE_USER");
@@ -119,6 +121,7 @@ public class InitDbService {
 		Configuration configuration = configurationService.find();
 		if(configuration == null) {
 			configuration = new Configuration();
+			configuration.setIcon(IOUtils.toByteArray(getClass().getResourceAsStream("/java-logo.png")));
 			configuration.setTitle("Java Blog Aggregator");
 			configuration.setHomepageHeading("Latest news from the Java world:");
 			configuration.setTopHeading("Best Java news");

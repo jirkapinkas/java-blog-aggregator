@@ -36,6 +36,18 @@ public class Configuration {
 	@Column(name = "top_heading")
 	private String topHeading;
 
+	@Lob
+	@Column(length = Integer.MAX_VALUE)
+	private byte[] icon;
+
+	public void setIcon(byte[] icon) {
+		this.icon = icon;
+	}
+
+	public byte[] getIcon() {
+		return icon;
+	}
+
 	public void setHomepageHeading(String homepageHeading) {
 		this.homepageHeading = homepageHeading;
 	}
