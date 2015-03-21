@@ -25,7 +25,7 @@ public class BlogResultService {
 		if (blog.getLastCheckErrorCount() != null) {
 			errorCount = blog.getLastCheckErrorCount();
 		}
-		blog.setLastCheckErrorCount(errorCount + 1);
+		errorCount++;
 		blogRepository.saveFail(blog.getId(), errorCount, errorText);
 	}
 
