@@ -15,8 +15,19 @@ public class TRssItem {
 
 	private String link;
 
-	@XmlElement(namespace="http://rssnamespace.org/feedburner/ext/1.0")
+	@XmlElement(namespace = "http://rssnamespace.org/feedburner/ext/1.0")
 	private String origLink;
+
+	@XmlElement(namespace = "http://purl.org/rss/1.0/modules/content/")
+	private String encoded;
+
+	public String getEncoded() {
+		return encoded;
+	}
+
+	public void setEncoded(String encoded) {
+		this.encoded = encoded;
+	}
 
 	public String getOrigLink() {
 		return origLink;

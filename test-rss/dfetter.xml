@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<rss version="2.0" 
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:admin="http://webns.net/mvcb/"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+   xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+   xmlns:content="http://purl.org/rss/1.0/modules/content/"
+   >
+<channel>
+    <title>David Fetter's blog</title>
+    <link>http://people.planetpostgresql.org/dfetter/</link>
+    <description>My little place on the web...</description>
+    <dc:language>en</dc:language>
+    <generator>Serendipity 1.5.5 - http://www.s9y.org/</generator>
+    <pubDate>Thu, 19 Feb 2015 19:38:58 GMT</pubDate>
+
+    <image>
+        <url>http://people.planetpostgresql.org/dfetter/templates/bulletproof/img/s9y_banner_small.png</url>
+        <title>RSS: David Fetter's blog - My little place on the web...</title>
+        <link>http://people.planetpostgresql.org/dfetter/</link>
+        <width>100</width>
+        <height>21</height>
+    </image>
+
+<item>
+    <title>Stalking the Wild Timezone</title>
+    <link>http://people.planetpostgresql.org/dfetter/index.php?/archives/77-Stalking-the-Wild-Timezone.html</link>
+    
+    <comments>http://people.planetpostgresql.org/dfetter/index.php?/archives/77-Stalking-the-Wild-Timezone.html#comments</comments>
+    <wfw:comment>http://people.planetpostgresql.org/dfetter/wfwcomment.php?cid=77</wfw:comment>
+
+    <slash:comments>0</slash:comments>
+    <wfw:commentRss>http://people.planetpostgresql.org/dfetter/rss.php?version=2.0&amp;type=comments&amp;cid=77</wfw:commentRss>
+    
+
+    <author>nospam@example.com (David Fetter)</author>
+    <content:encoded>
+    What time was it?&lt;br /&gt;
+&lt;br /&gt;
+This is a question that may not always be easy to answer, even with the excellent &lt;a href=&quot;http://www.postgresql.org/docs/current/static/datatype-datetime.html&quot; title=&quot;Unless you have a reason you can articulate, use TIMESTAMPTZ&quot;&gt;TIMESTAMPTZ&lt;/a&gt; data type.  While it stores the UTC timestamp equivalent to the time it sees, it throws away the time zone of the client.&lt;br /&gt;
+&lt;br /&gt;
+Here&#039;s how to capture it. &lt;br /&gt;&lt;a href=&quot;http://people.planetpostgresql.org/dfetter/index.php?/archives/77-Stalking-the-Wild-Timezone.html#extended&quot;&gt;Continue reading &quot;Stalking the Wild Timezone&quot;&lt;/a&gt;
+    </content:encoded>
+
+    <pubDate>Thu, 19 Feb 2015 21:38:58 +0200</pubDate>
+    <guid isPermaLink="false">http://people.planetpostgresql.org/dfetter/index.php?/archives/77-guid.html</guid>
+    
+</item>
+<item>
+    <title>Upgrading PostgreSQL on Ubuntu Without Automatically Restarting</title>
+    <link>http://people.planetpostgresql.org/dfetter/index.php?/archives/76-Upgrading-PostgreSQL-on-Ubuntu-Without-Automatically-Restarting.html</link>
+    
+    <comments>http://people.planetpostgresql.org/dfetter/index.php?/archives/76-Upgrading-PostgreSQL-on-Ubuntu-Without-Automatically-Restarting.html#comments</comments>
+    <wfw:comment>http://people.planetpostgresql.org/dfetter/wfwcomment.php?cid=76</wfw:comment>
+
+    <slash:comments>0</slash:comments>
+    <wfw:commentRss>http://people.planetpostgresql.org/dfetter/rss.php?version=2.0&amp;type=comments&amp;cid=76</wfw:commentRss>
+    
+
+    <author>nospam@example.com (David Fetter)</author>
+    <content:encoded>
+    You&#039;re in an environment where you can&#039;t take long (or worse, randomly timed) down times.  It&#039;s a totally ordinary thing.&lt;br /&gt;
+&lt;br /&gt;
+Normally, you&#039;d want to upgrade the software in one step, and restart the service that depends on it in a different step.&lt;br /&gt;
+&lt;br /&gt;
+Here&#039;s how. &lt;br /&gt;&lt;a href=&quot;http://people.planetpostgresql.org/dfetter/index.php?/archives/76-Upgrading-PostgreSQL-on-Ubuntu-Without-Automatically-Restarting.html#extended&quot;&gt;Continue reading &quot;Upgrading PostgreSQL on Ubuntu Without Automatically Restarting&quot;&lt;/a&gt;
+    </content:encoded>
+
+    <pubDate>Tue, 17 Feb 2015 20:41:24 +0200</pubDate>
+    <guid isPermaLink="false">http://people.planetpostgresql.org/dfetter/index.php?/archives/76-guid.html</guid>
+    
+</item>
+<item>
+    <title>9.4: Quantiles!</title>
+    <link>http://people.planetpostgresql.org/dfetter/index.php?/archives/75-9.4-Quantiles!.html</link>
+    
+    <comments>http://people.planetpostgresql.org/dfetter/index.php?/archives/75-9.4-Quantiles!.html#comments</comments>
+    <wfw:comment>http://people.planetpostgresql.org/dfetter/wfwcomment.php?cid=75</wfw:comment>
+
+    <slash:comments>3</slash:comments>
+    <wfw:commentRss>http://people.planetpostgresql.org/dfetter/rss.php?version=2.0&amp;type=comments&amp;cid=75</wfw:commentRss>
+    
+
+    <author>nospam@example.com (David Fetter)</author>
+    <content:encoded>
+    PostgreSQL 9.4 has an amazing feature hidden underneath a complicated syntax.  Here&#039;s a neat way to use it. &lt;br /&gt;&lt;a href=&quot;http://people.planetpostgresql.org/dfetter/index.php?/archives/75-9.4-Quantiles!.html#extended&quot;&gt;Continue reading &quot;9.4: Quantiles!&quot;&lt;/a&gt;
+    </content:encoded>
+
+    <pubDate>Wed, 23 Apr 2014 00:21:29 +0300</pubDate>
+    <guid isPermaLink="false">http://people.planetpostgresql.org/dfetter/index.php?/archives/75-guid.html</guid>
+    
+</item>
+<item>
+    <title>A little song</title>
+    <link>http://people.planetpostgresql.org/dfetter/index.php?/archives/74-A-little-song.html</link>
+    
+    <comments>http://people.planetpostgresql.org/dfetter/index.php?/archives/74-A-little-song.html#comments</comments>
+    <wfw:comment>http://people.planetpostgresql.org/dfetter/wfwcomment.php?cid=74</wfw:comment>
+
+    <slash:comments>0</slash:comments>
+    <wfw:commentRss>http://people.planetpostgresql.org/dfetter/rss.php?version=2.0&amp;type=comments&amp;cid=74</wfw:commentRss>
+    
+
+    <author>nospam@example.com (David Fetter)</author>
+    <content:encoded>
+    Computers are just the thing for automating repetitive tasks. &lt;br /&gt;&lt;a href=&quot;http://people.planetpostgresql.org/dfetter/index.php?/archives/74-A-little-song.html#extended&quot;&gt;Continue reading &quot;A little song&quot;&lt;/a&gt;
+    </content:encoded>
+
+    <pubDate>Sat, 29 Mar 2014 00:20:01 +0200</pubDate>
+    <guid isPermaLink="false">http://people.planetpostgresql.org/dfetter/index.php?/archives/74-guid.html</guid>
+    
+</item>
+<item>
+    <title>Conference Feedback for PGConf.EU 2013</title>
+    <link>http://people.planetpostgresql.org/dfetter/index.php?/archives/73-Conference-Feedback-for-PGConf.EU-2013.html</link>
+    
+    <comments>http://people.planetpostgresql.org/dfetter/index.php?/archives/73-Conference-Feedback-for-PGConf.EU-2013.html#comments</comments>
+    <wfw:comment>http://people.planetpostgresql.org/dfetter/wfwcomment.php?cid=73</wfw:comment>
+
+    <slash:comments>0</slash:comments>
+    <wfw:commentRss>http://people.planetpostgresql.org/dfetter/rss.php?version=2.0&amp;type=comments&amp;cid=73</wfw:commentRss>
+    
+
+    <author>nospam@example.com (David Fetter)</author>
+    <content:encoded>
+    Here &#039;tis! &lt;br /&gt;&lt;a href=&quot;http://people.planetpostgresql.org/dfetter/index.php?/archives/73-Conference-Feedback-for-PGConf.EU-2013.html#extended&quot;&gt;Continue reading &quot;Conference Feedback for PGConf.EU 2013&quot;&lt;/a&gt;
+    </content:encoded>
+
+    <pubDate>Mon, 25 Nov 2013 20:30:14 +0200</pubDate>
+    <guid isPermaLink="false">http://people.planetpostgresql.org/dfetter/index.php?/archives/73-guid.html</guid>
+    
+</item>
+<item>
+    <title>Libreadline on OSX/Homebrew</title>
+    <link>http://people.planetpostgresql.org/dfetter/index.php?/archives/72-Libreadline-on-OSXHomebrew.html</link>
+    
+    <comments>http://people.planetpostgresql.org/dfetter/index.php?/archives/72-Libreadline-on-OSXHomebrew.html#comments</comments>
+    <wfw:comment>http://people.planetpostgresql.org/dfetter/wfwcomment.php?cid=72</wfw:comment>
+
+    <slash:comments>0</slash:comments>
+    <wfw:commentRss>http://people.planetpostgresql.org/dfetter/rss.php?version=2.0&amp;type=comments&amp;cid=72</wfw:commentRss>
+    
+
+    <author>nospam@example.com (David Fetter)</author>
+    <content:encoded>
+    Developing on OSX can be an enormous headache (or pain elsewhere) without libreadline.  No, libedit is not a suitable substitute.  Sorry, David Wheeler.  Here&#039;s how to use your homebrew install&#039;s libreadline &lt;br /&gt;&lt;a href=&quot;http://people.planetpostgresql.org/dfetter/index.php?/archives/72-Libreadline-on-OSXHomebrew.html#extended&quot;&gt;Continue reading &quot;Libreadline on OSX/Homebrew&quot;&lt;/a&gt;
+    </content:encoded>
+
+    <pubDate>Tue, 17 Sep 2013 00:24:04 +0300</pubDate>
+    <guid isPermaLink="false">http://people.planetpostgresql.org/dfetter/index.php?/archives/72-guid.html</guid>
+    
+</item>
+<item>
+    <title>Querying Rows in Statement Triggers</title>
+    <link>http://people.planetpostgresql.org/dfetter/index.php?/archives/71-Querying-Rows-in-Statement-Triggers.html</link>
+    
+    <comments>http://people.planetpostgresql.org/dfetter/index.php?/archives/71-Querying-Rows-in-Statement-Triggers.html#comments</comments>
+    <wfw:comment>http://people.planetpostgresql.org/dfetter/wfwcomment.php?cid=71</wfw:comment>
+
+    <slash:comments>0</slash:comments>
+    <wfw:commentRss>http://people.planetpostgresql.org/dfetter/rss.php?version=2.0&amp;type=comments&amp;cid=71</wfw:commentRss>
+    
+
+    <author>nospam@example.com (David Fetter)</author>
+    <content:encoded>
+    Until very weird xylophones yell Z!&lt;br /&gt;
+&lt;br /&gt;
+Which they&#039;re doing now.  Back in the bad old days, triggers could see rows or act on a per-statement basis, but not both at once.  With this system, they can do both.&lt;br /&gt;
+ &lt;br /&gt;&lt;a href=&quot;http://people.planetpostgresql.org/dfetter/index.php?/archives/71-Querying-Rows-in-Statement-Triggers.html#extended&quot;&gt;Continue reading &quot;Querying Rows in Statement Triggers&quot;&lt;/a&gt;
+    </content:encoded>
+
+    <pubDate>Thu, 15 Aug 2013 19:33:41 +0300</pubDate>
+    <guid isPermaLink="false">http://people.planetpostgresql.org/dfetter/index.php?/archives/71-guid.html</guid>
+    
+</item>
+<item>
+    <title>Git down!</title>
+    <link>http://people.planetpostgresql.org/dfetter/index.php?/archives/70-Git-down!.html</link>
+    
+    <comments>http://people.planetpostgresql.org/dfetter/index.php?/archives/70-Git-down!.html#comments</comments>
+    <wfw:comment>http://people.planetpostgresql.org/dfetter/wfwcomment.php?cid=70</wfw:comment>
+
+    <slash:comments>1</slash:comments>
+    <wfw:commentRss>http://people.planetpostgresql.org/dfetter/rss.php?version=2.0&amp;type=comments&amp;cid=70</wfw:commentRss>
+    
+
+    <author>nospam@example.com (David Fetter)</author>
+    <content:encoded>
+    Here&#039;s how I&#039;ve arranged my browser to look at the official PostgreSQL git repository.  I just put the hash in and go. &lt;br /&gt;&lt;a href=&quot;http://people.planetpostgresql.org/dfetter/index.php?/archives/70-Git-down!.html#extended&quot;&gt;Continue reading &quot;Git down!&quot;&lt;/a&gt;
+    </content:encoded>
+
+    <pubDate>Tue, 08 Jan 2013 18:19:09 +0200</pubDate>
+    <guid isPermaLink="false">http://people.planetpostgresql.org/dfetter/index.php?/archives/70-guid.html</guid>
+    
+</item>
+<item>
+    <title>How do you use PostgreSQL?</title>
+    <link>http://people.planetpostgresql.org/dfetter/index.php?/archives/69-How-do-you-use-PostgreSQL.html</link>
+    
+    <comments>http://people.planetpostgresql.org/dfetter/index.php?/archives/69-How-do-you-use-PostgreSQL.html#comments</comments>
+    <wfw:comment>http://people.planetpostgresql.org/dfetter/wfwcomment.php?cid=69</wfw:comment>
+
+    <slash:comments>5</slash:comments>
+    <wfw:commentRss>http://people.planetpostgresql.org/dfetter/rss.php?version=2.0&amp;type=comments&amp;cid=69</wfw:commentRss>
+    
+
+    <author>nospam@example.com (David Fetter)</author>
+    <content:encoded>
+    My company&#039;s commissioned a survey.  We made it PostgreSQL-specific and will be sharing the raw data along with the processed results.&lt;br /&gt;
+&lt;br /&gt;
+http://svy.mk/TuMZYT 
+    </content:encoded>
+
+    <pubDate>Thu, 01 Nov 2012 05:15:00 +0200</pubDate>
+    <guid isPermaLink="false">http://people.planetpostgresql.org/dfetter/index.php?/archives/69-guid.html</guid>
+    
+</item>
+<item>
+    <title>Give me your tired, your poor...</title>
+    <link>http://people.planetpostgresql.org/dfetter/index.php?/archives/68-Give-me-your-tired,-your-poor....html</link>
+    
+    <comments>http://people.planetpostgresql.org/dfetter/index.php?/archives/68-Give-me-your-tired,-your-poor....html#comments</comments>
+    <wfw:comment>http://people.planetpostgresql.org/dfetter/wfwcomment.php?cid=68</wfw:comment>
+
+    <slash:comments>2</slash:comments>
+    <wfw:commentRss>http://people.planetpostgresql.org/dfetter/rss.php?version=2.0&amp;type=comments&amp;cid=68</wfw:commentRss>
+    
+
+    <author>nospam@example.com (David Fetter)</author>
+    <content:encoded>
+    ...your huddled checklists, yearning to breathe free.&lt;br /&gt;
+&lt;br /&gt;
+OK, I can&#039;t actually help out with the tired and poor until I get the checklists, so let&#039;s start with those. &lt;br /&gt;&lt;a href=&quot;http://people.planetpostgresql.org/dfetter/index.php?/archives/68-Give-me-your-tired,-your-poor....html#extended&quot;&gt;Continue reading &quot;Give me your tired, your poor...&quot;&lt;/a&gt;
+    </content:encoded>
+
+    <pubDate>Tue, 14 Aug 2012 19:44:37 +0300</pubDate>
+    <guid isPermaLink="false">http://people.planetpostgresql.org/dfetter/index.php?/archives/68-guid.html</guid>
+    
+</item>
+<item>
+    <title>PostgreSQL Archeology</title>
+    <link>http://people.planetpostgresql.org/dfetter/index.php?/archives/67-PostgreSQL-Archeology.html</link>
+    
+    <comments>http://people.planetpostgresql.org/dfetter/index.php?/archives/67-PostgreSQL-Archeology.html#comments</comments>
+    <wfw:comment>http://people.planetpostgresql.org/dfetter/wfwcomment.php?cid=67</wfw:comment>
+
+    <slash:comments>3</slash:comments>
+    <wfw:commentRss>http://people.planetpostgresql.org/dfetter/rss.php?version=2.0&amp;type=comments&amp;cid=67</wfw:commentRss>
+    
+
+    <author>nospam@example.com (David Fetter)</author>
+    <content:encoded>
+    It&#039;s happened to all of us.  We&#039;re faced with a system we have only limited access to administer, and something is Not Right.&lt;br /&gt;
+&lt;br /&gt;
+What&#039;s to do? &lt;br /&gt;&lt;a href=&quot;http://people.planetpostgresql.org/dfetter/index.php?/archives/67-PostgreSQL-Archeology.html#extended&quot;&gt;Continue reading &quot;PostgreSQL Archeology&quot;&lt;/a&gt;
+    </content:encoded>
+
+    <pubDate>Tue, 07 Aug 2012 21:56:26 +0300</pubDate>
+    <guid isPermaLink="false">http://people.planetpostgresql.org/dfetter/index.php?/archives/67-guid.html</guid>
+    
+</item>
+<item>
+    <title>VIEW triggers RETURNING...</title>
+    <link>http://people.planetpostgresql.org/dfetter/index.php?/archives/66-VIEW-triggers-RETURNING....html</link>
+    
+    <comments>http://people.planetpostgresql.org/dfetter/index.php?/archives/66-VIEW-triggers-RETURNING....html#comments</comments>
+    <wfw:comment>http://people.planetpostgresql.org/dfetter/wfwcomment.php?cid=66</wfw:comment>
+
+    <slash:comments>7</slash:comments>
+    <wfw:commentRss>http://people.planetpostgresql.org/dfetter/rss.php?version=2.0&amp;type=comments&amp;cid=66</wfw:commentRss>
+    
+
+    <author>nospam@example.com (David Fetter)</author>
+    <content:encoded>
+    Thanks to alecm on freenode for the idea.  Thanks also to Andres Freund for pointing out a hole in the first implementation.&lt;br /&gt;
+&lt;br /&gt;
+Access control is an excellent reason for allowing writes to a VIEW but not to the underlying table.  You would ideally like that VIEW to act exactly like a TABLE, but when you put an INSTEAD OF trigger in there, what&#039;s coming back isn&#039;t necessarily what you&#039;d expect...&lt;br /&gt;
+&lt;br /&gt;
+ &lt;br /&gt;&lt;a href=&quot;http://people.planetpostgresql.org/dfetter/index.php?/archives/66-VIEW-triggers-RETURNING....html#extended&quot;&gt;Continue reading &quot;VIEW triggers RETURNING...&quot;&lt;/a&gt;
+    </content:encoded>
+
+    <pubDate>Mon, 11 Jun 2012 19:39:23 +0300</pubDate>
+    <guid isPermaLink="false">http://people.planetpostgresql.org/dfetter/index.php?/archives/66-guid.html</guid>
+    
+</item>
+<item>
+    <title>Conferety-conf-conf-conf</title>
+    <link>http://people.planetpostgresql.org/dfetter/index.php?/archives/64-Conferety-conf-conf-conf.html</link>
+    
+    <comments>http://people.planetpostgresql.org/dfetter/index.php?/archives/64-Conferety-conf-conf-conf.html#comments</comments>
+    <wfw:comment>http://people.planetpostgresql.org/dfetter/wfwcomment.php?cid=64</wfw:comment>
+
+    <slash:comments>1</slash:comments>
+    <wfw:commentRss>http://people.planetpostgresql.org/dfetter/rss.php?version=2.0&amp;type=comments&amp;cid=64</wfw:commentRss>
+    
+
+    <author>nospam@example.com (David Fetter)</author>
+    <content:encoded>
+    I&#039;m at the very exciting &lt;a href=&quot;http://www.postgresql-sessions.org/&quot;&gt;PostgreSQL Sessions&lt;/a&gt; in Paris, where I just talked about DBI-Link, and&lt;br /&gt;
+&lt;br /&gt;
+&lt;a href=&quot;http://www.fosdem.org&quot;&gt;&lt;img src=&quot;http://www.fosdem.org/promo/going-to&quot; alt=&quot;FOSDEM, the Free and Open Source Software Developers&#039; European Meeting&quot; /&gt;&lt;/a&gt;&lt;br /&gt;
+&lt;br /&gt;
+where I&#039;ll talk about PL/Parrot to a frighteningly large room.&lt;br /&gt;
+ &lt;br /&gt;&lt;a href=&quot;http://people.planetpostgresql.org/dfetter/index.php?/archives/64-Conferety-conf-conf-conf.html#extended&quot;&gt;Continue reading &quot;Conferety-conf-conf-conf&quot;&lt;/a&gt;
+    </content:encoded>
+
+    <pubDate>Thu, 03 Feb 2011 16:24:41 +0200</pubDate>
+    <guid isPermaLink="false">http://people.planetpostgresql.org/dfetter/index.php?/archives/64-guid.html</guid>
+    
+</item>
+<item>
+    <title>Kick 'em out, and keep 'em out!</title>
+    <link>http://people.planetpostgresql.org/dfetter/index.php?/archives/63-Kick-em-out,-and-keep-em-out!.html</link>
+    
+    <comments>http://people.planetpostgresql.org/dfetter/index.php?/archives/63-Kick-em-out,-and-keep-em-out!.html#comments</comments>
+    <wfw:comment>http://people.planetpostgresql.org/dfetter/wfwcomment.php?cid=63</wfw:comment>
+
+    <slash:comments>3</slash:comments>
+    <wfw:commentRss>http://people.planetpostgresql.org/dfetter/rss.php?version=2.0&amp;type=comments&amp;cid=63</wfw:commentRss>
+    
+
+    <author>nospam@example.com (David Fetter)</author>
+    <content:encoded>
+    It&#039;s sad, really.  You&#039;re about to move a database to archival storage, possibly to /dev/null, but pesky users keep talking to it. &lt;br /&gt;&lt;a href=&quot;http://people.planetpostgresql.org/dfetter/index.php?/archives/63-Kick-em-out,-and-keep-em-out!.html#extended&quot;&gt;Continue reading &quot;Kick &#039;em out, and keep &#039;em out!&quot;&lt;/a&gt;
+    </content:encoded>
+
+    <pubDate>Fri, 22 Oct 2010 01:02:19 +0300</pubDate>
+    <guid isPermaLink="false">http://people.planetpostgresql.org/dfetter/index.php?/archives/63-guid.html</guid>
+    
+</item>
+<item>
+    <title>GRAPHical SQL (or how to make a forest)</title>
+    <link>http://people.planetpostgresql.org/dfetter/index.php?/archives/62-GRAPHical-SQL-or-how-to-make-a-forest.html</link>
+    
+    <comments>http://people.planetpostgresql.org/dfetter/index.php?/archives/62-GRAPHical-SQL-or-how-to-make-a-forest.html#comments</comments>
+    <wfw:comment>http://people.planetpostgresql.org/dfetter/wfwcomment.php?cid=62</wfw:comment>
+
+    <slash:comments>2</slash:comments>
+    <wfw:commentRss>http://people.planetpostgresql.org/dfetter/rss.php?version=2.0&amp;type=comments&amp;cid=62</wfw:commentRss>
+    
+
+    <author>nospam@example.com (David Fetter)</author>
+    <content:encoded>
+    Graphs?  In Databases?  Yes, you can! &lt;br /&gt;&lt;a href=&quot;http://people.planetpostgresql.org/dfetter/index.php?/archives/62-GRAPHical-SQL-or-how-to-make-a-forest.html#extended&quot;&gt;Continue reading &quot;GRAPHical SQL (or how to make a forest)&quot;&lt;/a&gt;
+    </content:encoded>
+
+    <pubDate>Thu, 16 Sep 2010 03:47:58 +0300</pubDate>
+    <guid isPermaLink="false">http://people.planetpostgresql.org/dfetter/index.php?/archives/62-guid.html</guid>
+    
+</item>
+
+</channel>
+</rss>

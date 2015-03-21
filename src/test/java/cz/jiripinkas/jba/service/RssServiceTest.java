@@ -186,4 +186,10 @@ public class RssServiceTest {
 //		assertEquals("In MySQL Character encoding - part 1 we stated that the myriad of ways in which character encoding can be controlled can lead to many situat...", items.get(8).getDescription());
 	}
 
+	@Test
+	public void testDfetter() throws RssException {
+		List<Item> items = rssService.getItems("test-rss/dfetter.xml", true, 0);
+		assertEquals("What time was it? This is a question that may not always be easy to answer, even with the excellent TIMESTAMPTZ data type. While it stores t...", items.get(0).getDescription());
+	}
+
 }

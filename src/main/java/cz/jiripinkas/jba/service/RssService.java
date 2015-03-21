@@ -208,7 +208,13 @@ public class RssService {
 				for (TRssItem rssItem : items) {
 					Item item = new Item();
 					item.setTitle(cleanTitle(rssItem.getTitle()));
-					item.setDescription(cleanDescription(rssItem.getDescription()));
+					if(rssItem.getDescription() != null) {
+						item.setDescription(cleanDescription(rssItem.getDescription().trim()));
+					} else if(rssItem.getEncoded() != null) {
+						item.setDescription(cleanDescription(rssItem.getEncoded().trim()));
+					} else {
+						throw new UnsupportedOperationException("unknown description");
+					}
 					Date pubDate = getRssDate(rssItem.getPubDate());
 					item.setPublishedDate(pubDate);
 					String link = null;
@@ -249,6 +255,9 @@ public class RssService {
 					description = summary;
 				} else {
 					description = entry.getContent();
+				}
+				if(description == null) {
+					throw new UnsupportedOperationException("unknown description");
 				}
 				item.setDescription(cleanDescription(description));
 				Date pubDate = null;

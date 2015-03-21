@@ -77,6 +77,7 @@ public class BlogService {
 			}
 			blogResultService.saveOk(blog);
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("exception during downloading: " + blog.getUrl());
 			System.out.println("message: " + e.getMessage());
 			errors.append(e.getMessage());
