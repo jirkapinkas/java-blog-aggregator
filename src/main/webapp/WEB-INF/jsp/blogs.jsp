@@ -64,7 +64,7 @@
 						<a href="<spring:url value='/blog-form.html?blogId=${blog.id}' />" class="btn btn-primary btn-xs">
 							edit
 						</a>
-						<button class="btn btn-danger btn-xs triggerRemove" id="${blog.id}">
+						<button class="btn btn-danger btn-xs triggerRemove" id="${blog.id}" onclick="removeBlog(this)">
 							 remove
 						</button>
 						
@@ -104,30 +104,28 @@ function categorySelectChange(element) {
 	var categoryId = $(element).val();
 	$.post("admin-categories/set/" + blogId + "/cat/" + categoryId + ".json", function(data) { });
 }
-$(document).ready(function() {
-	$(".triggerRemove").click(function(e) {
-		var origin = $(this);
-        BootstrapDialog.show({
-            title: 'Really delete?',
-            message: 'Really delete?',
-            buttons: [{
-                label: 'Cancel',
-                action: function(dialog) {
-                	dialog.close();
-                }
-            }, {
-                label: 'Delete',
-                cssClass: 'btn-primary',
-                action: function(dialog) {
-                	var blogId = origin.attr("id");
-					$.post("blog/remove/" + blogId + ".html", function (data) {
-						location.reload(true); // reload page
-					});
-                	dialog.close();
-                }
-            }]
-	    });
-	});
-});
+function removeBlog(e) {
+	var origin = $(e);
+    BootstrapDialog.show({
+        title: 'Really delete?',
+        message: 'Really delete?',
+        buttons: [{
+            label: 'Cancel',
+            action: function(dialog) {
+            	dialog.close();
+            }
+        }, {
+            label: 'Delete',
+            cssClass: 'btn-primary',
+            action: function(dialog) {
+            	var blogId = origin.attr("id");
+			$.post("blog/remove/" + blogId + ".html", function (data) {
+				location.reload(true); // reload page
+			});
+            	dialog.close();
+            }
+        }]
+    });
+}
 </script>
 </security:authorize>
