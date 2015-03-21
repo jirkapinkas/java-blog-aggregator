@@ -108,6 +108,7 @@ public class RssServiceTest {
 	public void testGetRssDate() throws ParseException {
 		assertEquals("Sun Mar 23 09:01:34 CET 2014", rssService.getRssDate("Sun, 23 Mar 2014 08:01:34 +0000").toString());
 		assertEquals("Sun Mar 23 00:00:00 CET 2014", rssService.getRssDate("Sun, 23 Mar 2014").toString());
+		assertEquals("Sun Mar 23 00:00:00 CET 2014", rssService.getRssDate("23 Mar 2014").toString());
 		assertEquals("Thu Mar 12 00:00:00 CET 2015", rssService.getRssDate("2015-03-12").toString());
 		assertEquals("Sun Jan 25 21:00:00 CET 2015", rssService.getRssDate("25 Jan 2015 20:00:00 GMT").toString());
 	}
