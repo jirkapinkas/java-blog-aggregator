@@ -140,6 +140,7 @@ public class BlogService {
 		return icon;
 	}
 
+	@Transactional
 	public Blog findOne(String url) {
 		return blogRepository.findByUrl(url);
 	}
