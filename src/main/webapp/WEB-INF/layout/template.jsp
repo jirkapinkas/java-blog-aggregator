@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8" autoFlush="false" buffer="10240kb"%>
-<%-- Do not remove autoFlush="false" buffer="10240kb" !!!!!!!! --%>
+	pageEncoding="UTF-8" autoFlush="false" buffer="512kb"%>
+<%-- Do not remove autoFlush="false" buffer="512kb" !!!!!!!! --%>
 <%-- It's because of Ziplet - gzip compression --%>
 <%-- JSP's out of the box perform auto-flush and it breaks Ziplet --%>
 
