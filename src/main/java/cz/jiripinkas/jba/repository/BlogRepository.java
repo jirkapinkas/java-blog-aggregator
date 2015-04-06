@@ -7,12 +7,11 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import cz.jiripinkas.jba.entity.Blog;
-import cz.jiripinkas.jba.entity.User;
 
 public interface BlogRepository extends JpaRepository<Blog, Integer>{
 
-	@Query("select b from Blog b where user = ?1 order by b.id")
-	List<Blog> findByUser(User user);
+	@Query("select b from Blog b where user.id = ?1 order by b.id")
+	List<Blog> findByUserId(int id);
 
 	Blog findByUrl(String url);
 

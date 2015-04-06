@@ -79,7 +79,6 @@
 	$(document)
 			.ready(
 					function() {
-						$('.nav-tabs a:first').tab('show'); // Select first tab
 						$(".triggerRemove")
 								.click(
 										function(e) {
@@ -175,55 +174,34 @@
 					});
 </script>
 
-<!-- Nav tabs -->
-<ul class="nav nav-tabs">
-	<c:forEach items="${user.blogs}" var="blog">
-		<li><a href="#blog_${blog.id}" data-toggle="tab"><c:out
-					value="${blog.name}" /></a></li>
-	</c:forEach>
-</ul>
 
-<!-- Tab panes -->
-<div class="tab-content">
-	<c:forEach items="${user.blogs}" var="blog">
-		<div class="tab-pane" id="blog_${blog.id}">
-			<h1>
-				<c:out value="${blog.name}" />
-			</h1>
-			<p>
-
-				<a href="<spring:url value="/blog-form.html?blogId=${blog.id}" />"
-					class="btn btn-primary">edit blog</a>
-
-				<button class="btn btn-danger triggerRemove" id="${blog.id}">
-					remove blog</button>
-
-				<a href="<c:out value="${blog.url}" />" target="_blank"><c:out
-						value="${blog.url}" /></a>
-			</p>
-
-			<p>Note: Only posts from last two months and max. 10 posts will
-				be displayed.</p>
-
-			<table class="table table-bordered table-hover table-striped">
-				<thead>
-					<tr>
-						<th>item</th>
-					</tr>
-				</thead>
-				<tbody>
-					<c:forEach items="${blog.items}" var="item">
-						<tr>
-							<td><strong> <a
-									href="<c:out value="${item.link}" />" target="_blank"> <c:out
-											value="${item.title}" />
-								</a>
-							</strong> <br /> ${item.description} <br /> <c:out
-									value="${item.publishedDate}" /></td>
-						</tr>
-					</c:forEach>
-				</tbody>
-			</table>
-		</div>
-	</c:forEach>
-</div>
+<table class="table table-bordered table-striped table-hover">
+	<thead>
+		<tr>
+			<th>name</th>
+			<th>operations</th>
+			<th>accepted?</th>
+		</tr>
+	</thead>
+	<tbody>
+		<c:forEach items="${user.blogs}" var="blog">
+			<tr>
+				<td>
+					<a href="blog/${blog.shortName}.html">
+						<c:out value="${blog.name}" />
+					</a>
+				</td>
+				<td>
+					<a href="<spring:url value="/blog-form.html?blogId=${blog.id}" />"
+						class="btn btn-primary">edit</a>
+		
+					<button class="btn btn-danger triggerRemove" id="${blog.id}">
+						remove</button>
+				</td>
+				<td>
+					${blog.category eq null ? "not yet reviewed" : "accepted"}
+				</td>
+			</tr>
+		</c:forEach>
+	</tbody>
+</table>
