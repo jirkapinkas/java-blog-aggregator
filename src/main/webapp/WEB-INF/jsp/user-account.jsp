@@ -192,14 +192,11 @@
 					</a>
 				</td>
 				<td>
-					<a href="<spring:url value="/blog-form.html?blogId=${blog.id}" />"
-						class="btn btn-primary">edit</a>
-		
-					<button class="btn btn-danger triggerRemove" id="${blog.id}">
-						remove</button>
+					${blog.category eq null ? "not yet reviewed" : "accepted"}
 				</td>
 				<td>
-					${blog.category eq null ? "not yet reviewed" : "accepted"}
+					<a href="<spring:url value="/blog-form.html?blogId=${blog.id}" />" class="btn btn-primary">edit</a>
+					<button class="btn btn-danger triggerRemove" id="${blog.id}">remove</button>
 				</td>
 			</tr>
 		</c:forEach>
