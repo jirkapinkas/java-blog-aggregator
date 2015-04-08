@@ -318,9 +318,20 @@ public class RssService {
 			}
 		}
 	}
+	
+	private String cleanXml10(String xml) {
+		String xml10pattern = "[^"
+                + "\u0009\r\n"
+                + "\u0020-\uD7FF"
+                + "\uE000-\uFFFD"
+                + "\ud800\udc00-\udbff\udfff"
+                + "]";
+		return xml.replaceAll(xml10pattern, "");
+	}
 
 	public String cleanTitle(String title) {
-		return Jsoup.parse(title).text();
+		String textTitle = Jsoup.parse(title).text();
+		return cleanXml10(textTitle);
 	}
 
 	public String cleanDescription(String description) {
