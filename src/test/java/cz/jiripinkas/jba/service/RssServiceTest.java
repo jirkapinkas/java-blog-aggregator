@@ -36,13 +36,13 @@ public class RssServiceTest {
 
 	@Mock
 	private ItemRepository itemRepository;
-	
+
 	@Mock
 	private CloseableHttpClient httpClient;
-	
+
 	@Mock
 	private CloseableHttpResponse httpResponse;
-	
+
 	@Before
 	public void setUp() throws Exception {
 		rssService = new RssService();
@@ -157,7 +157,7 @@ public class RssServiceTest {
 		Item firstItem = items.get(0);
 		assertEquals("http://www.baeldung.com/spring-security-oauth2-authentication-with-reddit", firstItem.getLink());
 	}
-	
+
 	@Test
 	public void testRedirect() throws Exception {
 		CloseableHttpResponse closeableHttpResponse = Mockito.mock(CloseableHttpResponse.class);
@@ -173,12 +173,16 @@ public class RssServiceTest {
 		assertEquals("http://www.java-skoleni.cz/kurz/java", realLink);
 	}
 
-	@Test(expected = UrlException.class)
 	public void test404() throws Exception {
-		mockHttpClientStatus(404);
-		rssService.getRealLink("http://www.java-skoleni.cz/xxxx", HttpClientContext.create());
+		try {
+			mockHttpClientStatus(404);
+			rssService.getRealLink("http://www.java-skoleni.cz/xxxx", HttpClientContext.create());
+			fail();
+		} catch (UrlException ex) {
+			// ignore expected exception
+		}
 	}
-	
+
 	private void mockHttpClient200Status() throws IllegalStateException, IOException {
 		mockHttpClientStatus(200);
 	}
@@ -214,7 +218,7 @@ public class RssServiceTest {
 		Item firstItem = items.get(0);
 		assertEquals("http://www.knitelius.com/2015/03/03/jsf-2-ajaxsubmit-issues-with-conversationscoped-beans/", firstItem.getLink());
 	}
-	
+
 	@Test
 	public void testPlanetMysqlSpecialCharacters() throws Exception {
 		mockHttpClient200Status();
