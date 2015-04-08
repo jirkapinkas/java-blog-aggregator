@@ -79,6 +79,10 @@ public class ItemService {
 		ArrayList<ItemDto> result = new ArrayList<ItemDto>();
 
 		List<Item> items = null;
+		
+		if(selectedCategories.length == 0) {
+			return result;
+		}
 
 		if (showAll) {
 			items = itemRepository.findPageAllItemsInCategory(publishedDate, Arrays.asList(selectedCategories), new PageRequest(page, 10, orderDirection, orderByProperty));

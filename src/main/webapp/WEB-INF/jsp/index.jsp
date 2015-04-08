@@ -40,7 +40,7 @@
 				</security:authorize>
 				<c:if test="${blogDetail eq null}">
 					<c:forEach items="${categories}" var="category">
-						<span class="label label-primary categoryLabel withTooltip" id="${category.id}" style="cursor: pointer;" data-toggle="tooltip" data-placement="top" title="toggle category visibility">${category.name}</span>
+						<span class="label label-primary categoryLabel withTooltip" id="${category.id}" style="cursor: pointer;" data-toggle="tooltip" data-placement="top" title="toggle category visibility">${category.name} (${category.blogCount})</span>
 					</c:forEach>
 				</c:if>
 				<script type="text/javascript">

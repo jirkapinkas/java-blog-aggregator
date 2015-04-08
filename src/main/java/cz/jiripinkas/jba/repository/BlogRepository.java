@@ -34,4 +34,6 @@ public interface BlogRepository extends JpaRepository<Blog, Integer>{
 	@Query("update Blog b set b.lastCheckErrorText = ?3, b.lastCheckErrorCount = ?2, b.lastCheckStatus = false where b.id = ?1")
 	void saveFail(int blogId, int errorCount, String errorText);
 
+	int countByCategoryId(int categoryId);
+
 }

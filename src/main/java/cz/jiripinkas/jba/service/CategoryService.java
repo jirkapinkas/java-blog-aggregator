@@ -28,7 +28,11 @@ public class CategoryService {
 
 	@Cacheable("categories")
 	public List<Category> findAll() {
-		return categoryRepository.findAll();
+		List<Category> categories = categoryRepository.findAll();
+		for (Category category : categories) {
+			category.setBlogCount(blogRepository.countByCategoryId(category.getId()));
+		}
+		return categories;
 	}
 
 	@CacheEvict(value = "categories", allEntries = true)
@@ -51,5 +55,5 @@ public class CategoryService {
 		blog.setCategory(category);
 		blogRepository.save(blog);
 	}
-
+	
 }

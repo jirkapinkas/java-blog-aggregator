@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 @Entity
 public class Category {
@@ -22,6 +23,17 @@ public class Category {
 
 	@OneToMany(mappedBy = "category")
 	private List<Blog> blogs;
+
+	@Transient
+	private int blogCount;
+
+	public int getBlogCount() {
+		return blogCount;
+	}
+
+	public void setBlogCount(int blogCount) {
+		this.blogCount = blogCount;
+	}
 
 	public String getShortName() {
 		return shortName;
