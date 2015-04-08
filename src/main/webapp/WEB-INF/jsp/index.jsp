@@ -309,7 +309,7 @@
 
 				html += "<span class='label' style='color: grey;'>";
 				html += ("0" + date.getDate()).slice(-2) + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + date.getFullYear();
-				html += ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2) + ":" + ("0" + date.getSeconds()).slice(-2);
+				html += " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2) + ":" + ("0" + date.getSeconds()).slice(-2);
 				html += "</span>";
 				html += "<span class='label label-info' style='margin-left: 5px'><a href='" + blogDetailBaseUrl + value.blog.shortName + ".html' style='color: white;'>";
 				html += value.blog.name;
