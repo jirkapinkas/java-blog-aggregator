@@ -334,11 +334,28 @@ public class RssService {
 			cleanDescription = cleanDescription.replace(link, "");
 		}
 
-		if (cleanDescription.length() >= 140) {
-			cleanDescription = cleanDescription.substring(0, 140);
-			cleanDescription += "...";
+		// split words which are more than 25 characters long
+		StringBuilder finalDescription = new StringBuilder(cleanDescription.length());
+		int lastSpace = 0;
+		for(int i = 0; i < cleanDescription.length(); i++) {
+			finalDescription.append(cleanDescription.charAt(i));
+			if(cleanDescription.charAt(i) == ' ') {
+				lastSpace = 0;
+			}
+			if(lastSpace == 25) {
+				lastSpace = 0;
+				finalDescription.append(" ");
+			}
+			lastSpace++;
 		}
-		return cleanDescription.trim();
+		
+		// return only first 140 characters (plus '...')
+		String returnDescription = finalDescription.toString();
+		if (returnDescription.length() >= 140) {
+			returnDescription = finalDescription.substring(0, 140);
+			returnDescription += "...";
+		}
+		return returnDescription.trim();
 	}
 
 	public ArrayList<String> pullLinks(String text) {

@@ -130,6 +130,7 @@ public class RssServiceTest {
 
 	@Test
 	public void testCleanDescription() {
+		assertEquals("this is loooooooooooooooooooooooo ooooooooooooooooooooooooo ooooooong description loooooooooooooooooooooooo ooooooooong once more looooooooo...", rssService.cleanDescription("this is loooooooooooooooooooooooooooooooooooooooooooooooooooooooong description looooooooooooooooooooooooooooooooong once more looooooooooooooooooooooooooooooooong"));
 		assertEquals("test this is strong", rssService.cleanDescription("test <strong>this is strong</strong>"));
 		assertEquals("test this is strong", rssService.cleanDescription("test &lt;strong&gt;this is strong&lt;/strong&gt;"));
 		assertEquals("test this is strong", rssService.cleanDescription("<![CDATA[test &lt;strong&gt;this is strong&lt;/strong&gt;]]>"));
