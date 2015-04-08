@@ -165,14 +165,13 @@ public class RssService {
 		}
 	}
 
-	protected String getRealLink(String link) throws UrlException {
+	protected String getRealLink(String link, HttpClientContext context) throws UrlException {
 		link = link.trim();
 		String realLink = null;
 		try {
 			HttpGet get = constructGet(link);
 			CloseableHttpResponse response = null;
 			try {
-				HttpClientContext context = HttpClientContext.create();
 				response = httpClient.execute(get, context);
 				HttpEntity entity = response.getEntity();
 				EntityUtils.toString(entity); // consume page
@@ -191,6 +190,7 @@ public class RssService {
 				}
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new UrlException("Exception during downloading: " + link);
 		}
 		return realLink;
@@ -228,7 +228,7 @@ public class RssService {
 						continue;
 					}
 					try {
-						item.setLink(getRealLink(link));
+						item.setLink(getRealLink(link, HttpClientContext.create()));
 					} catch (UrlException e) {
 						item.setError(e.getMessage());
 					}
@@ -287,7 +287,7 @@ public class RssService {
 					continue;
 				}
 				try {
-					item.setLink(getRealLink(link));
+					item.setLink(getRealLink(link, HttpClientContext.create()));
 				} catch (UrlException e) {
 					item.setError(e.getMessage());
 				}

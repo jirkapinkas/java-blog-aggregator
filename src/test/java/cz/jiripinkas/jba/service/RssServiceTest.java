@@ -3,14 +3,20 @@ package cz.jiripinkas.jba.service;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.io.IOException;
+import java.net.URI;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.StatusLine;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,7 +37,8 @@ public class RssServiceTest {
 	@Mock
 	private ItemRepository itemRepository;
 	
-	private CloseableHttpClient httpClient = HttpClients.createDefault();
+	@Mock
+	private CloseableHttpClient httpClient;
 	
 	@Mock
 	private CloseableHttpResponse httpResponse;
@@ -41,12 +48,12 @@ public class RssServiceTest {
 		rssService = new RssService();
 		rssService.setItemRepository(itemRepository);
 		Mockito.when(itemRepository.findItemIdByLinkAndBlogId(Mockito.anyString(), Mockito.anyInt())).thenReturn(null);
-		// TODO change to mock
 		rssService.setHttpClient(httpClient);
 	}
 
 	@Test
-	public void testGetItemsFileJavaVids() throws RssException {
+	public void testGetItemsFileJavaVids() throws Exception {
+		mockHttpClient200Status();
 		List<Item> items = rssService.getItems("test-rss/javavids.xml", true, 0);
 		assertEquals(10, items.size());
 		Item firstItem = items.get(0);
@@ -55,7 +62,8 @@ public class RssServiceTest {
 	}
 
 	@Test
-	public void testGetItemsFileSpring() throws RssException {
+	public void testGetItemsFileSpring() throws Exception {
+		mockHttpClient200Status();
 		List<Item> items = rssService.getItems("test-rss/spring.xml", true, 0);
 		assertEquals(20, items.size());
 		Item firstItem = items.get(0);
@@ -68,7 +76,8 @@ public class RssServiceTest {
 	}
 
 	@Test
-	public void testGetItemsFileHibernate() throws RssException {
+	public void testGetItemsFileHibernate() throws Exception {
+		mockHttpClient200Status();
 		List<Item> items = rssService.getItems("test-rss/hibernate.xml", true, 0);
 		assertEquals(14, items.size());
 		Item firstItem = items.get(0);
@@ -133,7 +142,8 @@ public class RssServiceTest {
 	}
 
 	@Test
-	public void testGetItemsFileInstanceofJavaPublishedDate() throws RssException {
+	public void testGetItemsFileInstanceofJavaPublishedDate() throws RssException, ClientProtocolException, IOException {
+		mockHttpClient200Status();
 		List<Item> items = rssService.getItems("test-rss/instanceofjava.xml", true, 0);
 		Item firstItem = items.get(0);
 		assertEquals("22 02 2015 13:35:00", new SimpleDateFormat("dd MM yyyy HH:mm:ss").format(firstItem.getPublishedDate()));
@@ -141,53 +151,81 @@ public class RssServiceTest {
 	}
 
 	@Test
-	public void testGetItemsFileBaeldungFeedburnerOrigLink() throws RssException {
+	public void testGetItemsFileBaeldungFeedburnerOrigLink() throws Exception {
+		mockHttpClient200Status();
 		List<Item> items = rssService.getItems("test-rss/baeldung.xml", true, 0);
 		Item firstItem = items.get(0);
 		assertEquals("http://www.baeldung.com/spring-security-oauth2-authentication-with-reddit", firstItem.getLink());
 	}
-
+	
 	@Test
 	public void testRedirect() throws Exception {
-		String realLink = rssService.getRealLink("http://www.java-skoleni.cz/skoleni.php?id=java");
+		CloseableHttpResponse closeableHttpResponse = Mockito.mock(CloseableHttpResponse.class);
+		HttpEntity httpEntity = Mockito.mock(HttpEntity.class);
+		StatusLine statusLine = Mockito.mock(StatusLine.class);
+		HttpClientContext httpClientContext = Mockito.mock(HttpClientContext.class);
+		Mockito.when(httpClientContext.getRedirectLocations()).thenReturn(Arrays.asList(new URI("http://www.java-skoleni.cz/kurz/java")));
+		Mockito.when(statusLine.getStatusCode()).thenReturn(200);
+		Mockito.when(closeableHttpResponse.getStatusLine()).thenReturn(statusLine);
+		Mockito.when(closeableHttpResponse.getEntity()).thenReturn(httpEntity);
+		Mockito.when(httpClient.execute(Mockito.anyObject(), Mockito.anyObject())).thenReturn(closeableHttpResponse);
+		String realLink = rssService.getRealLink("http://www.java-skoleni.cz/skoleni.php?id=java", httpClientContext);
 		assertEquals("http://www.java-skoleni.cz/kurz/java", realLink);
 	}
 
 	@Test(expected = UrlException.class)
 	public void test404() throws Exception {
-		rssService.getRealLink("http://www.java-skoleni.cz/xxxx");
+		mockHttpClientStatus(404);
+		rssService.getRealLink("http://www.java-skoleni.cz/xxxx", HttpClientContext.create());
+	}
+	
+	private void mockHttpClient200Status() throws IllegalStateException, IOException {
+		mockHttpClientStatus(200);
+	}
+
+	private void mockHttpClientStatus(int returnStatus) throws IllegalStateException, IOException {
+		CloseableHttpResponse closeableHttpResponse = Mockito.mock(CloseableHttpResponse.class);
+		HttpEntity httpEntity = Mockito.mock(HttpEntity.class);
+		StatusLine statusLine = Mockito.mock(StatusLine.class);
+		Mockito.when(statusLine.getStatusCode()).thenReturn(returnStatus);
+		Mockito.when(closeableHttpResponse.getStatusLine()).thenReturn(statusLine);
+		Mockito.when(closeableHttpResponse.getEntity()).thenReturn(httpEntity);
+		Mockito.when(httpClient.execute(Mockito.anyObject(), Mockito.anyObject())).thenReturn(closeableHttpResponse);
 	}
 
 	@Test
 	public void test200() throws Exception {
-		String realLink = rssService.getRealLink("http://www.java-skoleni.cz");
+		mockHttpClient200Status();
+		String realLink = rssService.getRealLink("http://www.java-skoleni.cz", HttpClientContext.create());
 		assertEquals("http://www.java-skoleni.cz", realLink);
 	}
 
 	@Test
 	public void testWhitespaces() throws Exception {
-		String realLink = rssService.getRealLink("   http://www.java-skoleni.cz   ");
+		mockHttpClient200Status();
+		String realLink = rssService.getRealLink("   http://www.java-skoleni.cz   ", HttpClientContext.create());
 		assertEquals("http://www.java-skoleni.cz", realLink);
 	}
 
 	@Test
-	public void testAtomAlternate() throws RssException {
+	public void testAtomAlternate() throws Exception {
+		mockHttpClient200Status();
 		List<Item> items = rssService.getItems("test-rss/knitelius.xml", true, 0);
 		Item firstItem = items.get(0);
 		assertEquals("http://www.knitelius.com/2015/03/03/jsf-2-ajaxsubmit-issues-with-conversationscoped-beans/", firstItem.getLink());
 	}
 	
 	@Test
-	public void testPlanetMysqlSpecialCharacters() throws RssException {
+	public void testPlanetMysqlSpecialCharacters() throws Exception {
+		mockHttpClient200Status();
 		List<Item> items = rssService.getItems("test-rss/planetmysql.xml", true, 0);
 		assertEquals("Introducing 'MySQL 101,' a 2-day intensive educational track at Percona Live this April 15-16", items.get(5).getTitle());
 		assertEquals("MySQL Character encoding - part 2", items.get(8).getTitle());
-		// TODO make this work
-//		assertEquals("In MySQL Character encoding - part 1 we stated that the myriad of ways in which character encoding can be controlled can lead to many situat...", items.get(8).getDescription());
 	}
 
 	@Test
-	public void testDfetter() throws RssException {
+	public void testDfetter() throws Exception {
+		mockHttpClient200Status();
 		List<Item> items = rssService.getItems("test-rss/dfetter.xml", true, 0);
 		assertEquals("What time was it? This is a question that may not always be easy to answer, even with the excellent TIMESTAMPTZ data type. While it stores t...", items.get(0).getDescription());
 	}
