@@ -39,7 +39,7 @@ $(document).ready(function() {
 				<tr>
 					<td>
 						<strong>
-							<a href="<c:out value="${item.link}" />" target="_blank">
+							<a href="<c:out value="${item.link}" />">
 								<c:out value="${item.title}" />
 							</a>
 						</strong>

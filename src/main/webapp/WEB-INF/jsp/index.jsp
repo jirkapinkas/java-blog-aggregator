@@ -8,9 +8,9 @@
 		<table style="width:100%">
 			<tr>
 				<td style="width:42px">
-					<a href="${blog.homepageUrl}" target="_blank" class="fa fa-home fa-lg" style="float:left;padding-top:14px;color:#333333">
+					<a href="${blog.homepageUrl}" class="fa fa-home fa-lg" style="float:left;padding-top:14px;color:#333333">
 					</a>
-					<a href="${blog.url}" target="_blank" class="fa fa-rss fa-lg"  style="float:left;padding-top:14px;padding-left:5px;color:#333333">
+					<a href="${blog.url}" class="fa fa-rss fa-lg"  style="float:left;padding-top:14px;padding-left:5px;color:#333333">
 					</a>
 				</td>
 				<td>
@@ -117,7 +117,7 @@
 						});
 					</script>
 
-						<a id="${item.id}" href="<c:out value="${item.link}" />" target="_blank" style="${customCss}" class="itemLink" onClick="itemClick(event)">
+						<a id="${item.id}" href="<c:out value="${item.link}" />" style="${customCss}" class="itemLink" onClick="itemClick(event)">
 							<img class="lazy" id="${item.id}" data-src="<spring:url value='/spring/icon/${item.blog.id}' />" style="float:left;padding-right:5px" />
 							<strong id="${item.id}">${item.title} <span class="glyphicon glyphicon-share-alt"></span></strong></a>
 					<br />
@@ -286,7 +286,7 @@
 				if(value.enabled == false) {
 					css = "text-decoration: line-through;color:grey";
 				}
-				html += "<a href='" + value.link + "' target='_blank' class='itemLink' style='" + css + "' onClick='itemClick(event)' id='" + value.id + "'>";
+				html += "<a href='" + value.link + "' class='itemLink' style='" + css + "' onClick='itemClick(event)' id='" + value.id + "'>";
 				html += "<img class='lazy' data-src='" + iconBaseUrl + value.blog.id + "' alt='icon' style='float:left;padding-right:10px' id='" + value.id + "' />";
 				html += "<strong id='" + value.id + "'>";
 				html += value.title;

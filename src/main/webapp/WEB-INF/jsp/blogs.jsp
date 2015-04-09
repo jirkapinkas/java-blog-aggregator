@@ -39,9 +39,9 @@
 				<td>
 					<img class="lazy" data-src="<spring:url value='/spring/icon/${blog.id}' />" style="float:left;padding-right:5px" />
 					
-					<a href="${blog.homepageUrl}" target="_blank" class="fa fa-home fa-lg" style="float:left;padding-top:0px;color:grey">
+					<a href="${blog.homepageUrl}" class="fa fa-home fa-lg" style="float:left;padding-top:0px;color:grey">
 					</a>
-					<a href="${blog.url}" target="_blank" class="fa fa-rss fa-lg"  style="float:left;padding-top:0px;padding-left:5px;color:grey">
+					<a href="${blog.url}" class="fa fa-rss fa-lg"  style="float:left;padding-top:0px;padding-left:5px;color:grey">
 					</a>
 					<h1 style="font-size:25px;">${title}</h1>
 
