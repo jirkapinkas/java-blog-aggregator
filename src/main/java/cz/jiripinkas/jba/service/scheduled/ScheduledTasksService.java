@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -37,8 +39,12 @@ public class ScheduledTasksService {
 	@Scheduled(fixedDelay = 60 * 60 * 1000)
 	@CacheEvict(value = "itemCount", allEntries = true)
 	public void reloadBlogs() {
-		List<Blog> blogs = blogRepository.findAll();
+		// first process blogs which have aggregator = null, 
+		// next blogs with aggregator = false 
+		// and last blogs with aggregator = true
+		List<Blog> blogs = blogRepository.findAll(new Sort(Direction.ASC, "aggregator"));
 		for (Blog blog : blogs) {
+			System.out.println("blog is aggregator: " + blog.getAggregator());
 			blogService.saveItems(blog);
 		}
 		blogService.setLastIndexedDateFinish(new Date());
