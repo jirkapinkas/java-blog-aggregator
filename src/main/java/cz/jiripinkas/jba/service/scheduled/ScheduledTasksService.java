@@ -44,7 +44,6 @@ public class ScheduledTasksService {
 		// and last blogs with aggregator = true
 		List<Blog> blogs = blogRepository.findAll(new Sort(Direction.ASC, "aggregator"));
 		for (Blog blog : blogs) {
-			System.out.println("blog is aggregator: " + blog.getAggregator());
 			blogService.saveItems(blog);
 		}
 		blogService.setLastIndexedDateFinish(new Date());
