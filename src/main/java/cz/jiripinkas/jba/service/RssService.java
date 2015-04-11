@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -76,8 +77,8 @@ public class RssService {
 		}
 	}
 
-	public List<Item> getItems(String location, int blogId) throws RssException {
-		return getItems(location, false, blogId);
+	public List<Item> getItems(String location, int blogId, Map<String, Object> allLinksMap) throws RssException {
+		return getItems(location, false, blogId, allLinksMap);
 	}
 
 	/**
@@ -126,7 +127,7 @@ public class RssService {
 		return get;
 	}
 
-	public List<Item> getItems(String location, boolean localFile, int blogId) throws RssException {
+	public List<Item> getItems(String location, boolean localFile, int blogId, Map<String, Object> allLinksMap) throws RssException {
 		Node node = null;
 		String page = null;
 
@@ -157,9 +158,9 @@ public class RssService {
 		}
 
 		if ("rss".equals(node.getNodeName())) {
-			return getRssItems(new StringReader(page), blogId);
+			return getRssItems(new StringReader(page), blogId, allLinksMap);
 		} else if ("feed".equals(node.getNodeName())) {
-			return getAtomItems(new StringReader(page), blogId);
+			return getAtomItems(new StringReader(page), blogId, allLinksMap);
 		} else {
 			throw new RssException("unknown RSS type");
 		}
@@ -196,7 +197,7 @@ public class RssService {
 		return realLink;
 	}
 
-	private List<Item> getRssItems(Reader reader, int blogId) throws RssException {
+	private List<Item> getRssItems(Reader reader, int blogId, Map<String, Object> allLinksMap) throws RssException {
 		ArrayList<Item> list = new ArrayList<Item>();
 		try {
 			TRss rss = (TRss) unmarshallerRss.unmarshal(reader);
@@ -223,7 +224,7 @@ public class RssService {
 					} else {
 						link = rssItem.getLink();
 					}
-					if (itemRepository.findItemIdByLinkAndBlogId(link, blogId) != null) {
+					if(allLinksMap.containsKey(link)) {
 						// skip this item, it's already in the database
 						continue;
 					}
@@ -241,7 +242,7 @@ public class RssService {
 		return list;
 	}
 
-	private List<Item> getAtomItems(Reader reader, int blogId) throws RssException {
+	private List<Item> getAtomItems(Reader reader, int blogId, Map<String, Object> allLinksMap) throws RssException {
 		ArrayList<Item> list = new ArrayList<Item>();
 		try {
 			Feed atom = (Feed) unmarshallerAtom.unmarshal(reader);
@@ -282,7 +283,7 @@ public class RssService {
 						}
 					}
 				}
-				if (itemRepository.findItemIdByLinkAndBlogId(link, blogId) != null) {
+				if(allLinksMap.containsKey(link)) {
 					// skip this item, it's already in the database
 					continue;
 				}

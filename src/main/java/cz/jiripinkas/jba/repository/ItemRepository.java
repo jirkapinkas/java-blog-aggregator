@@ -10,18 +10,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
-import cz.jiripinkas.jba.entity.Blog;
 import cz.jiripinkas.jba.entity.Item;
 
 public interface ItemRepository extends JpaRepository<Item, Integer> {
-
-	List<Item> findByBlog(Blog blog, Pageable pageable);
-
-	List<Item> findByBlogAndLink(Blog blog, String link);
-
-	List<Item> findByBlogAndTitleIgnoreCase(Blog blog, String title);
-
-	List<Item> findByTitleIgnoreCase(String title);
 
 	@Query("select i.id from Item i where i.link = ?1 and i.blog.id = ?2")
 	Integer findItemIdByLinkAndBlogId(String link, int blogId);
@@ -61,6 +52,12 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 
 	@Query("select i.clickCount from Item i where i.id = ?1")
 	int getClickCount(int id);
+
+	@Query("select i.link from Item i")
+	List<String> findAllLinks();
+
+	@Query("select lower(i.title) from Item i")
+	List<String> findAllLowercaseTitles();
 
 
 }

@@ -1,7 +1,9 @@
 package cz.jiripinkas.jba.service.scheduled;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -43,8 +45,18 @@ public class ScheduledTasksService {
 		// next blogs with aggregator = false 
 		// and last blogs with aggregator = true
 		List<Blog> blogs = blogRepository.findAll(new Sort(Direction.ASC, "aggregator"));
+		List<String> allLinks = itemRepository.findAllLinks();
+		List<String> allLowercaseTitles = itemRepository.findAllLowercaseTitles();
+		Map<String, Object> allLinksMap = new HashMap<String, Object>();
+		for (String link : allLinks) {
+			allLinksMap.put(link, null);
+		}
+		Map<String, Object> allLowercaseTitlesMap = new HashMap<String, Object>();
+		for (String title : allLowercaseTitles) {
+			allLowercaseTitlesMap.put(title, null);
+		}
 		for (Blog blog : blogs) {
-			blogService.saveItems(blog);
+			blogService.saveItems(blog, allLinksMap, allLowercaseTitlesMap);
 		}
 		blogService.setLastIndexedDateFinish(new Date());
 	}

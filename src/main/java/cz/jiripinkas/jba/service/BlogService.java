@@ -2,7 +2,9 @@ package cz.jiripinkas.jba.service;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,10 +49,10 @@ public class BlogService {
 
 	private Date lastIndexedDateFinish;
 
-	public void saveItems(Blog blog) {
+	public void saveItems(Blog blog, Map<String, Object> allLinksMap, Map<String, Object> allLowercaseTitlesMap) {
 		StringBuilder errors = new StringBuilder();
 		try {
-			List<Item> items = rssService.getItems(blog.getUrl(), blog.getId());
+			List<Item> items = rssService.getItems(blog.getUrl(), blog.getId(), allLinksMap);
 			for (Item item : items) {
 				if (item.getError() != null) {
 					errors.append(item.getError());
@@ -60,18 +62,16 @@ public class BlogService {
 				if (!itemService.isTooOld(item.getPublishedDate())) {
 					// search for duplicities in the database
 					boolean duplicate = false;
-					if (!itemRepository.findByBlogAndLink(blog, item.getLink()).isEmpty()) {
+					if(allLinksMap.containsKey(item.getLink())) {
 						duplicate = true;
 					}
-					if (!itemRepository.findByBlogAndTitleIgnoreCase(blog, item.getTitle()).isEmpty()) {
-						duplicate = true;
-					}
-					if (Boolean.TRUE.equals(blog.getAggregator()) && !itemRepository.findByTitleIgnoreCase(item.getTitle()).isEmpty()) {
+					if (Boolean.TRUE.equals(blog.getAggregator()) && allLowercaseTitlesMap.containsKey(item.getTitle().toLowerCase())) {
 						duplicate = true;
 					}
 					if (!duplicate) {
 						item.setBlog(blog);
 						itemRepository.save(item);
+						allLinksMap.put(item.getLink(), null);
 					}
 				}
 			}
@@ -101,7 +101,7 @@ public class BlogService {
 		blog.setUser(user);
 		blog.setShortName(MyUtil.generatePermalink(blog.getShortName()));
 		blogRepository.save(blog);
-		saveItems(blog);
+		saveItems(blog, new HashMap<String, Object>(), new HashMap<String, Object>());
 	}
 
 	@Transactional
