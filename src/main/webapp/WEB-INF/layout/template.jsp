@@ -76,6 +76,10 @@ ${configuration.googleAnalytics}
               	</li>
               </security:authorize>
               <li class="${current == 'blogs' ? 'active' : ''}"><a href="<spring:url value="/blogs.html" />">Blogs</a></li>
+              <security:authorize access="hasRole('ROLE_ADMIN')">
+	              <li class="${current == 'custom-blog' ? 'active' : ''}"><a href="<spring:url value="/custom-blog.html" />">Custom blog list</a></li>
+	              <li class="${current == 'custom-blog' ? 'active' : ''}"><a href="<spring:url value="/custom-blog/add.html" />">Add custom blog</a></li>
+              </security:authorize>
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <security:authorize access="! isAuthenticated()">

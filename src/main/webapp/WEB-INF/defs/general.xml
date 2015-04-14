@@ -79,4 +79,22 @@
 		<put-attribute name="current" value="configuration" />
 	</definition>
 
+	<definition name="custom-blog-form" extends="common">
+		<put-attribute name="title" value="Custom blog form" />
+		<put-attribute name="body" value="/WEB-INF/jsp/custom-blog-form.jsp" />
+		<put-attribute name="current" value="custom-blog" />
+	</definition>
+
+	<definition name="custom-blog-detail" extends="common">
+		<put-attribute name="title" value="Custom blog detail" />
+		<put-attribute name="body" value="/WEB-INF/jsp/custom-blog-detail.jsp" />
+		<put-attribute name="current" value="custom-blog" />
+	</definition>
+
+	<definition name="custom-blog-list" extends="common">
+		<put-attribute name="title" value="Custom blog list" />
+		<put-attribute name="body" value="/WEB-INF/jsp/custom-blog-list.jsp" />
+		<put-attribute name="current" value="custom-blog" />
+	</definition>
+
 </tiles-definitions>

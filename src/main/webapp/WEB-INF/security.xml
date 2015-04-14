@@ -9,6 +9,7 @@
 	<global-method-security pre-post-annotations="enabled" />
 
 	<http use-expressions="true">
+		<intercept-url pattern="/blog/add**" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/users**" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/users/**" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/admin-detail**" access="hasRole('ROLE_ADMIN')" />
