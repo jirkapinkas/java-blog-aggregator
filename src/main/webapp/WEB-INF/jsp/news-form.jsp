@@ -3,13 +3,13 @@
 
 <%@ include file="../layout/taglib.jsp"%>
 
-<h2>Custom blog item:</h2>
+<h2>News:</h2>
 
 <c:if test="${success eq true}">
 	<div class="alert alert-success">Saved!</div>
 </c:if>
 
-<form:form commandName="customBlog" cssClass="form-horizontal blogForm">
+<form:form commandName="newsItem" cssClass="form-horizontal blogForm">
 		<form:hidden path="id" />
 		<div class="form-group">
 			<label for="title" class="col-sm-2 control-label">Title:</label>
@@ -18,7 +18,7 @@
 				<form:errors path="title" />
 			</div>
 		</div>
-		<c:if test="${customBlog.id != null}">
+		<c:if test="${newsItem.id != null}">
 			<div class="form-group">
 				<label for="shortName" class="col-sm-2 control-label">Short name:</label>
 				<div class="col-sm-10">

@@ -10,8 +10,8 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "custom_blog")
-public class CustomBlog {
+@Table(name = "news_item")
+public class NewsItem {
 
 	@Id
 	@GeneratedValue

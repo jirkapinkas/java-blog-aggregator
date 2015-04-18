@@ -36,6 +36,39 @@ public class Configuration {
 	@Column(name = "top_heading")
 	private String topHeading;
 
+	@Column(name = "channel_title")
+	private String channelTitle;
+
+	@Column(name = "channel_link")
+	private String channelLink;
+
+	@Column(name = "channel_description")
+	private String channelDescription;
+
+	public String getChannelTitle() {
+		return channelTitle;
+	}
+
+	public void setChannelTitle(String channelTitle) {
+		this.channelTitle = channelTitle;
+	}
+
+	public String getChannelLink() {
+		return channelLink;
+	}
+
+	public void setChannelLink(String channelLink) {
+		this.channelLink = channelLink;
+	}
+
+	public String getChannelDescription() {
+		return channelDescription;
+	}
+
+	public void setChannelDescription(String channelDescription) {
+		this.channelDescription = channelDescription;
+	}
+
 	@Lob
 	@Column(length = Integer.MAX_VALUE)
 	private byte[] icon;

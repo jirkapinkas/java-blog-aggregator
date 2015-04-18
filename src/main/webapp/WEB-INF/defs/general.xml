@@ -79,22 +79,22 @@
 		<put-attribute name="current" value="configuration" />
 	</definition>
 
-	<definition name="custom-blog-form" extends="common">
-		<put-attribute name="title" value="Custom blog form" />
-		<put-attribute name="body" value="/WEB-INF/jsp/custom-blog-form.jsp" />
-		<put-attribute name="current" value="custom-blog" />
+	<definition name="news-form" extends="common">
+		<put-attribute name="title" value="News form" />
+		<put-attribute name="body" value="/WEB-INF/jsp/news-form.jsp" />
+		<put-attribute name="current" value="news-form" />
 	</definition>
 
-	<definition name="custom-blog-detail" extends="common">
-		<put-attribute name="title" value="Custom blog detail" />
-		<put-attribute name="body" value="/WEB-INF/jsp/custom-blog-detail.jsp" />
-		<put-attribute name="current" value="custom-blog" />
+	<definition name="news-detail" extends="common">
+		<put-attribute name="title" value="News detail" />
+		<put-attribute name="body" value="/WEB-INF/jsp/news-detail.jsp" />
+		<put-attribute name="current" value="news" />
 	</definition>
 
-	<definition name="custom-blog-list" extends="common">
-		<put-attribute name="title" value="Custom blog list" />
-		<put-attribute name="body" value="/WEB-INF/jsp/custom-blog-list.jsp" />
-		<put-attribute name="current" value="custom-blog" />
+	<definition name="news-list" extends="common">
+		<put-attribute name="title" value="News list" />
+		<put-attribute name="body" value="/WEB-INF/jsp/news-list.jsp" />
+		<put-attribute name="current" value="news" />
 	</definition>
 
 </tiles-definitions>

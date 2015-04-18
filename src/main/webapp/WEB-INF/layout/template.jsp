@@ -27,6 +27,8 @@
 
 <title>${configuration.title}: <tiles:getAsString name="title" /></title>
 
+<link rel="alternate" type="application/rss+xml" title="News feed" href="<spring:url value='/news/feed.xml' />" />
+
 </head>
 <body>
 
@@ -46,7 +48,7 @@ ${configuration.googleAnalytics}
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" style="padding:10px" href="<spring:url value="/" />">
+            <a class="navbar-brand" style="padding:10px" href="<spring:url value='/' />">
             	<img src="<spring:url value="/spring/icon" />" alt="logo" />
             	${configuration.brandName}
             </a>
@@ -72,14 +74,12 @@ ${configuration.googleAnalytics}
 	              	<li class="${current == 'configuration' ? 'active' : ''}"><a href="<spring:url value="/configuration.html" />">Configuration</a></li>
 	              	<li class="${current == 'admin-detail' ? 'active' : ''}"><a href="<spring:url value="/admin-detail.html" />">Admin detail</a></li>
 	              	<li class="${current == 'admin-categories' ? 'active' : ''}"><a href="<spring:url value="/admin-categories.html" />">Categories</a></li>
+	                <li class="${current == 'news-form' ? 'active' : ''}"><a href="<spring:url value="/admin-news/add.html" />">Add news</a></li>
               	  </ul>
               	</li>
               </security:authorize>
               <li class="${current == 'blogs' ? 'active' : ''}"><a href="<spring:url value="/blogs.html" />">Blogs</a></li>
-              <security:authorize access="hasRole('ROLE_ADMIN')">
-	              <li class="${current == 'custom-blog' ? 'active' : ''}"><a href="<spring:url value="/custom-blog.html" />">Custom blog list</a></li>
-	              <li class="${current == 'custom-blog' ? 'active' : ''}"><a href="<spring:url value="/custom-blog/add.html" />">Add custom blog</a></li>
-              </security:authorize>
+	          <li class="${current == 'news' ? 'active' : ''}"><a href="<spring:url value="/news.html" />">News</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <security:authorize access="! isAuthenticated()">

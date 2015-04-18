@@ -39,6 +39,7 @@ public class ConfigurationService {
 		Configuration managedConfiguration = find();
 		if (managedConfiguration != null) {
 			newConfiguration.setId(managedConfiguration.getId());
+			newConfiguration.setIcon(managedConfiguration.getIcon());
 		}
 		configurationRepository.save(newConfiguration);
 	}
