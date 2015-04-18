@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import cz.jiripinkas.jba.entity.Configuration;
 import cz.jiripinkas.jba.entity.NewsItem;
@@ -44,6 +45,7 @@ public class NewsService {
 		return newsItemRepository.findAll(new PageRequest(page, PAGE_SIZE, Direction.DESC, "publishedDate"));
 	}
 
+	@Transactional
 	public NewsItem findOne(String shortName) {
 		return newsItemRepository.findByShortName(shortName);
 	}
