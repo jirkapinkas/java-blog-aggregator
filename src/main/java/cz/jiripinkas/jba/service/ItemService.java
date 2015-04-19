@@ -49,7 +49,7 @@ public class ItemService {
 			orderByProperty = "publishedDate";
 			break;
 		case MOST_VIEWED:
-			orderByProperty = "(i.clickCount / 5) + i.likeCount + i.twitterRetweetCount + i.facebookShareCount + i.linkedinShareCount";
+			orderByProperty = "(i.clickCount / 5) + i.likeCount + log(i.twitterRetweetCount + 1) + log(i.facebookShareCount + 1) + log(i.linkedinShareCount + 1)";
 			break;
 		}
 
@@ -101,8 +101,9 @@ public class ItemService {
 	private int calculateLikeCount(int likeCount, int clickCount, Item item) {
 		int socialLikes = 0;
 		if(item != null) {
-			socialLikes = item.getFacebookShareCount() + item.getTwitterRetweetCount() + item.getLinkedinShareCount();
+			socialLikes = (int) (Math.log(item.getFacebookShareCount() + 1) + Math.log(item.getTwitterRetweetCount() + 1) + Math.log(item.getLinkedinShareCount() + 1));
 		}
+		System.out.println("social likes: " + socialLikes);
 		return likeCount + (int) (clickCount / 5) + socialLikes;
 	}
 

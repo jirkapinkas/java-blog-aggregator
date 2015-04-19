@@ -208,7 +208,7 @@ public class ScheduledTasksService {
 
 	@Autowired
 	private RestTemplate restTemplate;
-
+	
 	@Scheduled(fixedDelay = 60 * 60 * 1000)
 	public void retrieveSocialShareCount() {
 		System.out.println("retrieve social share count start");
@@ -216,15 +216,14 @@ public class ScheduledTasksService {
 		int page = 0;
 		int retrievedItems = 0;
 		do {
-			// TODO change from month to week
-			List<ItemDto> dtoItems = itemService.getDtoItems(page++, false, OrderType.LATEST, MaxType.MONTH, allCategories);
+			List<ItemDto> dtoItems = itemService.getDtoItems(page++, false, OrderType.LATEST, MaxType.WEEK, allCategories);
 			retrievedItems = dtoItems.size();
 			for (ItemDto itemDto : dtoItems) {
 				try {
 					TwitterRetweetJson twitterRetweetJson = restTemplate.getForObject("https://cdn.api.twitter.com/1/urls/count.json?url=" + itemDto.getLink(), TwitterRetweetJson.class);
 					if (twitterRetweetJson.getCount() != itemDto.getTwitterRetweetCount()) {
 						itemRepository.setTwitterRetweetCount(itemDto.getId(), twitterRetweetJson.getCount());
-						System.out.println("URL: " + itemDto.getLink() + " has twitter retweet count: " + twitterRetweetJson.getCount());
+//						System.out.println("URL: " + itemDto.getLink() + " has twitter retweet count: " + twitterRetweetJson.getCount());
 					}
 				} catch (Exception ex) {
 					ex.printStackTrace();
@@ -233,7 +232,7 @@ public class ScheduledTasksService {
 					FacebookShareJson facebookShareJson = restTemplate.getForObject("http://graph.facebook.com/?id=" + itemDto.getLink(), FacebookShareJson.class);
 					if (facebookShareJson.getShares() != itemDto.getFacebookShareCount()) {
 						itemRepository.setFacebookShareCount(itemDto.getId(), facebookShareJson.getShares());
-						System.out.println("URL: " + itemDto.getLink() + " has facebook retweet count: " + facebookShareJson.getShares());
+//						System.out.println("URL: " + itemDto.getLink() + " has facebook retweet count: " + facebookShareJson.getShares());
 					}
 				} catch (Exception ex) {
 					ex.printStackTrace();
@@ -242,7 +241,7 @@ public class ScheduledTasksService {
 					LinkedinShareJson linkedinShareJson = restTemplate.getForObject("https://www.linkedin.com/countserv/count/share?format=json&url=" + itemDto.getLink(), LinkedinShareJson.class);
 					if (linkedinShareJson.getCount() != itemDto.getLinkedinShareCount()) {
 						itemRepository.setLinkedinShareCount(itemDto.getId(), linkedinShareJson.getCount());
-						System.out.println("URL: " + itemDto.getLink() + " has linkedin retweet count: " + linkedinShareJson.getCount());
+//						System.out.println("URL: " + itemDto.getLink() + " has linkedin retweet count: " + linkedinShareJson.getCount());
 					}
 				} catch (Exception ex) {
 					ex.printStackTrace();
