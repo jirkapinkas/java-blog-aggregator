@@ -103,7 +103,6 @@ public class ItemService {
 		if(item != null) {
 			socialLikes = (int) (Math.log(item.getFacebookShareCount() + 1) + Math.log(item.getTwitterRetweetCount() + 1) + Math.log(item.getLinkedinShareCount() + 1));
 		}
-		System.out.println("social likes: " + socialLikes);
 		return likeCount + (int) (clickCount / 5) + socialLikes;
 	}
 
