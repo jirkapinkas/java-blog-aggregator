@@ -50,13 +50,13 @@ public class Item {
 	@Column(name = "dislike_count", nullable = false)
 	private Integer dislikeCount;
 
-	@Column(name = "twitter_retweet_count")
+	@Column(name = "twitter_retweet_count", nullable = false)
 	private Integer twitterRetweetCount;
 
-	@Column(name = "facebook_share_count")
+	@Column(name = "facebook_share_count", nullable = false)
 	private Integer facebookShareCount;
 
-	@Column(name = "linkedin_share_count")
+	@Column(name = "linkedin_share_count", nullable = false)
 	private Integer linkedinShareCount;
 
 	@Transient
