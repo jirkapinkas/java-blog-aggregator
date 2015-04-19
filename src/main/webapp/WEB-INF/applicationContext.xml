@@ -40,6 +40,8 @@
 
 	<bean class="org.dozer.DozerBeanMapper" />
 	
+	<bean class="org.springframework.web.client.RestTemplate" />
+	
 	<bean id="httpClient" class="org.apache.http.impl.client.HttpClients" factory-method="createDefault" destroy-method="close" />
 	
 	<beans profile="dev">

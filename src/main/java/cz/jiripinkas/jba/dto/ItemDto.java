@@ -24,6 +24,36 @@ public class ItemDto {
 
 	private int dislikeCount;
 
+	private int twitterRetweetCount;
+
+	private int facebookShareCount;
+
+	private int linkedinShareCount;
+
+	public int getTwitterRetweetCount() {
+		return twitterRetweetCount;
+	}
+
+	public void setTwitterRetweetCount(int twitterRetweetCount) {
+		this.twitterRetweetCount = twitterRetweetCount;
+	}
+
+	public int getFacebookShareCount() {
+		return facebookShareCount;
+	}
+
+	public void setFacebookShareCount(int facebookShareCount) {
+		this.facebookShareCount = facebookShareCount;
+	}
+
+	public int getLinkedinShareCount() {
+		return linkedinShareCount;
+	}
+
+	public void setLinkedinShareCount(int linkedinShareCount) {
+		this.linkedinShareCount = linkedinShareCount;
+	}
+
 	public int getLikeCount() {
 		return likeCount;
 	}

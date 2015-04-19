@@ -59,5 +59,20 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 	@Query("select lower(i.title) from Item i")
 	List<String> findAllLowercaseTitles();
 
+	@Transactional
+	@Modifying
+	@Query("update Item i set i.twitterRetweetCount = ?2 where i.id = ?1")
+	void setTwitterRetweetCount(int id, int count);
+
+	@Transactional
+	@Modifying
+	@Query("update Item i set i.facebookShareCount = ?2 where i.id = ?1")
+	void setFacebookShareCount(int id, int shares);
+
+	@Transactional
+	@Modifying
+	@Query("update Item i set i.linkedinShareCount = ?2 where i.id = ?1")
+	void setLinkedinShareCount(int id, int count);
+
 
 }

@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import cz.jiripinkas.jba.dto.ItemDto;
 import cz.jiripinkas.jba.entity.Blog;
@@ -26,6 +27,7 @@ import cz.jiripinkas.jba.entity.NewsItem;
 import cz.jiripinkas.jba.repository.BlogRepository;
 import cz.jiripinkas.jba.repository.ItemRepository;
 import cz.jiripinkas.jba.repository.NewsItemRepository;
+import cz.jiripinkas.jba.service.AllCategoriesService;
 import cz.jiripinkas.jba.service.BlogService;
 import cz.jiripinkas.jba.service.CategoryService;
 import cz.jiripinkas.jba.service.ConfigurationService;
@@ -60,6 +62,9 @@ public class ScheduledTasksService {
 
 	@Autowired
 	private CategoryService categoryService;
+
+	@Autowired
+	private AllCategoriesService allCategoriesService;
 
 	/**
 	 * For each blog retrieve latest items and store them into database.
@@ -157,6 +162,94 @@ public class ScheduledTasksService {
 			newsItem.setDescription(description);
 			newsService.save(newsItem);
 		}
+	}
+
+	private static class TwitterRetweetJson {
+
+		private int count;
+
+		public int getCount() {
+			return count;
+		}
+
+		@SuppressWarnings("unused")
+		public void setCount(int count) {
+			this.count = count;
+		}
+	}
+
+	private static class FacebookShareJson {
+
+		private int shares;
+
+		public int getShares() {
+			return shares;
+		}
+
+		@SuppressWarnings("unused")
+		public void setShares(int shares) {
+			this.shares = shares;
+		}
+	}
+
+	private static class LinkedinShareJson {
+
+		private int count;
+
+		public int getCount() {
+			return count;
+		}
+
+		@SuppressWarnings("unused")
+		public void setCount(int count) {
+			this.count = count;
+		}
+	}
+
+	@Autowired
+	private RestTemplate restTemplate;
+
+	@Scheduled(fixedDelay = 60 * 60 * 1000)
+	public void retrieveSocialShareCount() {
+		System.out.println("retrieve social share count start");
+		Integer[] allCategories = allCategoriesService.getAllCategoryIds();
+		int page = 0;
+		int retrievedItems = 0;
+		do {
+			// TODO change from month to week
+			List<ItemDto> dtoItems = itemService.getDtoItems(page++, false, OrderType.LATEST, MaxType.MONTH, allCategories);
+			retrievedItems = dtoItems.size();
+			for (ItemDto itemDto : dtoItems) {
+				try {
+					TwitterRetweetJson twitterRetweetJson = restTemplate.getForObject("https://cdn.api.twitter.com/1/urls/count.json?url=" + itemDto.getLink(), TwitterRetweetJson.class);
+					if (twitterRetweetJson.getCount() != itemDto.getTwitterRetweetCount()) {
+						itemRepository.setTwitterRetweetCount(itemDto.getId(), twitterRetweetJson.getCount());
+						System.out.println("URL: " + itemDto.getLink() + " has twitter retweet count: " + twitterRetweetJson.getCount());
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+				try {
+					FacebookShareJson facebookShareJson = restTemplate.getForObject("http://graph.facebook.com/?id=" + itemDto.getLink(), FacebookShareJson.class);
+					if (facebookShareJson.getShares() != itemDto.getFacebookShareCount()) {
+						itemRepository.setFacebookShareCount(itemDto.getId(), facebookShareJson.getShares());
+						System.out.println("URL: " + itemDto.getLink() + " has facebook retweet count: " + facebookShareJson.getShares());
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+				try {
+					LinkedinShareJson linkedinShareJson = restTemplate.getForObject("https://www.linkedin.com/countserv/count/share?format=json&url=" + itemDto.getLink(), LinkedinShareJson.class);
+					if (linkedinShareJson.getCount() != itemDto.getLinkedinShareCount()) {
+						itemRepository.setLinkedinShareCount(itemDto.getId(), linkedinShareJson.getCount());
+						System.out.println("URL: " + itemDto.getLink() + " has linkedin retweet count: " + linkedinShareJson.getCount());
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		} while (retrievedItems > 0);
+		System.out.println("retrieve social share count finish");
 	}
 
 }

@@ -62,7 +62,6 @@ ${configuration.googleAnalytics}
                 <ul class="dropdown-menu" role="menu">
 	              <li class="${current == 'top-views' && maxValue == 'week' ? 'active' : ''}"><a href='<spring:url value="/index.html?top-views&max=week" />'>Top this week</a></li>
 	              <li class="${current == 'top-views' && maxValue == 'month' ? 'active' : ''}"><a href='<spring:url value="/index.html?top-views&max=month" />'>Top this month</a></li>
-	              <li class="${current == 'top-views' && maxValue == null ? 'active' : ''}"><a href='<spring:url value="/index.html?top-views" />'>Top all time</a></li>
                 </ul>
               </li>
 

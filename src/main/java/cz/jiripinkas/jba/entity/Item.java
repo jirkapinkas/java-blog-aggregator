@@ -50,6 +50,15 @@ public class Item {
 	@Column(name = "dislike_count", nullable = false)
 	private Integer dislikeCount;
 
+	@Column(name = "twitter_retweet_count")
+	private Integer twitterRetweetCount;
+
+	@Column(name = "facebook_share_count")
+	private Integer facebookShareCount;
+
+	@Column(name = "linkedin_share_count")
+	private Integer linkedinShareCount;
+
 	@Transient
 	private String error;
 
@@ -58,6 +67,33 @@ public class Item {
 		setClickCount(0);
 		setLikeCount(0);
 		setDislikeCount(0);
+		setTwitterRetweetCount(0);
+		setFacebookShareCount(0);
+		setLinkedinShareCount(0);
+	}
+
+	public Integer getTwitterRetweetCount() {
+		return twitterRetweetCount;
+	}
+
+	public void setTwitterRetweetCount(Integer twitterRetweetCount) {
+		this.twitterRetweetCount = twitterRetweetCount;
+	}
+
+	public Integer getFacebookShareCount() {
+		return facebookShareCount;
+	}
+
+	public void setFacebookShareCount(Integer facebookShareCount) {
+		this.facebookShareCount = facebookShareCount;
+	}
+
+	public Integer getLinkedinShareCount() {
+		return linkedinShareCount;
+	}
+
+	public void setLinkedinShareCount(Integer linkedinShareCount) {
+		this.linkedinShareCount = linkedinShareCount;
 	}
 
 	public String getError() {
