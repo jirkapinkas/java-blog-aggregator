@@ -14,10 +14,7 @@
 	<h3>
 		<c:if test="${isAdmin}">
 			<a href="admin-news/edit/${news.shortName}.html" class="btn btn-small btn-primary">edit</a>
-			<form method="post" action="admin-news/delete" style="float: left; padding-left:5px">
-				<input type="hidden" name="id" value="${news.id}" />
-				<input type="submit" value="delete" class="btn btn-danger btn-small" />
-			</form>
+			<button onclick="removeNews(this)" id="${news.id}" class="btn btn-danger btn-small">delete</button>
 		</c:if>
 		<a href="news/${news.shortName}.html">${news.title}</a>
 	</h3>
@@ -31,3 +28,31 @@
 <c:if test="${currPage < (newsPage.totalPages - 1)}">
 	<a href="?page=${currPage + 1}">Older items</a>
 </c:if>
+
+<security:authorize access="${isAdmin}">
+<script type="text/javascript">
+function removeNews(e) {
+	var origin = $(e);
+    BootstrapDialog.show({
+        title: 'Really delete?',
+        message: 'Really delete?',
+        buttons: [{
+            label: 'Cancel',
+            action: function(dialog) {
+            	dialog.close();
+            }
+        }, {
+            label: 'Delete',
+            cssClass: 'btn-primary',
+            action: function(dialog) {
+            	var newsId = origin.attr("id");
+			$.post("admin-news/delete/" + newsId + ".html", function (data) {
+				location.reload(true); // reload page
+			});
+            	dialog.close();
+            }
+        }]
+    });
+}
+</script>
+</security:authorize>

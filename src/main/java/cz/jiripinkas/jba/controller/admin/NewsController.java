@@ -70,11 +70,11 @@ public class NewsController {
 		return "redirect:/admin-news/edit/" + newsItem.getShortName() + ".html";
 	}
 
-	@RequestMapping(value = "/admin-news/delete", method = RequestMethod.POST)
-	public String delete(@RequestParam int id, RedirectAttributes redirectAttributes) {
+	@RequestMapping(value = "/admin-news/delete/{id}", method = RequestMethod.POST)
+	public String delete(@PathVariable int id, RedirectAttributes redirectAttributes) {
 		newsService.delete(id);
 		redirectAttributes.addFlashAttribute("success", true);
-		return "redirect:/admin-news/add.html";
+		return "redirect:/news.html";
 	}
 
 }
