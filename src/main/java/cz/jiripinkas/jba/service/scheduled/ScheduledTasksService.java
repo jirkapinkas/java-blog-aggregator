@@ -126,7 +126,6 @@ public class ScheduledTasksService {
 	 */
 	@Scheduled(fixedDelay = 60 * 60 * 1000)
 	public void addWeeklyNews() throws ParseException {
-		System.out.println(">>>>>>>>>>>>>>>>> add weekly news <<<<<<<<<<<<<<<");
 		final int[] weekAndYear = getPreviousWeekAndYear(new Date());
 		final int week = weekAndYear[0];
 		final int year = weekAndYear[1];
@@ -149,7 +148,7 @@ public class ScheduledTasksService {
 					ItemDto itemDto = dtoItems.get(i);
 					description += "<li>";
 					description += "<a href='" + itemDto.getLink() + "' target='_blank'>";
-					description += itemDto.getTitle();
+					description += itemDto.getBlog().getName() + ": " + itemDto.getTitle();
 					description += "</a>";
 					description += "</li>";
 				}
