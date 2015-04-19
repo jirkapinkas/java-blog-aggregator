@@ -81,4 +81,8 @@ public class NewsService {
 		return rss;
 	}
 
+	public void delete(int id) {
+		newsItemRepository.delete(id);
+	}
+
 }

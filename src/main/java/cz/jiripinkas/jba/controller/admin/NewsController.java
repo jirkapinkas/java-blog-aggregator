@@ -34,7 +34,7 @@ public class NewsController {
 
 	@RequestMapping("/news")
 	public String showBlogs(Model model, @RequestParam(defaultValue = "0") int page) {
-		model.addAttribute("blogs", newsService.findBlogs(page));
+		model.addAttribute("newsPage", newsService.findBlogs(page));
 		model.addAttribute("currPage", page);
 		return "news-list";
 	}
@@ -68,6 +68,13 @@ public class NewsController {
 		newsService.save(newsItem);
 		redirectAttributes.addFlashAttribute("success", true);
 		return "redirect:/admin-news/edit/" + newsItem.getShortName() + ".html";
+	}
+
+	@RequestMapping(value = "/admin-news/delete", method = RequestMethod.POST)
+	public String delete(@RequestParam int id, RedirectAttributes redirectAttributes) {
+		newsService.delete(id);
+		redirectAttributes.addFlashAttribute("success", true);
+		return "redirect:/admin-news/add.html";
 	}
 
 }

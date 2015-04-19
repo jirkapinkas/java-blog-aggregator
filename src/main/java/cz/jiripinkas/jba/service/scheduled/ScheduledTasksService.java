@@ -126,6 +126,7 @@ public class ScheduledTasksService {
 	 */
 	@Scheduled(fixedDelay = 60 * 60 * 1000)
 	public void addWeeklyNews() throws ParseException {
+		System.out.println(">>>>>>>>>>>>>>>>> add weekly news <<<<<<<<<<<<<<<");
 		final int[] weekAndYear = getPreviousWeekAndYear(new Date());
 		final int week = weekAndYear[0];
 		final int year = weekAndYear[1];
@@ -133,9 +134,9 @@ public class ScheduledTasksService {
 		NewsItem newsItem = newsItemRepository.findByShortName(currentWeekShortTitle);
 		if (newsItem == null) {
 			newsItem = new NewsItem();
-			newsItem.setTitle("Top Java Blogs Weekly " + week);
-			newsItem.setShortName(currentWeekShortTitle);
 			Configuration configuration = configurationService.find();
+			newsItem.setTitle(configuration.getChannelTitle() + " Weekly: Best of " + week + "/" + year);
+			newsItem.setShortName(currentWeekShortTitle);
 			newsItem.setShortDescription("Best of " + configuration.getChannelTitle() + ", year " + year + ", week " + week);
 			String description = "<p>" + configuration.getChannelTitle() + " brings you interesting news every day.";
 			description += " Each week I select the best of:</p>";
