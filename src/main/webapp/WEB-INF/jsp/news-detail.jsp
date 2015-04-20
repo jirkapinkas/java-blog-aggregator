@@ -20,4 +20,5 @@
 ${blog.description}
 
 <br /><br />
-	
+
+${configuration.newsSocialButtons}

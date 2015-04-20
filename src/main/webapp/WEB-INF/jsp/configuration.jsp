@@ -72,23 +72,30 @@
 		</div>
 
 		<div class="form-group">
-			<label for="googleAnalytics" class="col-sm-2 control-label">Channel Title:</label>
+			<label for="channelTitle" class="col-sm-2 control-label">Channel Title:</label>
 			<div class="col-sm-10">
 				<form:input path="channelTitle" rows="5" cssClass="form-control" />
 			</div>
 		</div>
 
 		<div class="form-group">
-			<label for="googleAnalytics" class="col-sm-2 control-label">Channel Link (without trailing slash):</label>
+			<label for="channelLink" class="col-sm-2 control-label">Channel Link (without trailing slash):</label>
 			<div class="col-sm-10">
 				<form:input path="channelLink" cssClass="form-control" />
 			</div>
 		</div>
 
 		<div class="form-group">
-			<label for="googleAnalytics" class="col-sm-2 control-label">Channel description:</label>
+			<label for="channelDescription" class="col-sm-2 control-label">Channel description:</label>
 			<div class="col-sm-10">
 				<form:textarea path="channelDescription" rows="5" cssClass="form-control" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="newsSocialButtons" class="col-sm-2 control-label">News social button:</label>
+			<div class="col-sm-10">
+				<form:textarea path="newsSocialButtons" rows="5" cssClass="form-control" />
 			</div>
 		</div>
 

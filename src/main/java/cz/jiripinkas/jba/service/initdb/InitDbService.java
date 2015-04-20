@@ -161,6 +161,11 @@ public class InitDbService {
 					"(adsbygoogle = window.adsbygoogle || []).push({});\n" + 
 					"</script>\n"
 					);
+			configuration.setNewsSocialButtons(
+					"<script>\n" +
+					"document.write('<script src=\"//sharebutton.net/plugin/sharebutton.php?type=vertical&u=' + encodeURIComponent(document.location.href) + '\"></scr' + 'ipt>');\n" +
+					"</script>\n"
+					);
 			configurationService.save(configuration);
 		}
 	}

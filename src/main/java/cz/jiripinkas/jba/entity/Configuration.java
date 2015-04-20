@@ -45,6 +45,18 @@ public class Configuration {
 	@Column(name = "channel_description")
 	private String channelDescription;
 
+	@Column(name = "news_social_buttons", length = Integer.MAX_VALUE)
+	@Lob
+	private String newsSocialButtons;
+
+	public String getNewsSocialButtons() {
+		return newsSocialButtons;
+	}
+
+	public void setNewsSocialButtons(String newsSocialButtons) {
+		this.newsSocialButtons = newsSocialButtons;
+	}
+
 	public String getChannelTitle() {
 		return channelTitle;
 	}
