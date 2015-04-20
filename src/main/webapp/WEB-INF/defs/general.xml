@@ -86,7 +86,7 @@
 	</definition>
 
 	<definition name="news-detail" extends="common">
-		<put-attribute name="title" value="News detail" />
+		<put-attribute name="title" expression="${news.title}" />
 		<put-attribute name="body" value="/WEB-INF/jsp/news-detail.jsp" />
 		<put-attribute name="current" value="news" />
 	</definition>

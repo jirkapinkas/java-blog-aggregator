@@ -25,7 +25,7 @@
 
 <link rel="icon" href="<spring:url value="/favicon.ico" />" />
 
-<title>${configuration.title}: <tiles:getAsString name="title" /></title>
+<title>${configuration.title}: <tiles:insertAttribute name="title" /></title>
 
 <link rel="alternate" type="application/rss+xml" title="News feed" href="<spring:url value='/news/feed.xml' />" />
 

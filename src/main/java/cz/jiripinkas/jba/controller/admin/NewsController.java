@@ -41,7 +41,7 @@ public class NewsController {
 
 	@RequestMapping("/news/{shortName}")
 	public String showDetail(Model model, @PathVariable String shortName) {
-		model.addAttribute("blog", newsService.findOne(shortName));
+		model.addAttribute("news", newsService.findOne(shortName));
 		return "news-detail";
 	}
 
