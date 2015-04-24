@@ -147,7 +147,7 @@ public class ItemService {
 	private int like(int itemId, int amount) {
 		itemRepository.changeLike(itemId, amount);
 		Map<String, Integer> likeAndClickCount = itemRepository.getLikeAndClickCount(itemId);
-		return calculateLikeCount(likeAndClickCount.get("like"), likeAndClickCount.get("click"), null);
+		return calculateLikeCount(likeAndClickCount.get("like"), likeAndClickCount.get("click"), itemRepository.findOne(itemId));
 	}
 
 	@Transactional
