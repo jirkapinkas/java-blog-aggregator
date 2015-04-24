@@ -146,18 +146,25 @@ public class ScheduledTasksService {
 			description += " Each week I select the best of:</p>";
 			List<Category> categories = categoryService.findAll();
 			for (Category category : categories) {
+				description += "<table class='table'>";
+				description += "<tr>";
+				description += "<td>";
 				description += "<h4>" + category.getName() + "</h4>";
-				description += "<ul>";
+				description += "</td>";
+				description += "</tr>";
 				List<ItemDto> dtoItems = itemService.getDtoItems(0, false, OrderType.MOST_VIEWED, MaxType.WEEK, new Integer[] { category.getId() });
 				for (int i = 0; i < dtoItems.size() && i < 5; i++) {
 					ItemDto itemDto = dtoItems.get(i);
-					description += "<li>";
+					description += "<tr>";
+					description += "<td>";
 					description += "<a href='" + itemDto.getLink() + "' target='_blank'>";
-					description += itemDto.getBlog().getName() + ": " + itemDto.getTitle();
+					description += "<img src='/spring/icon/" + itemDto.getBlog().getId() + "' style='float:left;padding-right:5px;height:30px' />";
+					description += itemDto.getTitle();
 					description += "</a>";
-					description += "</li>";
+					description += "</td>";
+					description += "</tr>";
 				}
-				description += "</ul>";
+				description += "</table>";
 			}
 			newsItem.setDescription(description);
 			newsService.save(newsItem);
