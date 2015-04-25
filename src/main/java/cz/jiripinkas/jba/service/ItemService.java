@@ -49,7 +49,7 @@ public class ItemService {
 			orderByProperty = "publishedDate";
 			break;
 		case MOST_VIEWED:
-			orderByProperty = "(i.clickCount / 5) + i.likeCount + log(i.twitterRetweetCount + 1) + log(i.facebookShareCount + 1) + log(i.linkedinShareCount + 1)";
+			orderByProperty = "log(i.clickCount + 1) + i.likeCount + log(i.twitterRetweetCount + 1) + log(i.facebookShareCount + 1) + log(i.linkedinShareCount + 1)";
 			break;
 		}
 
@@ -101,9 +101,9 @@ public class ItemService {
 	private int calculateLikeCount(int likeCount, int clickCount, Item item) {
 		int socialLikes = 0;
 		if(item != null) {
-			socialLikes = (int) (Math.log(item.getFacebookShareCount() + 1) + Math.log(item.getTwitterRetweetCount() + 1) + Math.log(item.getLinkedinShareCount() + 1));
+			socialLikes = (int) (Math.log10(item.getFacebookShareCount() + 1) + Math.log10(item.getTwitterRetweetCount() + 1) + Math.log10(item.getLinkedinShareCount() + 1));
 		}
-		return likeCount + (int) (clickCount / 5) + socialLikes;
+		return likeCount + (int) (Math.log10(clickCount + 1)) + socialLikes;
 	}
 
 	public boolean isTooOld(Date date) {
