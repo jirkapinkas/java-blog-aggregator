@@ -34,9 +34,6 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 	@Query("update Item i set i.likeCount = i.likeCount + ?2 where i.id = ?1")
 	void changeLike(int id, int amount);
 
-	@Query("select new map(i.likeCount as like, i.clickCount as click) from Item i where i.id = ?1")
-	Map<String, Integer> getLikeAndClickCount(int id);
-
 	@Transactional
 	@Modifying
 	@Query("update Item i set i.dislikeCount = i.dislikeCount + ?2 where i.id = ?1")
