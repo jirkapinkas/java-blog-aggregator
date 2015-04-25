@@ -8,7 +8,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Map;
 
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +48,7 @@ public class ItemService {
 			orderByProperty = "publishedDate";
 			break;
 		case MOST_VIEWED:
-			orderByProperty = "(log(i.clickCount + 1) * 10) + (i.likeCount * 10) + (log(i.twitterRetweetCount + 1) * 10) + (log(i.facebookShareCount + 1) * 10) + (log(i.linkedinShareCount + 1) * 10)";
+			orderByProperty = "i.likeCount + ((log(i.clickCount + 1) * 10) + (log(i.twitterRetweetCount + 1) * 10) + (log(i.facebookShareCount + 1) * 10) + (log(i.linkedinShareCount + 1) * 10))";
 			break;
 		}
 
@@ -79,8 +78,8 @@ public class ItemService {
 		ArrayList<ItemDto> result = new ArrayList<ItemDto>();
 
 		List<Item> items = null;
-		
-		if(selectedCategories.length == 0) {
+
+		if (selectedCategories.length == 0) {
 			return result;
 		}
 
@@ -92,18 +91,15 @@ public class ItemService {
 		for (Item item : items) {
 			ItemDto itemDto = mapper.map(item, ItemDto.class);
 			// calculate like count
-			itemDto.setLikeCount(calculateLikeCount(itemDto.getLikeCount(), itemDto.getClickCount(), item));
+			itemDto.setLikeCount(calculateLikeCount(item));
 			result.add(itemDto);
 		}
 		return result;
 	}
 
-	private int calculateLikeCount(int likeCount, int clickCount, Item item) {
-		double socialLikes = 0;
-		if(item != null) {
-			socialLikes = (Math.log(item.getFacebookShareCount() + 1) * 10) + (Math.log(item.getTwitterRetweetCount() + 1) * 10) + (Math.log(item.getLinkedinShareCount() + 1) * 10);
-		}
-		return (int) (likeCount + ((Math.log(clickCount + 1)) * 10) + socialLikes);
+	private int calculateLikeCount(Item item) {
+		return (int) (item.getLikeCount() + ((Math.log10(item.getClickCount() + 1)) * 10) + (Math.log10(item.getFacebookShareCount() + 1) * 10) + (Math.log10(item.getTwitterRetweetCount() + 1) * 10) + (Math
+				.log10(item.getLinkedinShareCount() + 1) * 10));
 	}
 
 	public boolean isTooOld(Date date) {
@@ -146,8 +142,7 @@ public class ItemService {
 
 	private int like(int itemId, int amount) {
 		itemRepository.changeLike(itemId, amount);
-		Map<String, Integer> likeAndClickCount = itemRepository.getLikeAndClickCount(itemId);
-		return calculateLikeCount(likeAndClickCount.get("like"), likeAndClickCount.get("click"), itemRepository.findOne(itemId));
+		return calculateLikeCount(itemRepository.findOne(itemId));
 	}
 
 	@Transactional
@@ -172,7 +167,7 @@ public class ItemService {
 		items = itemRepository.findBlogPageEnabled(blogShortName, new PageRequest(page, 10, Direction.DESC, "publishedDate"));
 		for (Item item : items) {
 			ItemDto itemDto = mapper.map(item, ItemDto.class);
-			itemDto.setLikeCount(calculateLikeCount(itemDto.getLikeCount(), itemDto.getClickCount(), item));
+			itemDto.setLikeCount(calculateLikeCount(item));
 			result.add(itemDto);
 		}
 		return result;
