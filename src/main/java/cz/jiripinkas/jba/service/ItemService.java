@@ -101,9 +101,9 @@ public class ItemService {
 	private int calculateLikeCount(int likeCount, int clickCount, Item item) {
 		double socialLikes = 0;
 		if(item != null) {
-			socialLikes = (Math.log10(item.getFacebookShareCount() + 1) * 10) + (Math.log10(item.getTwitterRetweetCount() + 1) * 10) + (Math.log10(item.getLinkedinShareCount() + 1) * 10);
+			socialLikes = (Math.log(item.getFacebookShareCount() + 1) * 10) + (Math.log(item.getTwitterRetweetCount() + 1) * 10) + (Math.log(item.getLinkedinShareCount() + 1) * 10);
 		}
-		return (int) (likeCount + ((Math.log10(clickCount + 1)) * 10) + socialLikes);
+		return (int) (likeCount + ((Math.log(clickCount + 1)) * 10) + socialLikes);
 	}
 
 	public boolean isTooOld(Date date) {
