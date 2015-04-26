@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import cz.jiripinkas.jba.dto.ItemDto;
@@ -129,6 +130,7 @@ public class ScheduledTasksService {
 	/**
 	 * Generate best of weekly news
 	 */
+	@Transactional
 	@Scheduled(fixedDelay = 60 * 60 * 1000, initialDelay = 2000)
 	public void addWeeklyNews() throws ParseException {
 		final int[] weekAndYear = getPreviousWeekAndYear(new Date());
@@ -230,9 +232,6 @@ public class ScheduledTasksService {
 					TwitterRetweetJson twitterRetweetJson = restTemplate.getForObject("https://cdn.api.twitter.com/1/urls/count.json?url=" + itemDto.getLink(), TwitterRetweetJson.class);
 					if (twitterRetweetJson.getCount() != itemDto.getTwitterRetweetCount()) {
 						itemRepository.setTwitterRetweetCount(itemDto.getId(), twitterRetweetJson.getCount());
-						// System.out.println("URL: " + itemDto.getLink() +
-						// " has twitter retweet count: " +
-						// twitterRetweetJson.getCount());
 					}
 				} catch (Exception ex) {
 					ex.printStackTrace();
@@ -241,9 +240,6 @@ public class ScheduledTasksService {
 					FacebookShareJson facebookShareJson = restTemplate.getForObject("http://graph.facebook.com/?id=" + itemDto.getLink(), FacebookShareJson.class);
 					if (facebookShareJson.getShares() != itemDto.getFacebookShareCount()) {
 						itemRepository.setFacebookShareCount(itemDto.getId(), facebookShareJson.getShares());
-						// System.out.println("URL: " + itemDto.getLink() +
-						// " has facebook retweet count: " +
-						// facebookShareJson.getShares());
 					}
 				} catch (Exception ex) {
 					ex.printStackTrace();
@@ -252,9 +248,6 @@ public class ScheduledTasksService {
 					LinkedinShareJson linkedinShareJson = restTemplate.getForObject("https://www.linkedin.com/countserv/count/share?format=json&url=" + itemDto.getLink(), LinkedinShareJson.class);
 					if (linkedinShareJson.getCount() != itemDto.getLinkedinShareCount()) {
 						itemRepository.setLinkedinShareCount(itemDto.getId(), linkedinShareJson.getCount());
-						// System.out.println("URL: " + itemDto.getLink() +
-						// " has linkedin retweet count: " +
-						// linkedinShareJson.getCount());
 					}
 				} catch (Exception ex) {
 					ex.printStackTrace();
