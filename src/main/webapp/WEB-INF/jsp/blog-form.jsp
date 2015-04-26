@@ -52,12 +52,14 @@
 				<form:errors path="homepageUrl" />
 			</div>
 		</div>
-		<div class="form-group">
-			<label for="aggregator" class="col-sm-2 control-label">Blog aggregator:</label>
-			<div class="col-sm-10">
-				<form:checkbox path="aggregator" />
+		<security:authorize access="${isAdmin}">
+			<div class="form-group">
+				<label for="aggregator" class="col-sm-2 control-label">Blog aggregator:</label>
+				<div class="col-sm-10">
+					<form:checkbox path="aggregator" />
+				</div>
 			</div>
-		</div>
+		</security:authorize>
 
         <input type="submit" class="btn btn-primary" value="Save" />
 

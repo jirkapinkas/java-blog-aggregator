@@ -42,13 +42,6 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="url" class="col-sm-3 control-label">RSS&nbsp;/&nbsp;ATOM&nbsp;URL:</label>
-						<div class="col-sm-9">
-							<form:input path="url" cssClass="form-control" />
-							<form:errors path="url" />
-						</div>
-					</div>
-					<div class="form-group">
 						<label for="homepageUrl" class="col-sm-3 control-label">Homepage&nbsp;URL:</label>
 						<div class="col-sm-9">
 							<form:input path="homepageUrl" cssClass="form-control" />
@@ -56,12 +49,20 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="aggregator" class="col-sm-3 control-label">Aggregator:</label>
+						<label for="url" class="col-sm-3 control-label">RSS&nbsp;/&nbsp;ATOM&nbsp;URL:</label>
 						<div class="col-sm-9">
-							<form:checkbox path="aggregator" />
+							<form:input path="url" cssClass="form-control" />
+							<form:errors path="url" />
 						</div>
 					</div>
-
+					<security:authorize access="${isAdmin}">
+						<div class="form-group">
+							<label for="aggregator" class="col-sm-3 control-label">Aggregator:</label>
+							<div class="col-sm-9">
+								<form:checkbox path="aggregator" />
+							</div>
+						</div>
+					</security:authorize>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
