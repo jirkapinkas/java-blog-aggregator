@@ -91,13 +91,13 @@ public class ItemService {
 		for (Item item : items) {
 			ItemDto itemDto = mapper.map(item, ItemDto.class);
 			// calculate like count
-			itemDto.setLikeCount(calculateLikeCount(item));
+			itemDto.setDisplayLikeCount(calculateDisplayLikeCount(item));
 			result.add(itemDto);
 		}
 		return result;
 	}
 
-	private int calculateLikeCount(Item item) {
+	private int calculateDisplayLikeCount(Item item) {
 		return (int) (item.getLikeCount() + ((Math.log10(item.getClickCount() + 1)) * 10) + (Math.log10(item.getFacebookShareCount() + 1) * 10) + (Math.log10(item.getTwitterRetweetCount() + 1) * 10) + (Math
 				.log10(item.getLinkedinShareCount() + 1) * 10));
 	}
@@ -142,7 +142,7 @@ public class ItemService {
 
 	private int like(int itemId, int amount) {
 		itemRepository.changeLike(itemId, amount);
-		return calculateLikeCount(itemRepository.findOne(itemId));
+		return calculateDisplayLikeCount(itemRepository.findOne(itemId));
 	}
 
 	@Transactional
@@ -167,7 +167,7 @@ public class ItemService {
 		items = itemRepository.findBlogPageEnabled(blogShortName, new PageRequest(page, 10, Direction.DESC, "publishedDate"));
 		for (Item item : items) {
 			ItemDto itemDto = mapper.map(item, ItemDto.class);
-			itemDto.setLikeCount(calculateLikeCount(item));
+			itemDto.setDisplayLikeCount(calculateDisplayLikeCount(item));
 			result.add(itemDto);
 		}
 		return result;

@@ -93,7 +93,7 @@
 								   title="like"></i>
 							</td>
 							<td style="padding:2px">
-								<span class="likeCount_${item.id}">${item.likeCount}</span>
+								<span class="likeCount_${item.id}">${item.displayLikeCount}</span>
 							</td>
 						</tr>
 						<tr>
@@ -132,7 +132,11 @@
 						<span class="label label-default"><c:out value="${item.blog.category.name}" /></span>
 					</c:if>
 					<security:authorize access="${isAdmin}">
-						<span class="label label-default">views: ${item.clickCount}</span>
+						<span class="label label-default"><i class='fa fa-eye'></i> ${item.clickCount}</span>
+						<span class="label label-default"><i class='fa fa-thumbs-up'></i> ${item.likeCount}</span>
+						<span class="label label-default"><i class='fa fa-twitter'></i> ${item.twitterRetweetCount}</span>
+						<span class="label label-default"><i class='fa fa-facebook'></i> ${item.facebookShareCount}</span>
+						<span class="label label-default"><i class='fa fa-linkedin'></i> ${item.linkedinShareCount}</span>
 						<a href="<spring:url value="/items/toggle-enabled/${item.id}.html" />" class="btn btn-primary btn-xs btnToggleEnabled" style="margin-left:5px" onclick="event.preventDefault();toggleEnabledItem(this);">
 							<c:choose>
 								<c:when test="${item.enabled}">
@@ -263,7 +267,7 @@
 				html += ' </td>';
 
 				html += ' <td style="padding:2px">';
-				html += ' <span class="likeCount_' + value.id + '">' + value.likeCount + '</span>';
+				html += ' <span class="likeCount_' + value.id + '">' + value.displayLikeCount + '</span>';
 				html += ' </td>';
 
 				html += ' </tr>';

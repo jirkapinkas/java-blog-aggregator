@@ -30,6 +30,16 @@ public class ItemDto {
 
 	private int linkedinShareCount;
 
+	private int displayLikeCount;
+
+	public void setDisplayLikeCount(int displayLikeCount) {
+		this.displayLikeCount = displayLikeCount;
+	}
+
+	public int getDisplayLikeCount() {
+		return displayLikeCount;
+	}
+
 	public int getTwitterRetweetCount() {
 		return twitterRetweetCount;
 	}
