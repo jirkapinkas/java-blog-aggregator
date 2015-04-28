@@ -99,6 +99,13 @@
 			</div>
 		</div>
 
+		<div class="form-group">
+			<label for="disqusCode" class="col-sm-2 control-label">Disqus code:</label>
+			<div class="col-sm-10">
+				<form:textarea path="disqusCode" rows="5" cssClass="form-control" />
+			</div>
+		</div>
+
         <input type="submit" class="btn btn-primary" value="Save" />
 
 </form:form>

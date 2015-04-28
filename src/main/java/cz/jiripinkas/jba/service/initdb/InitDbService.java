@@ -166,6 +166,18 @@ public class InitDbService {
 					"document.write('<script src=\"//sharebutton.net/plugin/sharebutton.php?type=vertical&u=' + encodeURIComponent(document.location.href) + '\"></scr' + 'ipt>');\n" +
 					"</script>\n"
 					);
+			configuration.setDisqusCode(
+					"<div id=\"disqus_thread\"></div>\n" + 
+					"<script type=\"text/javascript\">\n" + 
+					"    var disqus_shortname = 'topjavablogs';\n" + 
+					"    (function() {\n" + 
+					"        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;\n" + 
+					"        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';\n" + 
+					"        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);\n" + 
+					"    })();\n" + 
+					"</script>\n" + 
+					"<noscript>Please enable JavaScript to view the <a href=\"https://disqus.com/?ref_noscript\" rel=\"nofollow\">comments powered by Disqus.</a></noscript>\n" 
+					);
 			configurationService.save(configuration);
 		}
 	}

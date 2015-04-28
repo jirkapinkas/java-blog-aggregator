@@ -21,4 +21,6 @@ ${news.description}
 
 <br /><br />
 
+${configuration.disqusCode}
+
 ${configuration.newsSocialButtons}

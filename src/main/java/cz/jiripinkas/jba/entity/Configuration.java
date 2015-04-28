@@ -49,6 +49,18 @@ public class Configuration {
 	@Lob
 	private String newsSocialButtons;
 
+	@Column(name = "disqus_code", length = Integer.MAX_VALUE)
+	@Lob
+	private String disqusCode;
+
+	public void setDisqusCode(String disqusCode) {
+		this.disqusCode = disqusCode;
+	}
+
+	public String getDisqusCode() {
+		return disqusCode;
+	}
+
 	public String getNewsSocialButtons() {
 		return newsSocialButtons;
 	}
