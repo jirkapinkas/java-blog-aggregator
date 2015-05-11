@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd">
 
-   <bean class="java.net.URI" id="dbUrl">
-      <constructor-arg value="#{systemEnvironment['DATABASE_URL']}" />
-   </bean>
-
-   <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource">
-      <property name="jdbcUrl"
-         value="#{ 'jdbc:postgresql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() }" />
-      <property name="username" value="#{ @dbUrl.getUserInfo().split(':')[0] }" />
-      <property name="password" value="#{ @dbUrl.getUserInfo().split(':')[1] }" />
-      <property name="driverClassName" value="org.postgresql.Driver" />
-   </bean>
+   <jee:jndi-lookup id="dataSource" jndi-name="jdbc/PostgreSQLDS" expected-type="javax.sql.DataSource" />
 
 	<bean
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"

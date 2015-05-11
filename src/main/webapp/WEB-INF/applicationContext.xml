@@ -48,8 +48,12 @@
 		<import resource="database-dev.xml" />
 	</beans>
 
-	<beans profile="prod">
-		<import resource="database-prod.xml" />
+	<beans profile="heroku">
+		<import resource="database-heroku.xml" />
+	</beans>
+
+	<beans profile="openshift">
+		<import resource="database-openshift.xml" />
 	</beans>
 
 </beans>

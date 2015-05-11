@@ -4,11 +4,10 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-   <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource">
-      <property name="jdbcUrl" value="jdbc:hsqldb:mem:test;sql.syntax_pgs=true" />
-      <property name="username" value="sa" />
+   <bean id="dataSource" class="org.hsqldb.jdbc.JDBCDataSource">
+      <property name="url" value="jdbc:hsqldb:mem:test;sql.syntax_pgs=true" />
+      <property name="user" value="sa" />
       <property name="password" value="" />
-      <property name="driverClassName" value="org.hsqldb.jdbc.JDBCDriver" />
    </bean>
 
 	<bean

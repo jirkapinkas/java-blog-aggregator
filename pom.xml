@@ -26,6 +26,10 @@
 					<artifactId>servlet-api</artifactId>
 					<groupId>javax.servlet</groupId>
 				</exclusion>
+				<exclusion>
+					<artifactId>slf4j-nop</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 
@@ -52,12 +56,6 @@
 			<groupId>net.sf.dozer</groupId>
 			<artifactId>dozer</artifactId>
 			<version>5.4.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.zaxxer</groupId>
-			<artifactId>HikariCP</artifactId>
-			<version>2.3.2</version>
 		</dependency>
 
 		<dependency>
@@ -191,7 +189,7 @@
 		</profile>
 
 		<profile>
-			<id>prod</id>
+			<id>heroku</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
@@ -200,6 +198,12 @@
 					<groupId>org.postgresql</groupId>
 					<artifactId>postgresql</artifactId>
 					<version>9.3-1103-jdbc41</version>
+				</dependency>
+				<dependency>
+					<groupId>org.hsqldb</groupId>
+					<artifactId>hsqldb</artifactId>
+					<version>2.3.2</version>
+					<scope>provided</scope>
 				</dependency>
 			</dependencies>
 			<build>
@@ -263,6 +267,61 @@
 			</build>
 		</profile>
 
+		<profile>
+			<id>openshift</id>
+			<dependencies>
+				<dependency>
+					<groupId>org.postgresql</groupId>
+					<artifactId>postgresql</artifactId>
+					<version>9.3-1103-jdbc41</version>
+				</dependency>
+			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-war-plugin</artifactId>
+						<version>2.1.1</version>
+						<configuration>
+							<outputDirectory>webapps</outputDirectory>
+							<warName>ROOT</warName>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>com.samaxes.maven</groupId>
+						<artifactId>minify-maven-plugin</artifactId>
+						<version>1.7.4</version>
+						<executions>
+							<execution>
+								<id>default-minify</id>
+								<configuration>
+									<charset>UTF-8</charset>
+									<cssSourceDir>resources/css</cssSourceDir>
+									<cssSourceFiles>
+										<cssSourceFile>bootstrap-dialog.min.css</cssSourceFile>
+										<cssSourceFile>custom.css</cssSourceFile>
+									</cssSourceFiles>
+									<cssFinalFile>style.css</cssFinalFile>
+									<jsSourceDir>resources/js</jsSourceDir>
+									<jsSourceFiles>
+										<jsSourceFile>ads.js</jsSourceFile>
+										<jsSourceFile>bootstrap-dialog.min.js</jsSourceFile>
+										<jsSourceFile>custom.js</jsSourceFile>
+										<jsSourceFile>jquery.cookie.js</jsSourceFile>
+										<jsSourceFile>jquery.unveil.js</jsSourceFile>
+									</jsSourceFiles>
+									<jsFinalFile>script.js</jsFinalFile>
+									<jsEngine>CLOSURE</jsEngine>
+								</configuration>
+								<goals>
+									<goal>minify</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
 	</profiles>
 
 	<build>
@@ -288,8 +347,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>1.7</source>
+					<target>1.7</target>
 				</configuration>
 			</plugin>
 		</plugins>

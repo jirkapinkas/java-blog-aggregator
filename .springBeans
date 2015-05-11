@@ -11,8 +11,8 @@
 		<config>src/main/webapp/WEB-INF/applicationContext.xml</config>
 		<config>src/main/webapp/WEB-INF/security.xml</config>
 		<config>src/main/webapp/WEB-INF/database-dev.xml</config>
-		<config>src/main/webapp/WEB-INF/database-prod.xml</config>
 		<config>src/main/webapp/WEB-INF/cache.xml</config>
+		<config>src/main/webapp/WEB-INF/database-heroku.xml</config>
 	</configs>
 	<autoconfigs>
 	</autoconfigs>

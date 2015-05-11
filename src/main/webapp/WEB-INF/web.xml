@@ -84,7 +84,7 @@
 
 	<context-param>
 		<param-name>spring.profiles.default</param-name>
-		<param-value>prod</param-value>
+		<param-value>openshift</param-value>
 	</context-param>
 
 	<session-config>
