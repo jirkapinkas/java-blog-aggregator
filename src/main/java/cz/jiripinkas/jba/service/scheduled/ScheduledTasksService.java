@@ -218,7 +218,7 @@ public class ScheduledTasksService {
 	@Autowired
 	private RestTemplate restTemplate;
 
-	@Scheduled(fixedDelay = 60 * 60 * 1000, initialDelay = 1000)
+	@Scheduled(fixedDelay = 2 * 60 * 60 * 1000, initialDelay = 1000)
 	public void retrieveSocialShareCount() {
 		System.out.println("retrieve social share count start");
 		Integer[] allCategories = allCategoriesService.getAllCategoryIds();
