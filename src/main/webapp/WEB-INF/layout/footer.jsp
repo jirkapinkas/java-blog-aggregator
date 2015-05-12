@@ -56,3 +56,7 @@ ${configuration.footer}
 
 <br />
 <br />
+openshift rulez
+
+<br />
+<br />
