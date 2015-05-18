@@ -10,7 +10,7 @@
 	<properties>
 		<org.springframework.version>4.1.4.RELEASE</org.springframework.version>
 		<apache.tiles>3.0.5</apache.tiles>
-		<spring.security.version>3.2.5.RELEASE</spring.security.version>
+		<spring.security.version>4.0.1.RELEASE</spring.security.version>
 		<jackson.version>2.2.3</jackson.version>
 	</properties>
 

@@ -19,8 +19,9 @@
 		<intercept-url pattern="/configuration**" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/account**" access="hasRole('ROLE_USER')" />
 		<intercept-url pattern="/blog-form**" access="hasRole('ROLE_USER')" />
-		<form-login login-page="/login.html" default-target-url="/" />
+		<form-login login-page="/login.html" login-processing-url="/j_spring_security_check" username-parameter="j_username" password-parameter="j_password" default-target-url="/" />
 		<logout logout-url="/logout" />
+		<csrf disabled="true" />
 		<remember-me />
 	</http>
 
