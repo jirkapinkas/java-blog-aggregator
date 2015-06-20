@@ -1,7 +1,6 @@
 package cz.jiripinkas.jba.service;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.Calendar;
 import java.util.Date;
