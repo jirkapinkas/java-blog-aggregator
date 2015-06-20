@@ -20,13 +20,13 @@
 	<script type="text/javascript" src="//cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
 	<script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 
-	<script type="text/javascript" src="<spring:url value="/resources/js/ads.js" />"></script>
 	<% if ("dev".equals(System.getProperty("spring.profiles.active"))) { %>
 		<%-- javascript resources & custom css used in development --%>
 		<script type="text/javascript" src="<spring:url value='/resources/js/jquery.unveil.js' />"></script>
 		<script type="text/javascript" src="<spring:url value='/resources/js/jquery.cookie.js' />"></script>
 		<script type="text/javascript" src="<spring:url value="/resources/js/bootstrap-dialog.min.js" />"></script>
 		<script type="text/javascript" src="<spring:url value="/resources/js/custom.js" />"></script>
+		<script type="text/javascript" src="<spring:url value="/resources/js/ads.js" />"></script>
 		<link rel="stylesheet" href="<spring:url value='/resources/css/bootstrap-dialog.min.css' />" />
 		<link rel="stylesheet" href="<spring:url value='/resources/css/custom.css' />" />
 	<% } else { %>
@@ -34,6 +34,7 @@
 		     minified using minify-maven-plugin (configuration is in pom.xml) --%>
 		<script type="text/javascript" src="<spring:url value='/resources/js/script.min.js' />"></script>
 		<link rel="stylesheet" href="<spring:url value='/resources/css/style.min.css' />" />
+		<script type="text/javascript" src="<spring:url value="/resources/js/ads.js" />"></script>
 	<% } %>
 
 	<div id="footer"></div>

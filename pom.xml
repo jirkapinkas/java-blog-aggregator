@@ -254,7 +254,6 @@
 									<cssFinalFile>style.css</cssFinalFile>
 									<jsSourceDir>resources/js</jsSourceDir>
 									<jsSourceFiles>
-										<jsSourceFile>ads.js</jsSourceFile>
 										<jsSourceFile>bootstrap-dialog.min.js</jsSourceFile>
 										<jsSourceFile>custom.js</jsSourceFile>
 										<jsSourceFile>jquery.cookie.js</jsSourceFile>
