@@ -167,3 +167,23 @@ function finishRefresh() {
 	$(".loadButton").css("display", "inline");
 	$(".fa-spin").remove();
 }
+
+function fbShare(url) {
+	openWindow('http://www.facebook.com/sharer.php?u=' + url);
+}
+
+function twShare(url, title) {
+	openWindow('https://twitter.com/intent/tweet?text=' + title + '&url=' + url);
+}
+
+function gpShare(url) {
+	openWindow('https://plus.google.com/share?url=' + url);
+}
+
+function openWindow(url) {
+	var winWidth = 660;
+	var winHeight = 330;
+    var winTop = (screen.height / 2) - (winHeight / 2);
+    var winLeft = (screen.width / 2) - (winWidth / 2);
+    window.open(url, 'Share', 'top=' + winTop + ',left=' + winLeft + ',toolbar=0,status=0,width=' + winWidth + ',height=' + winHeight);
+}

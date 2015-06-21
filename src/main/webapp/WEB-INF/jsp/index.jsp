@@ -28,6 +28,25 @@
 
 <br />
 
+<script type="text/javascript">
+	$(document).ready(function() {
+		$(document).on("mouseenter", ".item-row", itemRowMouseIn);
+		$(document).on("mouseleave", ".item-row", itemRowMouseOut);
+	});
+	function itemRowMouseIn(e) {
+		var icons = "";
+		var itemTitle = $(this).find(".itemTitle").text();
+		var itemLink = $(this).find(".itemLink").attr("href");
+		icons += "<i class='fa fa-twitter-square fa-4x' style='background-color:white;color:#32CCFE;padding-left:5px;padding-right:5px;cursor:pointer' onclick=\"twShare('" + itemLink + "','" + itemTitle + "')\"></i>";
+		icons += "<i class='fa fa-facebook-square fa-4x' style='background-color:white;color:#3C599F;padding-right:5px;cursor:pointer' onclick=\"fbShare('" + itemLink + "')\"></i>";
+		icons += "<i class='fa fa-google-plus-square fa-4x' style='background-color:white;color:#CF3D2E;padding-right:5px;cursor:pointer' onclick=\"gpShare('" + itemLink + "')\"></i>";
+		$(this).find(".socialButtons").html(icons);
+	}
+	function itemRowMouseOut(e) {
+		$(this).find(".socialButtons").html("");
+	}
+</script>
+
 <table class="table table-bordered table-hover table-striped tableItems">
 	<tbody>
 		<tr>
@@ -70,6 +89,7 @@
 				</script>
 			</td> 
 		</tr>
+
 		<c:forEach items="${items}" var="item">
 			<tr class="item-row">
 				<c:choose>
@@ -82,7 +102,7 @@
 				</c:choose>
 				<td>
 				
-					
+					<div style="float:left">
 					<table style="float:left;margin-right:5px">
 						<tr>
 							<td style="padding:2px">
@@ -119,7 +139,7 @@
 
 						<a id="${item.id}" href="<c:out value="${item.link}" />" style="${customCss}" class="itemLink" onClick="itemClick(event)" target="_blank">
 							<img class="lazy" id="${item.id}" data-src="<spring:url value='/spring/icon/${item.blog.id}' />" style="float:left;padding-right:5px" />
-							<strong id="${item.id}">${item.title} <span class="glyphicon glyphicon-share-alt"></span></strong></a>
+							<strong id="${item.id}" class="itemTitle">${item.title} <span class="glyphicon glyphicon-share-alt"></span></strong></a>
 					<br />
 					<span style="${customCss}" class="itemDesc">${item.description}</span>
 					<br /><br />
@@ -148,6 +168,11 @@
 							</c:choose>
 						</a>
 					</security:authorize>
+					
+					</div> <!-- end div style='float:left' -->
+					<div style="position:relative">
+					<div class="socialButtons" style="position:absolute;z-index:10;right:0"></div>
+					</div>
 				</td>
 			</tr>
 		</c:forEach>
@@ -255,6 +280,7 @@
 			var html = "";
 			$.each(data, function(key, value) {
 				html += "<tr class='item-row'><td>";
+				html += ' <div style="float:left">';
 
 				// show like / dislike buttons
 				html += ' <table style="float:left;margin-right:5px">';
@@ -319,6 +345,10 @@
 					html += ' <span class="label label-default" style="margin-left: 5px">' + value.blog.category.name + '</span>';
 				}
 				html += adminMenu(value);
+				html += ' </div>'; //end float:left
+				html += ' <div style="position:relative">';
+				html += ' <div class="socialButtons" style="position:absolute;z-index:10;right:0"></div>';
+				html += ' </div>';
 				html += "</td></tr>";
 			});
 			var newCode = $(".table tr:last").prev().after(html);
