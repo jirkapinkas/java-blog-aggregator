@@ -18,3 +18,37 @@
 	cursor: inherit;
 	display: block;
 }
+
+@media screen and (max-width: 786px) {
+	.socialIconTwitter {
+		display: none;
+	}
+	.socialIconFacebook {
+		display: none;
+	}
+	.socialIconGooglePlus {
+		display: none;
+	}
+}
+
+@media screen and (min-width: 786px) {
+	.socialIconTwitter {
+		background-color: white;
+		color: #32CCFE;
+		padding-left: 5px;
+		padding-right: 5px;
+		cursor: pointer;
+	}
+	.socialIconFacebook {
+		background-color: white;
+		color: #3C599F;
+		padding-right: 5px;
+		cursor: pointer;
+	}
+	.socialIconGooglePlus {
+		background-color: white;
+		color: #CF3D2E;
+		padding-right: 5px;
+		cursor: pointer;
+	}
+}

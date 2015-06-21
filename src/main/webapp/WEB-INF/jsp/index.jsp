@@ -37,9 +37,9 @@
 		var icons = "";
 		var itemTitle = $(this).find(".itemTitle").text();
 		var itemLink = $(this).find(".itemLink").attr("href");
-		icons += "<i class='fa fa-twitter-square fa-4x' style='background-color:white;color:#32CCFE;padding-left:5px;padding-right:5px;cursor:pointer' onclick=\"twShare('" + itemLink + "','" + itemTitle + "')\"></i>";
-		icons += "<i class='fa fa-facebook-square fa-4x' style='background-color:white;color:#3C599F;padding-right:5px;cursor:pointer' onclick=\"fbShare('" + itemLink + "')\"></i>";
-		icons += "<i class='fa fa-google-plus-square fa-4x' style='background-color:white;color:#CF3D2E;padding-right:5px;cursor:pointer' onclick=\"gpShare('" + itemLink + "')\"></i>";
+		icons += "<i class='fa fa-twitter-square fa-4x socialIconTwitter' onclick=\"twShare('" + itemLink + "','" + itemTitle + "')\"></i>";
+		icons += "<i class='fa fa-facebook-square fa-4x socialIconFacebook' onclick=\"fbShare('" + itemLink + "')\"></i>";
+		icons += "<i class='fa fa-google-plus-square fa-4x socialIconGooglePlus' onclick=\"gpShare('" + itemLink + "')\"></i>";
 		$(this).find(".socialButtons").html(icons);
 	}
 	function itemRowMouseOut(e) {
