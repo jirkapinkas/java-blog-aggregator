@@ -16,6 +16,12 @@
 
 	<dependencies>
 
+		<dependency>
+			<groupId>cz.jiripinkas</groupId>
+			<artifactId>jsitemapgenerator</artifactId>
+			<version>1.4</version>
+		</dependency>
+
 		<!-- gzip compression -->
 		<dependency>
 			<groupId>com.github.ziplet</groupId>
@@ -337,7 +343,6 @@
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>8.1.14.v20131031</version>
 				<configuration>
-					<scanIntervalSeconds>3</scanIntervalSeconds>
 					<contextXml>${basedir}/src/main/webapp/WEB-INF/jetty-context.xml</contextXml>
 				</configuration>
 			</plugin>

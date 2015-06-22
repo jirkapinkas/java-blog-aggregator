@@ -44,6 +44,10 @@ public class NewsService {
 	public Page<NewsItem> findBlogs(int page) {
 		return newsItemRepository.findAll(new PageRequest(page, PAGE_SIZE, Direction.DESC, "publishedDate"));
 	}
+	
+	public List<NewsItem> findAll() {
+		return newsItemRepository.findAll();
+	}
 
 	@Transactional
 	public NewsItem findOne(String shortName) {
