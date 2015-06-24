@@ -23,7 +23,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<link rel="icon" href="<spring:url value="/favicon.ico" />" />
+<link rel="icon" href="<spring:url value="/spring/favicon" />" />
+<link rel="apple-touch-icon" href="<spring:url value="/spring/appleTouchIcon" />" />
 
 <title>${configuration.title}: <tiles:insertAttribute name="title" /></title>
 

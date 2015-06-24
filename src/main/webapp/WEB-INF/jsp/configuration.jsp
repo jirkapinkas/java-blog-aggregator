@@ -7,14 +7,46 @@
 	<div class="alert alert-success">Saved!</div>
 </c:if>
 
-<img src="<spring:url value="/spring/icon" />" alt="logo" style="float:left;padding-right:10px" />
-
+<!-- icon -->
 <form method="post" enctype="multipart/form-data" action="configuration/upload-icon.html">
 	<span class="btn btn-default btn-file">
 		Select icon (50 x 50 px) <input type="file" name="icon" />
 	</span>
 	<input type="submit" value="Upload" class="btn btn-primary" />
 </form>
+<br />
+<img src="<spring:url value="/spring/icon" />" alt="logo" style="float:left;padding-right:10px" />
+<!-- /icon -->
+
+<div style="clear:both"></div>
+
+<br />
+
+<!-- favicon -->
+<form method="post" enctype="multipart/form-data" action="configuration/upload-favicon.html">
+	<span class="btn btn-default btn-file">
+		Select icon (32 x 32 px) <input type="file" name="favicon" />
+	</span>
+	<input type="submit" value="Upload" class="btn btn-primary" />
+</form>
+<br />
+<img src="<spring:url value="/spring/favicon" />" alt="favicon" style="float:left;padding-right:10px" />
+<!-- /favicon -->
+
+<div style="clear:both"></div>
+
+<br />
+
+<!-- appleTouchIcon -->
+<form method="post" enctype="multipart/form-data" action="configuration/upload-appleTouchIcon.html">
+	<span class="btn btn-default btn-file">
+		Select icon (180 x 180 px) <input type="file" name="appleTouchIcon" />
+	</span>
+	<input type="submit" value="Upload" class="btn btn-primary" />
+</form>
+<br />
+<img src="<spring:url value="/spring/appleTouchIcon" />" alt="appleTouchIcon" style="float:left;padding-right:10px" />
+<!-- /appleTouchIcon -->
 
 <div style="clear:both"></div>
 

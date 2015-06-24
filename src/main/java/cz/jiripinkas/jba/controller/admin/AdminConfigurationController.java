@@ -51,4 +51,34 @@ public class AdminConfigurationController {
 		return "redirect:/configuration.html";
 	}
 
+	@RequestMapping(value = "configuration/upload-favicon", method = RequestMethod.POST)
+	public String uploadFavicon(@RequestParam MultipartFile favicon, RedirectAttributes redirectAttributes) {
+		redirectAttributes.addFlashAttribute("success", true);
+		if (!favicon.isEmpty()) {
+			try {
+				configurationService.saveFavicon(favicon.getBytes());
+			} catch (Exception e) {
+				log.error("could not upload favicon", e);
+			}
+		} else {
+			log.error("could not upload favicon");
+		}
+		return "redirect:/configuration.html";
+	}
+
+	@RequestMapping(value = "configuration/upload-appleTouchIcon", method = RequestMethod.POST)
+	public String uploadAppleTouchIcon(@RequestParam MultipartFile appleTouchIcon, RedirectAttributes redirectAttributes) {
+		redirectAttributes.addFlashAttribute("success", true);
+		if (!appleTouchIcon.isEmpty()) {
+			try {
+				configurationService.saveAppleTouchIcon(appleTouchIcon.getBytes());
+			} catch (Exception e) {
+				log.error("could not upload appleTouchIcon", e);
+			}
+		} else {
+			log.error("could not upload appleTouchIcon");
+		}
+		return "redirect:/configuration.html";
+	}
+
 }

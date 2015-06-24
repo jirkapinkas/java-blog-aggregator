@@ -122,6 +122,8 @@ public class InitDbService {
 		if(configuration == null) {
 			configuration = new Configuration();
 			configuration.setIcon(IOUtils.toByteArray(getClass().getResourceAsStream("/java-logo.png")));
+			configuration.setFavicon(IOUtils.toByteArray(getClass().getResourceAsStream("/favicon.ico")));
+			configuration.setAppleTouchIcon(IOUtils.toByteArray(getClass().getResourceAsStream("/apple-touch-icon.png")));
 			configuration.setTitle("Java Blog Aggregator");
 			configuration.setHomepageHeading("Latest news from the Java world:");
 			configuration.setTopHeading("Best Java news");

@@ -140,4 +140,14 @@ public class IndexController {
 		return configurationService.find().getIcon();
 	}
 
+	@RequestMapping(value = "/favicon", produces = MediaType.IMAGE_PNG_VALUE)
+	public @ResponseBody byte[] getFavicon() throws IOException {
+		return configurationService.find().getFavicon();
+	}
+
+	@RequestMapping(value = "/appleTouchIcon", produces = MediaType.IMAGE_PNG_VALUE)
+	public @ResponseBody byte[] getAppleTouchIcon() throws IOException {
+		return configurationService.find().getAppleTouchIcon();
+	}
+
 }

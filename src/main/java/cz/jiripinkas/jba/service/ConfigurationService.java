@@ -35,6 +35,20 @@ public class ConfigurationService {
 	}
 
 	@CacheEvict(value = "configuration", allEntries = true)
+	public void saveFavicon(byte[] bytes) {
+		Configuration configuration = find();
+		configuration.setFavicon(bytes);
+		save(configuration);
+	}
+
+	@CacheEvict(value = "configuration", allEntries = true)
+	public void saveAppleTouchIcon(byte[] bytes) {
+		Configuration configuration = find();
+		configuration.setAppleTouchIcon(bytes);
+		save(configuration);
+	}
+
+	@CacheEvict(value = "configuration", allEntries = true)
 	public void save(Configuration newConfiguration) {
 		Configuration managedConfiguration = find();
 		if (managedConfiguration != null) {
@@ -43,4 +57,5 @@ public class ConfigurationService {
 		}
 		configurationRepository.save(newConfiguration);
 	}
+
 }

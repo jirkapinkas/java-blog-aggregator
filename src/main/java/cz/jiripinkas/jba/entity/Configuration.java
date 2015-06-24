@@ -53,6 +53,34 @@ public class Configuration {
 	@Lob
 	private String disqusCode;
 
+	@Lob
+	@Column(length = Integer.MAX_VALUE)
+	private byte[] icon;
+
+	@Lob
+	@Column(length = Integer.MAX_VALUE)
+	private byte[] favicon;
+
+	@Lob
+	@Column(length = Integer.MAX_VALUE, name = "apple_touch_icon")
+	private byte[] appleTouchIcon;
+
+	public byte[] getFavicon() {
+		return favicon;
+	}
+
+	public void setFavicon(byte[] favicon) {
+		this.favicon = favicon;
+	}
+
+	public byte[] getAppleTouchIcon() {
+		return appleTouchIcon;
+	}
+
+	public void setAppleTouchIcon(byte[] appleTouchIcon) {
+		this.appleTouchIcon = appleTouchIcon;
+	}
+
 	public void setDisqusCode(String disqusCode) {
 		this.disqusCode = disqusCode;
 	}
@@ -92,10 +120,6 @@ public class Configuration {
 	public void setChannelDescription(String channelDescription) {
 		this.channelDescription = channelDescription;
 	}
-
-	@Lob
-	@Column(length = Integer.MAX_VALUE)
-	private byte[] icon;
 
 	public void setIcon(byte[] icon) {
 		this.icon = icon;
