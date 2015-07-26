@@ -4,6 +4,9 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <dependent-module archiveName="jsitemapgenerator-1.5.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/jsitemapgenerator/jsitemapgenerator">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="java-output-path" value="/java-blog-aggregator/target/classes"/>
         <property name="context-root" value="jba"/>
     </wb-module>
