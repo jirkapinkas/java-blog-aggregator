@@ -37,6 +37,13 @@
 		<script type="text/javascript" src="<spring:url value="/resources/js/ads.js" />"></script>
 	<% } %>
 
+	<!-- Begin Cookie Consent plugin by Silktide -->
+	<script type="text/javascript">
+	    window.cookieconsent_options = {"message":"This website uses cookies to ensure you get the best experience on our website","dismiss":"Got it!","learnMore":"More info","link":null,"theme":"dark-bottom"};
+	</script>
+	<script type="text/javascript" src="<spring:url value="/resources/js/cookieconsent.min.js" />"></script>
+	<!-- End Cookie Consent plugin -->
+
 	<div id="footer"></div>
 	<script type="text/javascript">
 		if( window.canRunAds === undefined ){
