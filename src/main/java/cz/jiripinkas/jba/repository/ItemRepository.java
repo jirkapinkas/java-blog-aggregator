@@ -2,7 +2,6 @@ package cz.jiripinkas.jba.repository;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
