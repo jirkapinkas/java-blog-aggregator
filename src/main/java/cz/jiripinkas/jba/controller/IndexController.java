@@ -40,7 +40,7 @@ public class IndexController {
 
 	private String showPage(Model model, HttpServletRequest request, int page, String tilesPage, OrderType orderType, MaxType maxType) {
 		boolean showAll = false;
-		if (request.isUserInRole("ROLE_ADMIN")) {
+		if (request.isUserInRole("ADMIN")) {
 			showAll = true;
 		}
 		model.addAttribute("items", itemService.getDtoItems(page, showAll, orderType, maxType, allCategoriesService.getAllCategoryIds()));
@@ -113,7 +113,7 @@ public class IndexController {
 	@RequestMapping("/page/{page}")
 	public List<ItemDto> getPageLatest(@PathVariable int page, HttpServletRequest request, @RequestParam Integer[] selectedCategories) {
 		boolean showAll = false;
-		if (request.isUserInRole("ROLE_ADMIN")) {
+		if (request.isUserInRole("ADMIN")) {
 			showAll = true;
 		}
 		return itemService.getDtoItems(page, showAll, OrderType.LATEST, MaxType.UNDEFINED, selectedCategories);
@@ -123,7 +123,7 @@ public class IndexController {
 	@RequestMapping(value = "/page/{page}", params = "topviews")
 	public List<ItemDto> getPageMostViewed(@PathVariable int page, HttpServletRequest request, @RequestParam(required = false) String max, @RequestParam Integer[] selectedCategories) {
 		boolean showAll = false;
-		if (request.isUserInRole("ROLE_ADMIN")) {
+		if (request.isUserInRole("ADMIN")) {
 			showAll = true;
 		}
 		return itemService.getDtoItems(page, showAll, OrderType.MOST_VIEWED, resolveMaxType(max), selectedCategories);

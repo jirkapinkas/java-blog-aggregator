@@ -34,7 +34,7 @@ public class ConfigurationInterceptor extends HandlerInterceptorAdapter {
 			modelAndView.getModelMap().addAttribute("categories", categoryService.findAll());
 			modelAndView.getModelMap().addAttribute("lastIndexDate", blogService.getLastIndexDateMinutes());
 			modelAndView.getModelMap().addAttribute("blogCount", blogService.count());
-			if (request.isUserInRole("ROLE_ADMIN")) {
+			if (request.isUserInRole("ADMIN")) {
 				modelAndView.getModelMap().addAttribute("itemCount", itemService.count());
 				modelAndView.getModelMap().addAttribute("userCount", userService.count());
 			}

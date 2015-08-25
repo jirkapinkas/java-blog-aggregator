@@ -45,7 +45,7 @@ public class UserController {
 	public String editBlog(@RequestParam int blogId, RedirectAttributes redirectAttributes, @ModelAttribute Blog blog, Model model, Principal principal, HttpServletRequest request) {
 		redirectAttributes.addFlashAttribute("success", true);
 		blog.setId(blogId);
-		blogService.update(blog, principal.getName(), request.isUserInRole("ROLE_ADMIN"));
+		blogService.update(blog, principal.getName(), request.isUserInRole("ADMIN"));
 		return "redirect:/blog-form.html?blogId=" + blogId;
 	}
 
