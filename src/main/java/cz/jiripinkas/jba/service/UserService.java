@@ -36,7 +36,7 @@ public class UserService {
 	private ItemRepository itemRepository;
 
 	public List<User> findAll() {
-		return userRepository.findAll();
+		return userRepository.findAllFetchRoles();
 	}
 
 	public User findOne(int id) {

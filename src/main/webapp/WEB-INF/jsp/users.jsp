@@ -35,6 +35,7 @@ $(document).ready(function() {
 	<thead>
 		<tr>
 			<th>user name</th>
+			<th>roles</th>
 			<th>operations</th>
 		</tr>
 	</thead>
@@ -45,6 +46,12 @@ $(document).ready(function() {
 					<a href="<spring:url value="/users/${user.id}.html" />">
 						<c:out value="${user.name}" />
 					</a>
+				</td>
+				<td>
+					<c:forEach items="${user.roles}" var="role">
+						${role.name}
+						<br/>
+					</c:forEach>
 				</td>
 				<td>
 					<button id="${user.id}" class="btn btn-danger triggerRemove">
