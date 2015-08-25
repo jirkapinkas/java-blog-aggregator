@@ -10,7 +10,7 @@ import cz.jiripinkas.jba.entity.Blog;
 
 public interface BlogRepository extends JpaRepository<Blog, Integer>{
 
-	@Query("select b from Blog b where user.id = ?1 order by b.id")
+	@Query("select distinct b from Blog b left join fetch b.items where b.user.id = ?1 order by b.id")
 	List<Blog> findByUserId(int id);
 
 	Blog findByUrl(String url);
