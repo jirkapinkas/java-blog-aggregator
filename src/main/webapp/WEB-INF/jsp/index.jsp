@@ -342,7 +342,7 @@
 				html += value.blog.name;
 				html += "</a></span>";
 				if(value.blog.category != null) {
-					html += ' <span class="label label-default" style="margin-left: 5px">' + value.blog.category.name + '</span>';
+					html += ' <span class="label label-default">' + value.blog.category.name + '</span>';
 				}
 				html += adminMenu(value);
 				html += ' </div>'; //end float:left
@@ -371,7 +371,11 @@
 			// generate menu for administrator
 			function adminMenu(item) {
 				var html = "";
-				html += ' <span class="label label-default" style="margin-left: 5px">views: ' + item.clickCount + '</span> ';
+				html += '<span class="label label-default" style="margin-left: 5px"><i class="fa fa-eye"></i> ' + item.clickCount + '</span> ';
+				html += '<span class="label label-default"><i class="fa fa-thumbs-up"></i> ' + item.likeCount + '</span> ';
+				html += '<span class="label label-default"><i class="fa fa-twitter"></i> ' + item.twitterRetweetCount + '</span> ';
+				html += '<span class="label label-default"><i class="fa fa-facebook"></i> ' + item.facebookShareCount + '</span> ';
+				html += '<span class="label label-default"><i class="fa fa-linkedin"></i> ' + item.linkedinShareCount + '</span> ';
 				html += '<a href="<spring:url value="/" />items/toggle-enabled/' + item.id + '.html" class="btn btn-primary btn-xs btnToggleEnabled" onclick="event.preventDefault();toggleEnabledItem(this);">';
 				if(item.enabled) {
 					html += 'disable';
