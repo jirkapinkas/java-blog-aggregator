@@ -103,32 +103,6 @@
 				<td>
 				
 					<div style="float:left">
-					<table style="float:left;margin-right:5px">
-						<tr>
-							<td style="padding:2px">
-								<i style="color:#6273a9;cursor:pointer;" 
-								   class="fa fa-thumbs-o-up icon_like_${item.id}" 
-								   id="${item.id}" 
-								   onClick="itemLike(event)"
-								   title="like"></i>
-							</td>
-							<td style="padding:2px">
-								<span class="likeCount_${item.id}">${item.displayLikeCount}</span>
-							</td>
-						</tr>
-						<tr>
-							<td style="padding:2px">
-								<i style="color:#6273a9;cursor:pointer;" 
-								   class="fa fa-thumbs-o-down icon_dislike_${item.id}" 
-								   id="${item.id}" 
-								   onClick="itemDislike(event)"
-								   title="dislike"></i>
-							</td>
-							<td style="padding:2px">
-								<span class="dislikeCount_${item.id}">${item.dislikeCount}</span>
-							</td>
-						</tr>
-					</table>
 				
 					<script type="text/javascript">
 						$(document).ready(function() {
@@ -142,7 +116,21 @@
 							<strong id="${item.id}" class="itemTitle">${item.title} <span class="glyphicon glyphicon-share-alt"></span></strong></a>
 					<br />
 					<span style="${customCss}" class="itemDesc">${item.description}</span>
-					<br /><br />
+					<div style="padding-top:10px"></div>
+					<table style="float:left;margin-left:5px">
+						<tr>
+							<td style="padding:2px">
+								<i style="color:#6273a9;cursor:pointer;" 
+								   class="fa fa-thumbs-o-up fa-lg icon_like_${item.id}" 
+								   id="${item.id}" 
+								   onClick="itemLike(event)"
+								   title="like"></i>
+							</td>
+							<td style="padding:2px">
+								<span class="likeCount_${item.id}">${item.displayLikeCount}</span>
+							</td>
+						</tr>
+					</table>
 					<c:if test="${item.publishedDate > yesterdayDate}">
 						<i class="fa fa-plus" title="today"></i>
 					</c:if>
@@ -282,36 +270,6 @@
 				html += "<tr class='item-row'><td>";
 				html += ' <div style="float:left">';
 
-				// show like / dislike buttons
-				html += ' <table style="float:left;margin-right:5px">';
-				html += ' <tr>';
-				html += ' <td style="padding:2px">';
-				html += ' <i style="color:#6273a9;cursor:pointer;" ';
-				html += ' class="fa fa-thumbs-o-up icon_like_' + value.id + '" ';
-				html += ' id="' + value.id + '" ';
-				html += ' onClick="itemLike(event)" title="like"></i>';
-				html += ' </td>';
-
-				html += ' <td style="padding:2px">';
-				html += ' <span class="likeCount_' + value.id + '">' + value.displayLikeCount + '</span>';
-				html += ' </td>';
-
-				html += ' </tr>';
-				html += ' <tr>';
-				html += ' <td style="padding:2px">';
-				html += ' <i style="color:#6273a9;cursor:pointer;" ';
-				html += ' class="fa fa-thumbs-o-down icon_dislike_' + value.id + '" ';
-				html += ' id="' + value.id + '" ';
-				html += ' onClick="itemDislike(event)" title="dislike"></i>';
-				html += ' </td>';
-
-				html += ' <td style="padding:2px">';
-				html += ' <span class="dislikeCount_' + value.id + '">' + value.dislikeCount + '</span>';
-				html += ' </td>';
-
-				html += ' </tr>';
-				html += ' </table>';
-
 				var css = "";
 				if(value.enabled == false) {
 					css = "text-decoration: line-through;color:grey";
@@ -327,8 +285,25 @@
 				html += "<span class='itemDesc' style='" + css + "'>";
 				html += value.description;
 				html += "</span>";
-				html += "<br />";
-				html += "<br />";
+				html += "<div style='padding-top:10px;'></div>";
+
+				// show like / dislike buttons
+				html += ' <table style="float:left;margin-right:5px">';
+				html += ' <tr>';
+				html += ' <td style="padding:2px">';
+				html += ' <i style="color:#6273a9;cursor:pointer;" ';
+				html += ' class="fa fa-thumbs-o-up fa-lg icon_like_' + value.id + '" ';
+				html += ' id="' + value.id + '" ';
+				html += ' onClick="itemLike(event)" title="like"></i>';
+				html += ' </td>';
+
+				html += ' <td style="padding:2px">';
+				html += ' <span class="likeCount_' + value.id + '">' + value.displayLikeCount + '</span>';
+				html += ' </td>';
+
+				html += ' </tr>';
+				html += ' </table>';
+
 				var date = new Date(value.publishedDate);
 				if(date.getTime() > "${yesterdayDate.time}") {
 					html += '<i class="fa fa-plus" title="today"></i> ';
