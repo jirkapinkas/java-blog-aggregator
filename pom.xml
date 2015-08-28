@@ -286,6 +286,12 @@
 					<artifactId>postgresql</artifactId>
 					<version>9.3-1103-jdbc41</version>
 				</dependency>
+				<dependency>
+					<groupId>org.hsqldb</groupId>
+					<artifactId>hsqldb</artifactId>
+					<version>2.3.3</version>
+					<scope>provided</scope>
+				</dependency>
 			</dependencies>
 			<build>
 				<plugins>
