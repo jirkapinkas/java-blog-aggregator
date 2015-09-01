@@ -29,6 +29,7 @@ public class SpringOpenshiftConfiguration {
 		config.setUsername(username);
 		config.setPassword(password);
 		config.setDriverClassName("org.postgresql.Driver");
+		config.setMaximumPoolSize(5);
 		return new HikariDataSource(config);
 	}
 
