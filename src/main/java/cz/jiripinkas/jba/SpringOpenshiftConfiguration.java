@@ -20,10 +20,10 @@ public class SpringOpenshiftConfiguration {
 
 	@Bean
 	public DataSource dataSource() {
-		String url = "jdbc:postgresql://" + System.getProperty("OPENSHIFT_POSTGRESQL_DB_HOST") + ":" + System.getProperty("OPENSHIFT_POSTGRESQL_DB_PORT") + "/"
-				+ System.getProperty("OPENSHIFT_APP_NAME");
-		String username = System.getProperty("OPENSHIFT_POSTGRESQL_DB_USERNAME");
-		String password = System.getProperty("OPENSHIFT_POSTGRESQL_DB_PASSWORD");
+		String url = "jdbc:postgresql://" + System.getenv("OPENSHIFT_POSTGRESQL_DB_HOST") + ":" + System.getenv("OPENSHIFT_POSTGRESQL_DB_PORT") + "/"
+				+ System.getenv("OPENSHIFT_APP_NAME");
+		String username = System.getenv("OPENSHIFT_POSTGRESQL_DB_USERNAME");
+		String password = System.getenv("OPENSHIFT_POSTGRESQL_DB_PASSWORD");
 		HikariConfig config = new HikariConfig();
 		config.setJdbcUrl(url);
 		config.setUsername(username);
