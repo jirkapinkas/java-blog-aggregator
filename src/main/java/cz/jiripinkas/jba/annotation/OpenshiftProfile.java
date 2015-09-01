@@ -7,9 +7,9 @@ import java.lang.annotation.Target;
 
 import org.springframework.context.annotation.Profile;
 
-@Profile("prod")
+@Profile("openshift")
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.TYPE, ElementType.METHOD })
-public @interface ProdProfile {
+public @interface OpenshiftProfile {
 
 }

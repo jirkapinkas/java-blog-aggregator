@@ -5,24 +5,31 @@ import java.util.Properties;
 import javax.sql.DataSource;
 
 import org.hibernate.jpa.HibernatePersistenceProvider;
-import org.hsqldb.jdbc.JDBCDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
-import cz.jiripinkas.jba.annotation.DevProfile;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 
-@DevProfile
+import cz.jiripinkas.jba.annotation.OpenshiftProfile;
+
+@OpenshiftProfile
 @Configuration
-public class SpringDevConfiguration {
+public class SpringOpenshiftConfiguration {
 
 	@Bean
 	public DataSource dataSource() {
-		JDBCDataSource dataSource = new JDBCDataSource();
-		dataSource.setUrl("jdbc:hsqldb:mem:test;sql.syntax_pgs=true");
-		dataSource.setUser("sa");
-		dataSource.setPassword("");
-		return dataSource;
+		String url = "jdbc:postgresql://" + System.getenv("OPENSHIFT_POSTGRESQL_DB_HOST") + ":" + System.getenv("OPENSHIFT_POSTGRESQL_DB_PORT") + "/"
+				+ System.getenv("OPENSHIFT_APP_NAME");
+		String username = System.getenv("OPENSHIFT_POSTGRESQL_DB_USERNAME");
+		String password = System.getenv("OPENSHIFT_POSTGRESQL_DB_PASSWORD");
+		HikariConfig config = new HikariConfig();
+		config.setJdbcUrl(url);
+		config.setUsername(username);
+		config.setPassword(password);
+		config.setDriverClassName("org.postgresql.Driver");
+		return new HikariDataSource(config);
 	}
 
 	@Bean
@@ -30,14 +37,13 @@ public class SpringDevConfiguration {
 		LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
 		entityManagerFactory.setDataSource(dataSource);
 		Properties jpaProperties = new Properties();
-		jpaProperties.put("hibernate.hbm2ddl.auto", "create");
-		jpaProperties.put("hibernate.show_sql", "true");
+		jpaProperties.put("hibernate.hbm2ddl.auto", "update");
+		jpaProperties.put("hibernate.show_sql", "false");
 		jpaProperties.put("hibernate.default_batch_fetch_size", 10);
 		entityManagerFactory.setJpaProperties(jpaProperties);
 		entityManagerFactory.setPackagesToScan("cz.jiripinkas.jba.entity");
 		entityManagerFactory.setPersistenceProvider(new HibernatePersistenceProvider());
 		return entityManagerFactory;
 	}
-
 
 }
