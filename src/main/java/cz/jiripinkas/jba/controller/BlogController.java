@@ -42,7 +42,7 @@ public class BlogController {
 		if (blog == null) {
 			throw new BlogNotFoundException();
 		}
-		model.addAttribute("title", "Blog: " + blog.getName());
+		model.addAttribute("title", "Blog: " + blog.getPublicName());
 		model.addAttribute("blogDetail", true);
 		model.addAttribute("blogShortName", blog.getShortName());
 		model.addAttribute("blog", blog);

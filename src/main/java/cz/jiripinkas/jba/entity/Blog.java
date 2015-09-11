@@ -18,6 +18,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.URL;
 
 import cz.jiripinkas.jba.annotation.UniqueBlog;
+import cz.jiripinkas.jba.util.MyUtil;
 
 @Entity
 public class Blog {
@@ -51,6 +52,8 @@ public class Blog {
 	@Column(name = "short_name")
 	private String shortName;
 
+	private String nick;
+
 	@NotNull
 	@Size(min = 1, message = "Homepage cannot be empty!")
 	@URL(message = "Invalid URL!")
@@ -72,6 +75,10 @@ public class Blog {
 	private Category category;
 
 	private Boolean aggregator;
+
+	public String getPublicName() {
+		return MyUtil.getPublicName(nick, name);
+	}
 
 	public void setAggregator(Boolean aggregator) {
 		this.aggregator = aggregator;
@@ -175,6 +182,14 @@ public class Blog {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getNick() {
+		return nick;
+	}
+
+	public void setNick(String nick) {
+		this.nick = nick;
 	}
 
 }

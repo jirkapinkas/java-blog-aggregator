@@ -43,11 +43,11 @@
 					</a>
 					<a href="${blog.url}" class="fa fa-rss fa-lg"  style="float:left;padding-top:0px;padding-left:5px;color:grey">
 					</a>
-					<h1 style="font-size:25px;">${title}</h1>
+					<br />
 
 					<a href="<spring:url value="/blog/${blog.shortName}.html" />">
 						<strong>
-							<c:out value="${blog.name}" />
+							<c:out value="${blog.publicName}" />
 						</strong>
 					</a>
 				</td>

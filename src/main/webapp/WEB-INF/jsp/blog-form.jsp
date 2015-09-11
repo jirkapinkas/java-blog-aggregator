@@ -39,6 +39,13 @@
 			</div>
 		</div>
 		<div class="form-group">
+			<label for="nick" class="col-sm-2 control-label">Nick:</label>
+			<div class="col-sm-10">
+				<form:input path="nick" cssClass="form-control" />
+				<form:errors path="nick" />
+			</div>
+		</div>
+		<div class="form-group">
 			<label for="url" class="col-sm-2 control-label">RSS&nbsp;/&nbsp;ATOM&nbsp;URL:</label>
 			<div class="col-sm-10">
 				<form:input path="url" cssClass="form-control" />

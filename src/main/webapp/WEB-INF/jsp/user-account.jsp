@@ -42,6 +42,13 @@
 						</div>
 					</div>
 					<div class="form-group">
+						<label for="nick" class="col-sm-3 control-label">Nick:</label>
+						<div class="col-sm-9">
+							<form:input path="nick" cssClass="form-control" />
+							<form:errors path="nick" />
+						</div>
+					</div>
+					<div class="form-group">
 						<label for="homepageUrl" class="col-sm-3 control-label">Homepage&nbsp;URL:</label>
 						<div class="col-sm-9">
 							<form:input path="homepageUrl" cssClass="form-control" />

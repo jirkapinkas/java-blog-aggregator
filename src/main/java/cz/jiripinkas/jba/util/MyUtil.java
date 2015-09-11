@@ -6,7 +6,7 @@ public final class MyUtil {
 
 	private MyUtil() {
 	}
-	
+
 	/**
 	 * Generate permalink (without http://www.yourweb.com prefix)
 	 * 
@@ -22,6 +22,13 @@ public final class MyUtil {
 		permalink = permalink.replaceAll("^-", "");
 		permalink = permalink.replaceAll("-$", "");
 		return permalink;
+	}
+
+	public static String getPublicName(String nick, String name) {
+		if (nick == null || nick.trim().isEmpty()) {
+			return name;
+		}
+		return nick + " (" + name + ")";
 	}
 
 }

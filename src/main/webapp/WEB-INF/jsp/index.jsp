@@ -135,7 +135,7 @@
 						<i class="fa fa-plus" title="today"></i>
 					</c:if>
 					<span class="label" style="color: grey;"><fmt:formatDate value="${item.publishedDate}" pattern="dd-MM-yyyy hh:mm:ss" /></span>
-					<span class="label label-info"><a href="<spring:url value='/blog/${item.blog.shortName}.html' />" style="color: white"><c:out value="${item.blog.name}" /></a></span>
+					<span class="label label-info"><a href="<spring:url value='/blog/${item.blog.shortName}.html' />" style="color: white"><c:out value="${item.blog.publicName}" /></a></span>
 					<c:if test="${item.blog.category.shortName != null}">
 						<span class="label label-default"><c:out value="${item.blog.category.name}" /></span>
 					</c:if>
@@ -314,7 +314,7 @@
 				html += " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2) + ":" + ("0" + date.getSeconds()).slice(-2);
 				html += "</span>";
 				html += "<span class='label label-info' style='margin-left: 5px'><a href='" + blogDetailBaseUrl + value.blog.shortName + ".html' style='color: white;'>";
-				html += value.blog.name;
+				html += value.blog.publicName;
 				html += "</a></span>";
 				if(value.blog.category != null) {
 					html += ' <span class="label label-default">' + value.blog.category.name + '</span>';

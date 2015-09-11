@@ -115,6 +115,7 @@ public class BlogService {
 		managedBlog.setUrl(blog.getUrl());
 		managedBlog.setHomepageUrl(blog.getHomepageUrl());
 		managedBlog.setAggregator(blog.getAggregator());
+		managedBlog.setNick(blog.getNick());
 		blogRepository.save(managedBlog);
 	}
 
