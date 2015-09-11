@@ -332,6 +332,7 @@ public class RssService {
 
 	public String cleanTitle(String title) {
 		String textTitle = Jsoup.parse(title).text();
+		textTitle = textTitle.replace("[OmniFaces utilities 2.0]", "").trim();
 		return cleanXml10(textTitle);
 	}
 
@@ -342,6 +343,9 @@ public class RssService {
 		// fix for Tomcat blog
 		cleanDescription = cleanDescription.replace("~", "");
 		cleanDescription = cleanDescription.replace("... Continue reading", "");
+		cleanDescription = cleanDescription.replace("[OmniFaces utilities]", "");
+		cleanDescription = cleanDescription.replace("[Note from Pinal]:", "");
+		cleanDescription = cleanDescription.replace("[Additional]", "");
 		ArrayList<String> links = pullLinks(cleanDescription);
 		for (String link : links) {
 			cleanDescription = cleanDescription.replace(link, "");
