@@ -341,6 +341,7 @@ public class RssService {
 		String cleanDescription = Jsoup.parse(Jsoup.clean(unescapedDescription, Whitelist.none())).text();
 		// fix for Tomcat blog
 		cleanDescription = cleanDescription.replace("~", "");
+		cleanDescription = cleanDescription.replace("... Continue reading", "");
 		ArrayList<String> links = pullLinks(cleanDescription);
 		for (String link : links) {
 			cleanDescription = cleanDescription.replace(link, "");
