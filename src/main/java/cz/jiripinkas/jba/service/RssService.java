@@ -209,9 +209,9 @@ public class RssService {
 				for (TRssItem rssItem : items) {
 					Item item = new Item();
 					item.setTitle(cleanTitle(rssItem.getTitle()));
-					if(rssItem.getDescription() != null) {
+					if (rssItem.getDescription() != null) {
 						item.setDescription(cleanDescription(rssItem.getDescription().trim()));
-					} else if(rssItem.getEncoded() != null) {
+					} else if (rssItem.getEncoded() != null) {
 						item.setDescription(cleanDescription(rssItem.getEncoded().trim()));
 					} else {
 						throw new UnsupportedOperationException("unknown description");
@@ -224,7 +224,7 @@ public class RssService {
 					} else {
 						link = rssItem.getLink();
 					}
-					if(allLinksMap.containsKey(link)) {
+					if (allLinksMap.containsKey(link)) {
 						// skip this item, it's already in the database
 						continue;
 					}
@@ -257,7 +257,7 @@ public class RssService {
 				} else {
 					description = entry.getContent();
 				}
-				if(description == null) {
+				if (description == null) {
 					throw new UnsupportedOperationException("unknown description");
 				}
 				item.setDescription(cleanDescription(description));
@@ -283,7 +283,7 @@ public class RssService {
 						}
 					}
 				}
-				if(allLinksMap.containsKey(link)) {
+				if (allLinksMap.containsKey(link)) {
 					// skip this item, it's already in the database
 					continue;
 				}
@@ -319,14 +319,9 @@ public class RssService {
 			}
 		}
 	}
-	
+
 	private String cleanXml10(String xml) {
-		String xml10pattern = "[^"
-                + "\u0009\r\n"
-                + "\u0020-\uD7FF"
-                + "\uE000-\uFFFD"
-                + "\ud800\udc00-\udbff\udfff"
-                + "]";
+		String xml10pattern = "[^" + "\u0009\r\n" + "\u0020-\uD7FF" + "\uE000-\uFFFD" + "\ud800\udc00-\udbff\udfff" + "]";
 		return xml.replaceAll(xml10pattern, "");
 	}
 
@@ -339,7 +334,10 @@ public class RssService {
 	public String cleanDescription(String description) {
 		String unescapedDescription = StringEscapeUtils.unescapeHtml3(description);
 		unescapedDescription = unescapedDescription.replace("<![CDATA[", "").replace("]]>", "");
+		unescapedDescription = unescapedDescription.replace("<br />", "BREAK_HERE").replace("<br/>", "BREAK_HERE").replace("<br>", "BREAK_HERE").replace("&lt;br /&gt;", "BREAK_HERE")
+				.replace("&lt;br/&gt;", "BREAK_HERE").replace("&lt;br&gt;", "BREAK_HERE");
 		String cleanDescription = Jsoup.parse(Jsoup.clean(unescapedDescription, Whitelist.none())).text();
+		cleanDescription = cleanDescription.replace("BREAK_HERE", " ");
 		// fix for Tomcat blog
 		cleanDescription = cleanDescription.replace("~", "");
 		cleanDescription = cleanDescription.replace("... Continue reading", "");
@@ -354,22 +352,27 @@ public class RssService {
 		// split words which are more than 25 characters long
 		StringBuilder finalDescription = new StringBuilder(cleanDescription.length());
 		int lastSpace = 0;
-		for(int i = 0; i < cleanDescription.length(); i++) {
+		for (int i = 0; i < cleanDescription.length(); i++) {
 			finalDescription.append(cleanDescription.charAt(i));
-			if(cleanDescription.charAt(i) == ' ') {
+			if (cleanDescription.charAt(i) == ' ') {
 				lastSpace = 0;
 			}
-			if(lastSpace == 25) {
+			if (lastSpace == 25) {
 				lastSpace = 0;
 				finalDescription.append(" ");
 			}
 			lastSpace++;
 		}
-		
+
 		// return only first 140 characters (plus '...')
 		String returnDescription = finalDescription.toString();
+		// this will replace all multiple whitespaces with just single
+		// whitespace
+		// fix for http://www.tutorial4soft.com/feeds/posts/default?alt=rss
+		returnDescription = returnDescription.replaceAll("[^\\x00-\\x7F]", " ").trim();
+		returnDescription = returnDescription.trim().replaceAll("\\s+", " ").trim();
 		if (returnDescription.length() >= 140) {
-			returnDescription = finalDescription.substring(0, 140);
+			returnDescription = returnDescription.substring(0, 140);
 			returnDescription += "...";
 		}
 		return returnDescription.trim();
