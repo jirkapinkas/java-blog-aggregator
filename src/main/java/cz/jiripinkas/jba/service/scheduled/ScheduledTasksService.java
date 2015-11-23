@@ -228,14 +228,14 @@ public class ScheduledTasksService {
 			List<ItemDto> dtoItems = itemService.getDtoItems(page++, false, OrderType.LATEST, MaxType.WEEK, allCategories);
 			retrievedItems = dtoItems.size();
 			for (ItemDto itemDto : dtoItems) {
-				try {
-					TwitterRetweetJson twitterRetweetJson = restTemplate.getForObject("https://cdn.api.twitter.com/1/urls/count.json?url=" + itemDto.getLink(), TwitterRetweetJson.class);
-					if (twitterRetweetJson.getCount() != itemDto.getTwitterRetweetCount()) {
-						itemRepository.setTwitterRetweetCount(itemDto.getId(), twitterRetweetJson.getCount());
-					}
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
+//				try {
+//					TwitterRetweetJson twitterRetweetJson = restTemplate.getForObject("https://cdn.api.twitter.com/1/urls/count.json?url=" + itemDto.getLink(), TwitterRetweetJson.class);
+//					if (twitterRetweetJson.getCount() != itemDto.getTwitterRetweetCount()) {
+//						itemRepository.setTwitterRetweetCount(itemDto.getId(), twitterRetweetJson.getCount());
+//					}
+//				} catch (Exception ex) {
+//					ex.printStackTrace();
+//				}
 				try {
 					FacebookShareJson facebookShareJson = restTemplate.getForObject("http://graph.facebook.com/?id=" + itemDto.getLink(), FacebookShareJson.class);
 					if (facebookShareJson.getShares() != itemDto.getFacebookShareCount()) {
