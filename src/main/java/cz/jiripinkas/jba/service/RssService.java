@@ -153,8 +153,8 @@ public class RssService {
 			document = db.parse(new ByteArrayInputStream(page.getBytes(Charset.forName("UTF-8"))));
 			node = document.getDocumentElement();
 		} catch (Exception ex) {
-			System.out.println("error parsing XML file");
-			throw new RssException(ex);
+			System.out.println("error parsing XML file: " + location);
+			throw new RssException(ex.getMessage());
 		}
 
 		if ("rss".equals(node.getNodeName())) {
@@ -162,7 +162,7 @@ public class RssService {
 		} else if ("feed".equals(node.getNodeName())) {
 			return getAtomItems(new StringReader(page), blogId, allLinksMap);
 		} else {
-			throw new RssException("unknown RSS type");
+			throw new RssException("unknown RSS type: " + location);
 		}
 	}
 
@@ -206,34 +206,36 @@ public class RssService {
 
 			for (TRssChannel channel : channels) {
 				List<TRssItem> items = channel.getItems();
-				for (TRssItem rssItem : items) {
-					Item item = new Item();
-					item.setTitle(cleanTitle(rssItem.getTitle()));
-					if (rssItem.getDescription() != null) {
-						item.setDescription(cleanDescription(rssItem.getDescription().trim()));
-					} else if (rssItem.getEncoded() != null) {
-						item.setDescription(cleanDescription(rssItem.getEncoded().trim()));
-					} else {
-						throw new UnsupportedOperationException("unknown description");
+				if (items != null) {
+					for (TRssItem rssItem : items) {
+						Item item = new Item();
+						item.setTitle(cleanTitle(rssItem.getTitle()));
+						if (rssItem.getDescription() != null) {
+							item.setDescription(cleanDescription(rssItem.getDescription().trim()));
+						} else if (rssItem.getEncoded() != null) {
+							item.setDescription(cleanDescription(rssItem.getEncoded().trim()));
+						} else {
+							throw new UnsupportedOperationException("unknown description");
+						}
+						Date pubDate = getRssDate(rssItem.getPubDate());
+						item.setPublishedDate(pubDate);
+						String link = null;
+						if (rssItem.getOrigLink() != null) {
+							link = rssItem.getOrigLink();
+						} else {
+							link = rssItem.getLink();
+						}
+						if (allLinksMap.containsKey(link)) {
+							// skip this item, it's already in the database
+							continue;
+						}
+						try {
+							item.setLink(getRealLink(link, HttpClientContext.create()));
+						} catch (UrlException e) {
+							item.setError(e.getMessage());
+						}
+						list.add(item);
 					}
-					Date pubDate = getRssDate(rssItem.getPubDate());
-					item.setPublishedDate(pubDate);
-					String link = null;
-					if (rssItem.getOrigLink() != null) {
-						link = rssItem.getOrigLink();
-					} else {
-						link = rssItem.getLink();
-					}
-					if (allLinksMap.containsKey(link)) {
-						// skip this item, it's already in the database
-						continue;
-					}
-					try {
-						item.setLink(getRealLink(link, HttpClientContext.create()));
-					} catch (UrlException e) {
-						item.setError(e.getMessage());
-					}
-					list.add(item);
 				}
 			}
 		} catch (JAXBException | ParseException e) {
