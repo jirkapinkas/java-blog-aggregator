@@ -336,6 +336,7 @@
 										<jsSourceFile>custom.js</jsSourceFile>
 										<jsSourceFile>jquery.cookie.js</jsSourceFile>
 										<jsSourceFile>jquery.unveil.js</jsSourceFile>
+										<jsSourceFile>jquery.ba-throttle-debounce.min.js</jsSourceFile>
 									</jsSourceFiles>
 									<jsFinalFile>script.js</jsFinalFile>
 									<jsEngine>CLOSURE</jsEngine>

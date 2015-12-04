@@ -27,6 +27,7 @@
 		<script type="text/javascript" src="<spring:url value="/resources/js/bootstrap-dialog.min.js" />"></script>
 		<script type="text/javascript" src="<spring:url value="/resources/js/custom.js" />"></script>
 		<script type="text/javascript" src="<spring:url value="/resources/js/ads.js" />"></script>
+		<script type="text/javascript" src="<spring:url value="/resources/js/jquery.ba-throttle-debounce.min.js"/>"></script>
 		<link rel="stylesheet" href="<spring:url value='/resources/css/bootstrap-dialog.min.css' />" />
 		<link rel="stylesheet" href="<spring:url value='/resources/css/custom.css' />" />
 	<% } else { %>
