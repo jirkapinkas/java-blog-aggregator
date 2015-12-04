@@ -51,17 +51,26 @@
 	<tbody>
 		<tr>
 			<td>
-				<span class="label label-default">${blogCount} blogs</span>
-				<span class="label label-default">last update was ${lastIndexDate} minutes ago</span>
-				<security:authorize access="${isAdmin}">
-					<span class="label label-default">items: ${itemCount}</span>
-					<span class="label label-default">users: ${userCount}</span>
-				</security:authorize>
-				<c:if test="${blogDetail eq null}">
-					<c:forEach items="${categories}" var="category">
-						<span class="label label-primary categoryLabel withTooltip" id="${category.id}" style="cursor: pointer;" data-toggle="tooltip" data-placement="top" title="toggle category visibility">${category.name} (${category.blogCount})</span>
-					</c:forEach>
-				</c:if>
+				<div class="form-inline">
+					<div class="form-group">
+						<span class="label label-default">${blogCount} blogs</span>
+						<span class="label label-default">last update was ${lastIndexDate} minutes ago</span>
+						<security:authorize access="${isAdmin}">
+							<span class="label label-default">items: ${itemCount}</span>
+							<span class="label label-default">users: ${userCount}</span>
+						</security:authorize>
+						<c:if test="${blogDetail eq null}">
+							<c:forEach items="${categories}" var="category">
+								<span class="label label-primary categoryLabel withTooltip" id="${category.id}" style="cursor: pointer;" data-toggle="tooltip" data-placement="top" title="toggle category visibility">${category.name} (${category.blogCount})</span>
+							</c:forEach>
+						</c:if>
+					</div>
+					<div class="form-group">
+						<label for="searchInputText">filter:</label>
+						<input type="text" class="form-control searchInput" id="searchInputText" placeholder="filter news" />
+					</div>
+				</div>
+				
 				<script type="text/javascript">
 					$(document).ready(function() {
 						$('.withTooltip').tooltip();
@@ -81,10 +90,20 @@
 								$(this).css("text-decoration", "none");
 							}
 							// reload first page
-							$(".tableItems tbody .item-row").remove();
-							currentPage = -1;
-							loadNextPage();
+// 							$(".tableItems tbody .item-row").remove();
+// 							currentPage = -1;
+							loadNextPage(null, true);
 						});
+						var filterFunc = function() {
+							var searchTxtValue = $(this).val();
+							searchTxt = searchTxtValue;
+							// reload first page
+// 							$(".tableItems tbody .item-row").remove();
+// 							currentPage = -1;
+							loadNextPage(null, true);
+						}
+						var debounced = $.debounce(300, filterFunc);
+						$(".searchInput").bind("keyup", debounced);
 					});
 				</script>
 			</td> 
@@ -240,7 +259,13 @@
 		$(".loadButton").click(loadNextPage);
 	});
 
-	function loadNextPage(e) {
+	/*
+	 * clear = boolean whether the list should be cleared.
+	 */
+	function loadNextPage(e, clear) {
+		if(clear) {
+			currentPage = -1;
+		}
 		if(e != null) {
 			e.preventDefault();
 		}
@@ -262,9 +287,15 @@
 		} else {
 			url = url + "&selectedCategories=" + selectedCategories.join(',');
 		}
+		if(searchTxt != undefined && searchTxt != null) {
+			url = url + "&search=" + searchTxt;
+		}
 
 
 		$.getJSON( url, function( data ) {
+			if(clear) {
+				$(".tableItems tbody .item-row").remove();
+			}
 			var html = "";
 			$.each(data, function(key, value) {
 				html += "<tr class='item-row'><td>";

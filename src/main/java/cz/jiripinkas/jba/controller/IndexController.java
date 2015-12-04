@@ -27,10 +27,10 @@ public class IndexController {
 
 	@Autowired
 	private ItemService itemService;
-	
+
 	@Autowired
 	private AllCategoriesService allCategoriesService;
-	
+
 	@Autowired
 	private ConfigurationService configurationService;
 
@@ -111,22 +111,22 @@ public class IndexController {
 
 	@ResponseBody
 	@RequestMapping("/page/{page}")
-	public List<ItemDto> getPageLatest(@PathVariable int page, HttpServletRequest request, @RequestParam Integer[] selectedCategories) {
+	public List<ItemDto> getPageLatest(@PathVariable int page, HttpServletRequest request, @RequestParam Integer[] selectedCategories, @RequestParam(required = false) String search) {
 		boolean showAll = false;
 		if (request.isUserInRole("ADMIN")) {
 			showAll = true;
 		}
-		return itemService.getDtoItems(page, showAll, OrderType.LATEST, MaxType.UNDEFINED, selectedCategories);
+		return itemService.getDtoItems(page, showAll, OrderType.LATEST, MaxType.UNDEFINED, selectedCategories, search);
 	}
 
 	@ResponseBody
 	@RequestMapping(value = "/page/{page}", params = "topviews")
-	public List<ItemDto> getPageMostViewed(@PathVariable int page, HttpServletRequest request, @RequestParam(required = false) String max, @RequestParam Integer[] selectedCategories) {
+	public List<ItemDto> getPageMostViewed(@PathVariable int page, HttpServletRequest request, @RequestParam(required = false) String max, @RequestParam Integer[] selectedCategories, @RequestParam(required = false) String search) {
 		boolean showAll = false;
 		if (request.isUserInRole("ADMIN")) {
 			showAll = true;
 		}
-		return itemService.getDtoItems(page, showAll, OrderType.MOST_VIEWED, resolveMaxType(max), selectedCategories);
+		return itemService.getDtoItems(page, showAll, OrderType.MOST_VIEWED, resolveMaxType(max), selectedCategories, search);
 	}
 
 	@ResponseBody

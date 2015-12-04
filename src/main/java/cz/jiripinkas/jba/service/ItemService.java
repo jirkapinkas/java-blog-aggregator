@@ -9,6 +9,11 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+
+import org.apache.commons.lang.StringEscapeUtils;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -27,6 +32,9 @@ public class ItemService {
 	@Autowired
 	private ItemRepository itemRepository;
 
+	@PersistenceContext
+	private EntityManager entityManager;
+
 	@Autowired
 	private Mapper mapper;
 
@@ -40,12 +48,18 @@ public class ItemService {
 
 	@Transactional
 	public List<ItemDto> getDtoItems(int page, boolean showAll, OrderType orderType, MaxType maxType, Integer[] selectedCategories) {
+		// call getDtoItems without search
+		return getDtoItems(page, showAll, orderType, maxType, selectedCategories, null);
+	}
+
+	@Transactional
+	public List<ItemDto> getDtoItems(int page, boolean showAll, OrderType orderType, MaxType maxType, Integer[] selectedCategories, String search) {
 		Direction orderDirection = Direction.DESC;
 
 		String orderByProperty = null;
 		switch (orderType) {
 		case LATEST:
-			orderByProperty = "publishedDate";
+			orderByProperty = "i.publishedDate";
 			break;
 		case MOST_VIEWED:
 			orderByProperty = "i.likeCount + ((log(i.clickCount + 1) * 10) + (log(i.twitterRetweetCount + 1) * 10) + (log(i.facebookShareCount + 1) * 10) + (log(i.linkedinShareCount + 1) * 10))";
@@ -83,11 +97,25 @@ public class ItemService {
 			return result;
 		}
 
-		if (showAll) {
-			items = itemRepository.findPageAllItemsInCategory(publishedDate, Arrays.asList(selectedCategories), new PageRequest(page, 10, orderDirection, orderByProperty));
-		} else {
-			items = itemRepository.findPageEnabledInCategory(publishedDate, Arrays.asList(selectedCategories), new PageRequest(page, 10, orderDirection, orderByProperty));
+		String hql = "select i from Item i join fetch i.blog b left join fetch b.category cat where ";
+		if (!showAll) {
+			hql += " i.enabled = true and ";
 		}
+		hql += " i.publishedDate >= ?1 and cat.id IN ?2 ";
+		if (search != null) {
+			for (String string : search.split(" ")) {
+				String searchStringPart = StringEscapeUtils.escapeSql(string).trim();
+				if (!searchStringPart.isEmpty()) {
+					hql += " and (lower(i.title) like lower('%" + searchStringPart + "%') or lower(i.description) like lower('%" + searchStringPart + "%')) ";
+				}
+			}
+		}
+		hql += " order by ";
+		hql += " " + orderByProperty + " ";
+		hql += orderDirection;
+		TypedQuery<Item> query = entityManager.createQuery(hql, Item.class).setParameter(1, publishedDate).setParameter(2, Arrays.asList(selectedCategories));
+		items = query.setFirstResult(page * 10).setMaxResults(10).getResultList();
+
 		for (Item item : items) {
 			ItemDto itemDto = mapper.map(item, ItemDto.class);
 			// calculate like count

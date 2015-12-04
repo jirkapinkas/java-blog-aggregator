@@ -4,6 +4,8 @@ var currentPage = 0;
 
 var selectedCategories;
 
+var searchTxt;
+
 /*
  * clever way to get homepage in javascript, thanks to:
  * http://james.padolsey.com/snippets/getting-a-fully-qualified-url/
