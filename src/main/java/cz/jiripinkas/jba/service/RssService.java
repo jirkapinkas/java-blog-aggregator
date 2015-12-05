@@ -195,7 +195,8 @@ public class RssService {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.debug("Stacktrace", e);
+			log.error("Exception downloading real link: " + link);
 			throw new UrlException("Exception during downloading: " + link);
 		}
 		return realLink;

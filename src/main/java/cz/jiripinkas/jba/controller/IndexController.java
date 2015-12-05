@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -24,6 +26,8 @@ import cz.jiripinkas.jba.service.ItemService.OrderType;
 
 @Controller
 public class IndexController {
+	
+	private static final Logger log = LoggerFactory.getLogger(IndexController.class);
 
 	@Autowired
 	private ItemService itemService;
@@ -112,6 +116,9 @@ public class IndexController {
 	@ResponseBody
 	@RequestMapping("/page/{page}")
 	public List<ItemDto> getPageLatest(@PathVariable int page, HttpServletRequest request, @RequestParam Integer[] selectedCategories, @RequestParam(required = false) String search) {
+		if(search != null && !search.trim().isEmpty()) {
+			log.info("search for: " + search);
+		}
 		boolean showAll = false;
 		if (request.isUserInRole("ADMIN")) {
 			showAll = true;
@@ -122,6 +129,9 @@ public class IndexController {
 	@ResponseBody
 	@RequestMapping(value = "/page/{page}", params = "topviews")
 	public List<ItemDto> getPageMostViewed(@PathVariable int page, HttpServletRequest request, @RequestParam(required = false) String max, @RequestParam Integer[] selectedCategories, @RequestParam(required = false) String search) {
+		if(search != null && !search.trim().isEmpty()) {
+			log.info("search for: " + search);
+		}
 		boolean showAll = false;
 		if (request.isUserInRole("ADMIN")) {
 			showAll = true;
