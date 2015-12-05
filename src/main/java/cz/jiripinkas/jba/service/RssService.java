@@ -33,6 +33,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
@@ -51,6 +53,8 @@ import cz.jiripinkas.jba.rss.TRssItem;
 
 @Service
 public class RssService {
+
+	private static final Logger log = LoggerFactory.getLogger(RssService.class);
 
 	private static Unmarshaller unmarshallerRss;
 	private static Unmarshaller unmarshallerAtom;
@@ -153,7 +157,7 @@ public class RssService {
 			document = db.parse(new ByteArrayInputStream(page.getBytes(Charset.forName("UTF-8"))));
 			node = document.getDocumentElement();
 		} catch (Exception ex) {
-			System.out.println("error parsing XML file: " + location);
+			log.warn("error parsing XML file: " + location);
 			throw new RssException(ex.getMessage());
 		}
 

@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Sort;
@@ -39,6 +41,8 @@ import cz.jiripinkas.jba.service.NewsService;
 
 @Service
 public class ScheduledTasksService {
+	
+	private static final Logger log = LoggerFactory.getLogger(ScheduledTasksService.class);
 
 	@Autowired
 	private BlogRepository blogRepository;
@@ -220,7 +224,7 @@ public class ScheduledTasksService {
 
 	@Scheduled(fixedDelay = 2 * 60 * 60 * 1000, initialDelay = 1000)
 	public void retrieveSocialShareCount() {
-		System.out.println("retrieve social share count start");
+		log.info("retrieve social share count start");
 		Integer[] allCategories = allCategoriesService.getAllCategoryIds();
 		int page = 0;
 		int retrievedItems = 0;
@@ -254,7 +258,7 @@ public class ScheduledTasksService {
 				}
 			}
 		} while (retrievedItems > 0);
-		System.out.println("retrieve social share count finish");
+		log.info("retrieve social share count finish");
 	}
 
 }

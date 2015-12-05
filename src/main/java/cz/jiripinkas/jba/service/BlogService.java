@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -28,6 +30,8 @@ import cz.jiripinkas.jba.util.MyUtil;
 
 @Service
 public class BlogService {
+	
+	private static final Logger log = LoggerFactory.getLogger(BlogService.class);
 
 	@Autowired
 	private BlogRepository blogRepository;
@@ -77,9 +81,8 @@ public class BlogService {
 			}
 			blogResultService.saveOk(blog);
 		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("exception during downloading: " + blog.getUrl());
-			System.out.println("message: " + e.getMessage());
+			log.warn("Exception downloading: " + blog.getUrl() + " message: " + e.getMessage());
+			log.debug("Stacktrace", e);
 			errors.append(e.getMessage());
 		}
 		if (errors.length() != 0) {
