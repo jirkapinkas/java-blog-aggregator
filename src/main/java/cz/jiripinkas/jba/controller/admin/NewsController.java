@@ -46,7 +46,10 @@ public class NewsController {
 	}
 
 	@RequestMapping("/admin-news/add")
-	public String showAdd() {
+	public String showAdd(Model model) {
+		NewsItem newsItem = new NewsItem();
+		newsItem.setDescription("<div class='jumbotron'>\n\n</div>\n");
+		model.addAttribute("newsItem", newsItem);
 		return "news-form";
 	}
 
