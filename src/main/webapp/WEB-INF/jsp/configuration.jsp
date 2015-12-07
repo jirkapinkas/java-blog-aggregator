@@ -138,6 +138,13 @@
 			</div>
 		</div>
 
+		<div class="form-group">
+			<label for="twitterOauth" class="col-sm-2 control-label">Twitter OAuth:</label>
+			<div class="col-sm-10">
+				<form:input path="twitterOauth" cssClass="form-control" placeholder="format: ConsumerKey:ConsumerSecret:AccessToken:AccessTokenSecret" />
+			</div>
+		</div>
+
         <input type="submit" class="btn btn-primary" value="Save" />
 
 </form:form>

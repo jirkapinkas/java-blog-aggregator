@@ -53,6 +53,10 @@ public class Configuration {
 	@Lob
 	private String disqusCode;
 
+	@Column(name = "twitter_oauth", length = Integer.MAX_VALUE)
+	@Lob
+	private String twitterOauth;
+
 	@Lob
 	@Column(length = Integer.MAX_VALUE)
 	private byte[] icon;
@@ -191,6 +195,14 @@ public class Configuration {
 
 	public void setGoogleAnalytics(String googleAnalytics) {
 		this.googleAnalytics = googleAnalytics;
+	}
+
+	public String getTwitterOauth() {
+		return twitterOauth;
+	}
+
+	public void setTwitterOauth(String twitterOauth) {
+		this.twitterOauth = twitterOauth;
 	}
 
 }

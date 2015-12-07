@@ -54,6 +54,8 @@ public class ConfigurationService {
 		if (managedConfiguration != null) {
 			newConfiguration.setId(managedConfiguration.getId());
 			newConfiguration.setIcon(managedConfiguration.getIcon());
+			newConfiguration.setAppleTouchIcon(managedConfiguration.getAppleTouchIcon());
+			newConfiguration.setFavicon(managedConfiguration.getFavicon());
 		}
 		configurationRepository.save(newConfiguration);
 	}

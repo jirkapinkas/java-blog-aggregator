@@ -21,6 +21,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import twitter4j.Query;
+import twitter4j.QueryResult;
+import twitter4j.RateLimitStatus;
+import twitter4j.Twitter;
+import twitter4j.TwitterFactory;
+import twitter4j.conf.ConfigurationBuilder;
 import cz.jiripinkas.jba.dto.ItemDto;
 import cz.jiripinkas.jba.entity.Blog;
 import cz.jiripinkas.jba.entity.Category;
@@ -41,7 +47,7 @@ import cz.jiripinkas.jba.service.NewsService;
 
 @Service
 public class ScheduledTasksService {
-	
+
 	private static final Logger log = LoggerFactory.getLogger(ScheduledTasksService.class);
 
 	@Autowired
@@ -177,20 +183,6 @@ public class ScheduledTasksService {
 		}
 	}
 
-	private static class TwitterRetweetJson {
-
-		private int count;
-
-		public int getCount() {
-			return count;
-		}
-
-		@SuppressWarnings("unused")
-		public void setCount(int count) {
-			this.count = count;
-		}
-	}
-
 	private static class FacebookShareJson {
 
 		private int shares;
@@ -222,6 +214,7 @@ public class ScheduledTasksService {
 	@Autowired
 	private RestTemplate restTemplate;
 
+	// will run every 2 hours
 	@Scheduled(fixedDelay = 2 * 60 * 60 * 1000, initialDelay = 1000)
 	public void retrieveSocialShareCount() {
 		log.info("retrieve social share count start");
@@ -232,14 +225,39 @@ public class ScheduledTasksService {
 			List<ItemDto> dtoItems = itemService.getDtoItems(page++, false, OrderType.LATEST, MaxType.WEEK, allCategories);
 			retrievedItems = dtoItems.size();
 			for (ItemDto itemDto : dtoItems) {
-//				try {
-//					TwitterRetweetJson twitterRetweetJson = restTemplate.getForObject("https://cdn.api.twitter.com/1/urls/count.json?url=" + itemDto.getLink(), TwitterRetweetJson.class);
-//					if (twitterRetweetJson.getCount() != itemDto.getTwitterRetweetCount()) {
-//						itemRepository.setTwitterRetweetCount(itemDto.getId(), twitterRetweetJson.getCount());
-//					}
-//				} catch (Exception ex) {
-//					ex.printStackTrace();
-//				}
+				try {
+					String twitterOauth = configurationService.find().getTwitterOauth();
+					if (twitterOauth != null && !twitterOauth.trim().isEmpty()) {
+						String[] twitterOauthParts = twitterOauth.split(":");
+						String consumerKey = twitterOauthParts[0];
+						String consumerKeySecret = twitterOauthParts[1];
+						String accessToken = twitterOauthParts[2];
+						String accessTokenSecret = twitterOauthParts[3];
+						ConfigurationBuilder cb = new ConfigurationBuilder();
+						cb.setDebugEnabled(true).setOAuthConsumerKey(consumerKey).setOAuthConsumerSecret(consumerKeySecret).setOAuthAccessToken(accessToken)
+								.setOAuthAccessTokenSecret(accessTokenSecret);
+
+						TwitterFactory twitterFactory = new TwitterFactory(cb.build());
+						Twitter twitter = twitterFactory.getInstance();
+
+						RateLimitStatus rateLimitStatus = twitter.getRateLimitStatus().get("/search/tweets");
+						int remaining = rateLimitStatus.getRemaining();
+						if (remaining <= 1) {
+							Thread.sleep(15 * 60 * 1000); // sleep for 15
+															// minutes, this
+															// will reset the
+															// limit for sure
+						}
+						Query query = new Query(itemDto.getLink());
+						QueryResult result = twitter.search(query);
+						int retweetCount = result.getTweets().size();
+						if (retweetCount > itemDto.getTwitterRetweetCount()) {
+							itemRepository.setTwitterRetweetCount(itemDto.getId(), retweetCount);
+						}
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
 				try {
 					FacebookShareJson facebookShareJson = restTemplate.getForObject("http://graph.facebook.com/?id=" + itemDto.getLink(), FacebookShareJson.class);
 					if (facebookShareJson.getShares() != itemDto.getFacebookShareCount()) {

@@ -41,6 +41,7 @@ public class AdminConfigurationController {
 		redirectAttributes.addFlashAttribute("success", true);
 		if (!icon.isEmpty()) {
 			try {
+				System.out.println("save icon");
 				configurationService.saveIcon(icon.getBytes());
 			} catch (Exception e) {
 				log.error("could not upload icon", e);
@@ -56,6 +57,7 @@ public class AdminConfigurationController {
 		redirectAttributes.addFlashAttribute("success", true);
 		if (!favicon.isEmpty()) {
 			try {
+				System.out.println("save favicon");
 				configurationService.saveFavicon(favicon.getBytes());
 			} catch (Exception e) {
 				log.error("could not upload favicon", e);
@@ -71,6 +73,7 @@ public class AdminConfigurationController {
 		redirectAttributes.addFlashAttribute("success", true);
 		if (!appleTouchIcon.isEmpty()) {
 			try {
+				System.out.println("save apple touch icon");
 				configurationService.saveAppleTouchIcon(appleTouchIcon.getBytes());
 			} catch (Exception e) {
 				log.error("could not upload appleTouchIcon", e);
