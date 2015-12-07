@@ -19,9 +19,6 @@
 			</tr>
 		</table>
 	</c:when>
-	<c:otherwise>
-		<h1 style="font-size:25px">${title}</h1>
-	</c:otherwise>
 </c:choose>
 
 <jsp:include page="../layout/adsense.jsp" />

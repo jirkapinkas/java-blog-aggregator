@@ -106,7 +106,10 @@ public class ItemService {
 			for (String string : search.split(" ")) {
 				String searchStringPart = StringEscapeUtils.escapeSql(string).trim();
 				if (!searchStringPart.isEmpty()) {
-					hql += " and (lower(i.title) like lower('%" + searchStringPart + "%') or lower(i.description) like lower('%" + searchStringPart + "%')) ";
+					hql += " and (lower(i.title) like lower('%" + searchStringPart + "%') "
+							+ " or lower(i.description) like lower('%" + searchStringPart + "%') "
+							+ " or lower(b.name) like lower('%" + searchStringPart + "%') "
+							+ " or lower(b.nick) like lower('%" + searchStringPart + "%')) ";
 				}
 			}
 		}
