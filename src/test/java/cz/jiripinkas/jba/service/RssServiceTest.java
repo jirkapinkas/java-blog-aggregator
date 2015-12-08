@@ -242,5 +242,11 @@ public class RssServiceTest {
 		List<Item> items = rssService.getItems("test-rss/dfetter.xml", true, 0, new HashMap<String, Object>());
 		assertEquals("What time was it? This is a question that may not always be easy to answer, even with the excellent TIMESTAMPTZ data type. While it stores t...", items.get(0).getDescription());
 	}
+	
+	@Test
+	public void testFixRealLink() {
+		assertEquals("http://www.infoq.com/articles/Easily-Create-Java-Agents-with-ByteBuddy", rssService.fixRealLink("http://www.infoq.com/articles/Easily-Create-Java-Agents-with-ByteBuddy?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=Java"));
+		assertEquals("http://techblog.bozho.net/the-astonishingly-low-quality-of-scientific-code/", rssService.fixRealLink("http://techblog.bozho.net/the-astonishingly-low-quality-of-scientific-code/?utm_source=rss&utm_medium=rss&utm_campaign=the-astonishingly-low-quality-of-scientific-code"));
+	}
 
 }
