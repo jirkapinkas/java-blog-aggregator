@@ -50,9 +50,9 @@
 			<td>
 				<div class="form-inline">
 					<div class="form-group">
-						<div class="form-group">
+						<div class="form-group" style="padding-bottom:5px">
 							<span class="label label-default">${blogCount} blogs</span>
-							<span class="label label-default">last update was ${lastIndexDate} minutes ago</span>
+							<span class="label label-default">updated: ${lastIndexDate} min. ago</span>
 							<security:authorize access="${isAdmin}">
 								<span class="label label-default">items: ${itemCount}</span>
 								<span class="label label-default">users: ${userCount}</span>
@@ -76,7 +76,7 @@
 						</c:if>
 					</div>
 					<div class="form-group">
-						<label for="searchInputText">fulltext search:</label>
+						<label for="searchInputText">search:</label>
 						<input type="text" class="form-control searchInput" id="searchInputText" placeholder="filter news" />
 					</div>
 				</div>
