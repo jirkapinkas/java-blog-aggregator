@@ -50,20 +50,33 @@
 			<td>
 				<div class="form-inline">
 					<div class="form-group">
-						<span class="label label-default">${blogCount} blogs</span>
-						<span class="label label-default">last update was ${lastIndexDate} minutes ago</span>
-						<security:authorize access="${isAdmin}">
-							<span class="label label-default">items: ${itemCount}</span>
-							<span class="label label-default">users: ${userCount}</span>
-						</security:authorize>
+						<div class="form-group">
+							<span class="label label-default">${blogCount} blogs</span>
+							<span class="label label-default">last update was ${lastIndexDate} minutes ago</span>
+							<security:authorize access="${isAdmin}">
+								<span class="label label-default">items: ${itemCount}</span>
+								<span class="label label-default">users: ${userCount}</span>
+							</security:authorize>
+						</div>
+						
+						<div class="form-group">
+							<label>show:</label>
+							<a href="" style="text-decoration:underline;font-weight:bold;" class="orderByLabel" id="latest">latest</a>
+							<a href="" class="orderByLabel" id="topWeek">top this week</a>
+							<a href="" class="orderByLabel" id="topMonth">top this month</a>
+						</div>
+						
 						<c:if test="${blogDetail eq null}">
-							<c:forEach items="${categories}" var="category">
-								<span class="label label-primary categoryLabel withTooltip" id="${category.id}" style="cursor: pointer;" data-toggle="tooltip" data-placement="top" title="toggle category visibility">${category.name} (${category.blogCount})</span>
-							</c:forEach>
+							<div class="form-group">
+								<label>filter categories:</label>
+								<c:forEach items="${categories}" var="category">
+									<span class="label label-primary categoryLabel withTooltip" id="${category.id}" style="cursor: pointer;" data-toggle="tooltip" data-placement="top" title="toggle category visibility">${category.name} (${category.blogCount})</span>
+								</c:forEach>
+							</div>
 						</c:if>
 					</div>
 					<div class="form-group">
-						<label for="searchInputText">filter:</label>
+						<label for="searchInputText">fulltext search:</label>
 						<input type="text" class="form-control searchInput" id="searchInputText" placeholder="filter news" />
 					</div>
 				</div>
@@ -87,20 +100,27 @@
 								$(this).css("text-decoration", "none");
 							}
 							// reload first page
-// 							$(".tableItems tbody .item-row").remove();
-// 							currentPage = -1;
 							loadNextPage(null, true);
 						});
 						var filterFunc = function() {
 							var searchTxtValue = $(this).val();
 							searchTxt = searchTxtValue;
 							// reload first page
-// 							$(".tableItems tbody .item-row").remove();
-// 							currentPage = -1;
 							loadNextPage(null, true);
 						}
 						var debounced = $.debounce(300, filterFunc);
 						$(".searchInput").bind("keyup", debounced);
+						
+						$(".orderByLabel").click(function (e) {
+							e.preventDefault();
+							orderByCriteria = $(this).attr("id");
+							$(".orderByLabel").css("text-decoration", "none");
+							$(".orderByLabel").css("font-weight", "normal");
+							$(this).css("text-decoration", "underline");
+							$(this).css("font-weight", "bold");
+							// reload first page
+							loadNextPage(null, true);
+						});
 					});
 				</script>
 			</td> 
@@ -286,6 +306,9 @@
 		}
 		if(searchTxt != undefined && searchTxt != null) {
 			url = url + "&search=" + searchTxt;
+		}
+		if(orderByCriteria != undefined && orderByCriteria != null) {
+			url = url + "&orderBy=" + orderByCriteria;
 		}
 
 

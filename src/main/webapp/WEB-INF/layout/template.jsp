@@ -58,14 +58,6 @@ ${configuration.googleAnalytics}
             <ul class="nav navbar-nav">
               <li class="${current == 'index' ? 'active' : ''}"><a href='<spring:url value="/" />'>Latest</a></li>
 
-              <li class="dropdown ${current == 'top-views' ? 'active' : ''}">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Top <span class="caret"></span></a>
-                <ul class="dropdown-menu" role="menu">
-	              <li class="${current == 'top-views' && maxValue == 'week' ? 'active' : ''}"><a href='<spring:url value="/index.html?top-views&max=week" />'>Top this week</a></li>
-	              <li class="${current == 'top-views' && maxValue == 'month' ? 'active' : ''}"><a href='<spring:url value="/index.html?top-views&max=month" />'>Top this month</a></li>
-                </ul>
-              </li>
-
               <security:authorize access="hasRole('ROLE_ADMIN')">
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Administer <span class="caret"></span></a>

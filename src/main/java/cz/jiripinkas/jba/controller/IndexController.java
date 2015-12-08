@@ -26,7 +26,7 @@ import cz.jiripinkas.jba.service.ItemService.OrderType;
 
 @Controller
 public class IndexController {
-	
+
 	private static final Logger log = LoggerFactory.getLogger(IndexController.class);
 
 	@Autowired
@@ -64,79 +64,24 @@ public class IndexController {
 		return showPage(model, request, page, "index", OrderType.LATEST, MaxType.UNDEFINED);
 	}
 
-	private MaxType resolveMaxType(String max) {
-		MaxType maxType = MaxType.UNDEFINED;
-		if ("month".equals(max)) {
-			maxType = MaxType.MONTH;
-		} else if ("week".equals(max)) {
-			maxType = MaxType.WEEK;
-		}
-		return maxType;
-	}
-
-	private String resolveTitle(MaxType maxType) {
-		String finalTitle = configurationService.find().getTopHeading();
-		switch (maxType) {
-		case MONTH:
-			finalTitle += " this month: ";
-			break;
-		case WEEK:
-			finalTitle += " this week: ";
-			break;
-		default:
-			finalTitle += ": ";
-			break;
-		}
-		return finalTitle;
-	}
-
-	private MaxType populateModelWithMax(Model model, String max) {
-		model.addAttribute("topViews", true);
-		MaxType maxType = resolveMaxType(max);
-		if (maxType != MaxType.UNDEFINED) {
-			model.addAttribute("max", true);
-			model.addAttribute("maxValue", max);
-		}
-		model.addAttribute("title", resolveTitle(maxType));
-		return maxType;
-	}
-
-	@RequestMapping(value = "/index", params = "top-views")
-	public String topViews(Model model, HttpServletRequest request, @RequestParam(required = false) String max) {
-		MaxType maxType = populateModelWithMax(model, max);
-		return showFirstPage(model, request, "top-views", OrderType.MOST_VIEWED, maxType);
-	}
-
-	@RequestMapping(value = "/index", params = { "page", "top-views" })
-	public String topViews(Model model, @RequestParam int page, HttpServletRequest request, @RequestParam(required = false) String max) {
-		MaxType maxType = populateModelWithMax(model, max);
-		return showPage(model, request, page, "top-views", OrderType.MOST_VIEWED, maxType);
-	}
-
 	@ResponseBody
 	@RequestMapping("/page/{page}")
-	public List<ItemDto> getPageLatest(@PathVariable int page, HttpServletRequest request, @RequestParam Integer[] selectedCategories, @RequestParam(required = false) String search) {
-		if(search != null && !search.trim().isEmpty()) {
+	public List<ItemDto> getPageLatest(@PathVariable int page, HttpServletRequest request, @RequestParam Integer[] selectedCategories, @RequestParam(required = false) String search,
+			@RequestParam(required = false) String orderBy) {
+		if (search != null && !search.trim().isEmpty()) {
 			log.info("search for: " + search);
 		}
 		boolean showAll = false;
 		if (request.isUserInRole("ADMIN")) {
 			showAll = true;
 		}
-		return itemService.getDtoItems(page, showAll, OrderType.LATEST, MaxType.UNDEFINED, selectedCategories, search);
-	}
-
-	@ResponseBody
-	@RequestMapping(value = "/page/{page}", params = "topviews")
-	public List<ItemDto> getPageMostViewed(@PathVariable int page, HttpServletRequest request, @RequestParam(required = false) String max, @RequestParam Integer[] selectedCategories, @RequestParam(required = false) String search) {
-		if(search != null && !search.trim().isEmpty()) {
-			log.info("search for: " + search);
+		if ("topWeek".equals(orderBy)) {
+			return itemService.getDtoItems(page, showAll, OrderType.MOST_VIEWED, MaxType.WEEK, selectedCategories, search);
+		} else if ("topMonth".equals(orderBy)) {
+			return itemService.getDtoItems(page, showAll, OrderType.MOST_VIEWED, MaxType.MONTH, selectedCategories, search);
+		} else {
+			return itemService.getDtoItems(page, showAll, OrderType.LATEST, MaxType.UNDEFINED, selectedCategories, search);
 		}
-		boolean showAll = false;
-		if (request.isUserInRole("ADMIN")) {
-			showAll = true;
-		}
-		return itemService.getDtoItems(page, showAll, OrderType.MOST_VIEWED, resolveMaxType(max), selectedCategories, search);
 	}
 
 	@ResponseBody

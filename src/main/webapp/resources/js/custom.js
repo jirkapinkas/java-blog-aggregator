@@ -4,6 +4,8 @@ var currentPage = 0;
 
 var selectedCategories;
 
+var orderByCriteria = "latest";
+
 var searchTxt;
 
 /*
