@@ -84,11 +84,24 @@
 				<script type="text/javascript">
 					$(document).ready(function() {
 						$('.withTooltip').tooltip();
-						// TODO save settings to cookie
-						// select all categories
-						$.getJSON("<spring:url value='/all-categories.json' />", function(data) {
-							selectedCategories = data;
-						});
+
+						// set selectedCategories
+						if(localStorage.getItem("selectedCategories")) {
+							// retrieve categories from localStorage
+							selectedCategories = JSON.parse(localStorage.getItem("selectedCategories"));
+							// update category labels
+							$(".categoryLabel").css("text-decoration", "line-through");
+							for (var i = 0; i < selectedCategories.length; i++) {
+								$("#" + selectedCategories[i] +  ".categoryLabel").css("text-decoration", "none");
+							}
+						} else {
+							// select all categories
+							$.getJSON("<spring:url value='/all-categories.json' />", function(data) {
+								selectedCategories = data;
+								localStorage.setItem("selectedCategories", JSON.stringify(selectedCategories));
+							});
+						}
+						
 						$(".categoryLabel").click(function (e) {
 							var categoryId = parseInt($(this).attr("id"));
 							var arrIndex = $.inArray(categoryId, selectedCategories);
@@ -99,6 +112,8 @@
 								selectedCategories.push(categoryId);
 								$(this).css("text-decoration", "none");
 							}
+							// store categories to localStorage
+							localStorage.setItem("selectedCategories", JSON.stringify(selectedCategories));
 							// reload first page
 							loadNextPage(null, true);
 						});
