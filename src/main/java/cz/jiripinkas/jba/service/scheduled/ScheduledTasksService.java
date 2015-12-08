@@ -31,7 +31,6 @@ import cz.jiripinkas.jba.dto.ItemDto;
 import cz.jiripinkas.jba.entity.Blog;
 import cz.jiripinkas.jba.entity.Category;
 import cz.jiripinkas.jba.entity.Configuration;
-import cz.jiripinkas.jba.entity.Item;
 import cz.jiripinkas.jba.entity.NewsItem;
 import cz.jiripinkas.jba.repository.BlogRepository;
 import cz.jiripinkas.jba.repository.ItemRepository;
@@ -108,16 +107,18 @@ public class ScheduledTasksService {
 	 * Remove too old items without any clicks ... nobody will see them anyway.
 	 */
 	// one day = 60 * 60 * 24 * 1000
-//	@Scheduled(initialDelay = 60 * 60 * 12 * 1000, fixedDelay = 60 * 60 * 24 * 1000)
-//	@CacheEvict(value = "itemCount", allEntries = true)
-//	public void cleanOldItems() {
-//		List<Item> items = itemRepository.findAll();
-//		for (Item item : items) {
-//			if (item.getClickCount() == 0 && itemService.isTooOld(item.getPublishedDate())) {
-//				itemRepository.delete(item);
-//			}
-//		}
-//	}
+	// @Scheduled(initialDelay = 60 * 60 * 12 * 1000, fixedDelay = 60 * 60 * 24
+	// * 1000)
+	// @CacheEvict(value = "itemCount", allEntries = true)
+	// public void cleanOldItems() {
+	// List<Item> items = itemRepository.findAll();
+	// for (Item item : items) {
+	// if (item.getClickCount() == 0 &&
+	// itemService.isTooOld(item.getPublishedDate())) {
+	// itemRepository.delete(item);
+	// }
+	// }
+	// }
 
 	int[] getPreviousWeekAndYear(Date date) throws ParseException {
 		Calendar calendar = new GregorianCalendar();

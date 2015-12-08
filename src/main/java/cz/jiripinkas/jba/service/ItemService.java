@@ -106,10 +106,8 @@ public class ItemService {
 			for (String string : search.split(" ")) {
 				String searchStringPart = StringEscapeUtils.escapeSql(string).trim();
 				if (!searchStringPart.isEmpty()) {
-					hql += " and (lower(i.title) like lower('%" + searchStringPart + "%') "
-							+ " or lower(i.description) like lower('%" + searchStringPart + "%') "
-							+ " or lower(b.name) like lower('%" + searchStringPart + "%') "
-							+ " or lower(b.nick) like lower('%" + searchStringPart + "%')) ";
+					hql += " and (lower(i.title) like lower('%" + searchStringPart + "%') " + " or lower(i.description) like lower('%" + searchStringPart + "%') " + " or lower(b.name) like lower('%"
+							+ searchStringPart + "%') " + " or lower(b.nick) like lower('%" + searchStringPart + "%')) ";
 				}
 			}
 		}
@@ -133,11 +131,17 @@ public class ItemService {
 				.log10(item.getLinkedinShareCount() + 1) * 10));
 	}
 
-	public boolean isTooOld(Date date) {
-		GregorianCalendar calendar = new GregorianCalendar();
-		calendar.add(Calendar.MONTH, -2);
-		Date oneMonthBefore = calendar.getTime();
+	public boolean isTooOldOrYoung(Date date) {
+		GregorianCalendar calendar1 = new GregorianCalendar();
+		calendar1.add(Calendar.MONTH, -2);
+		Date oneMonthBefore = calendar1.getTime();
+		GregorianCalendar calendar2 = new GregorianCalendar();
+		calendar2.add(Calendar.DATE, 1);
+		Date oneDayAfter = calendar2.getTime();
 		if (date.compareTo(oneMonthBefore) < 0) {
+			return true;
+		}
+		if (date.compareTo(oneDayAfter) > 0) {
 			return true;
 		}
 		return false;

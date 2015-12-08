@@ -30,7 +30,7 @@ import cz.jiripinkas.jba.util.MyUtil;
 
 @Service
 public class BlogService {
-	
+
 	private static final Logger log = LoggerFactory.getLogger(BlogService.class);
 
 	@Autowired
@@ -63,10 +63,10 @@ public class BlogService {
 					errors.append(", ");
 					continue;
 				}
-				if (!itemService.isTooOld(item.getPublishedDate())) {
+				if (!itemService.isTooOldOrYoung(item.getPublishedDate())) {
 					// search for duplicities in the database
 					boolean duplicate = false;
-					if(allLinksMap.containsKey(item.getLink())) {
+					if (allLinksMap.containsKey(item.getLink())) {
 						duplicate = true;
 					}
 					if (Boolean.TRUE.equals(blog.getAggregator()) && allLowercaseTitlesMap.containsKey(item.getTitle().toLowerCase())) {
