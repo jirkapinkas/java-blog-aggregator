@@ -395,10 +395,12 @@
 			var newCode = $(".table tr:last").prev().after(html);
 			$("img.lazy").unveil(unveilTreshold);
 			// set like / dislike buttons state
+			var changedAnything = false;
 			$.each(data, function(key, value) {
 				showCurrentState(value.id);
+				changedAnything = true;
 			});
-			finishRefresh();
+			finishRefresh(changedAnything);
 		});
 		currentPage++;
 	}

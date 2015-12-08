@@ -163,11 +163,15 @@ function undislike(itemId) {
 }
 
 function startRefresh() {
+	$(".loadButton").text("load next 10 items");
 	$(".loadButton").css("display", "none");
 	$(".loadButton").after("<i class='fa fa-refresh fa-spin' style='color:#428bca'></i>");
 }
 
-function finishRefresh() {
+function finishRefresh(changedAnything) {
+	if(!changedAnything) {
+		$(".loadButton").text("there's nothing more");
+	}
 	$(".loadButton").css("display", "inline");
 	$(".fa-spin").remove();
 }
