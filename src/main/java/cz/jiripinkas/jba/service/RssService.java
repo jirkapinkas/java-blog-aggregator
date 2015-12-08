@@ -200,6 +200,12 @@ public class RssService {
 			log.error("Exception downloading real link: " + link);
 			throw new UrlException("Exception during downloading: " + link);
 		}
+		if(realLink != null) {
+			// fixes for stupid blogs
+			realLink = realLink.replace("?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=Microservices", "");
+			realLink = realLink.replace("?utm_campaign=infoq_content&utm_source=infoq&utm_medium=feed&utm_term=Java", "");
+			realLink = realLink.trim();
+		}
 		return realLink;
 	}
 
