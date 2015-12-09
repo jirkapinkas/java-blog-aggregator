@@ -17,7 +17,6 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +35,9 @@ public class ItemService {
 	private EntityManager entityManager;
 
 	@Autowired
+	private AllCategoriesService allCategoriesService;
+
+	@Autowired
 	private Mapper mapper;
 
 	public enum OrderType {
@@ -49,11 +51,20 @@ public class ItemService {
 	@Transactional
 	public List<ItemDto> getDtoItems(int page, boolean showAll, OrderType orderType, MaxType maxType, Integer[] selectedCategories) {
 		// call getDtoItems without search
-		return getDtoItems(page, showAll, orderType, maxType, selectedCategories, null);
+		return getDtoItems(page, showAll, orderType, maxType, selectedCategories, null, null);
 	}
 
 	@Transactional
 	public List<ItemDto> getDtoItems(int page, boolean showAll, OrderType orderType, MaxType maxType, Integer[] selectedCategories, String search) {
+		// call getDtoItems without search
+		return getDtoItems(page, showAll, orderType, maxType, selectedCategories, search, null);
+	}
+
+	@Transactional
+	public List<ItemDto> getDtoItems(int page, boolean showAll, OrderType orderType, MaxType maxType, Integer[] selectedCategories, String search, String blogShortName) {
+		if (selectedCategories == null) {
+			selectedCategories = allCategoriesService.getAllCategoryIds();
+		}
 		Direction orderDirection = Direction.DESC;
 
 		String orderByProperty = null;
@@ -110,6 +121,10 @@ public class ItemService {
 							+ searchStringPart + "%') " + " or lower(b.nick) like lower('%" + searchStringPart + "%')) ";
 				}
 			}
+		}
+		if (blogShortName != null) {
+			String blogShortNameEscaped = StringEscapeUtils.escapeSql(blogShortName);
+			hql += " and b.shortName = '" + blogShortNameEscaped + "' ";
 		}
 		hql += " order by ";
 		hql += " " + orderByProperty + " ";
@@ -193,19 +208,6 @@ public class ItemService {
 	private int dislike(int itemId, int amount) {
 		itemRepository.changeDislike(itemId, amount);
 		return itemRepository.getDislikeCount(itemId);
-	}
-
-	@Transactional
-	public List<ItemDto> getDtoItems(int page, String blogShortName) {
-		ArrayList<ItemDto> result = new ArrayList<ItemDto>();
-		List<Item> items = null;
-		items = itemRepository.findBlogPageEnabled(blogShortName, new PageRequest(page, 10, Direction.DESC, "publishedDate"));
-		for (Item item : items) {
-			ItemDto itemDto = mapper.map(item, ItemDto.class);
-			itemDto.setDisplayLikeCount(calculateDisplayLikeCount(item));
-			result.add(itemDto);
-		}
-		return result;
 	}
 
 }

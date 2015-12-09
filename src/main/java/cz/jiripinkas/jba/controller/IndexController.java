@@ -67,7 +67,7 @@ public class IndexController {
 	@ResponseBody
 	@RequestMapping("/page/{page}")
 	public List<ItemDto> getPageLatest(@PathVariable int page, HttpServletRequest request, @RequestParam Integer[] selectedCategories, @RequestParam(required = false) String search,
-			@RequestParam(required = false) String orderBy) {
+			@RequestParam(required = false) String orderBy, @RequestParam(required = false) String shortName) {
 		if (search != null && !search.trim().isEmpty()) {
 			log.info("search for: " + search);
 		}
@@ -76,11 +76,11 @@ public class IndexController {
 			showAll = true;
 		}
 		if ("topWeek".equals(orderBy)) {
-			return itemService.getDtoItems(page, showAll, OrderType.MOST_VIEWED, MaxType.WEEK, selectedCategories, search);
+			return itemService.getDtoItems(page, showAll, OrderType.MOST_VIEWED, MaxType.WEEK, selectedCategories, search, shortName);
 		} else if ("topMonth".equals(orderBy)) {
-			return itemService.getDtoItems(page, showAll, OrderType.MOST_VIEWED, MaxType.MONTH, selectedCategories, search);
+			return itemService.getDtoItems(page, showAll, OrderType.MOST_VIEWED, MaxType.MONTH, selectedCategories, search, shortName);
 		} else {
-			return itemService.getDtoItems(page, showAll, OrderType.LATEST, MaxType.UNDEFINED, selectedCategories, search);
+			return itemService.getDtoItems(page, showAll, OrderType.LATEST, MaxType.UNDEFINED, selectedCategories, search, shortName);
 		}
 	}
 

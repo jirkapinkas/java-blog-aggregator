@@ -1,8 +1,8 @@
 package cz.jiripinkas.jba.controller;
 
 import java.io.IOException;
-import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import cz.jiripinkas.jba.dto.ItemDto;
 import cz.jiripinkas.jba.entity.Blog;
 import cz.jiripinkas.jba.service.BlogService;
 import cz.jiripinkas.jba.service.ItemService;
+import cz.jiripinkas.jba.service.ItemService.MaxType;
+import cz.jiripinkas.jba.service.ItemService.OrderType;
 
 @Controller
 public class BlogController {
@@ -48,32 +48,30 @@ public class BlogController {
 		model.addAttribute("blog", blog);
 	}
 
-	@RequestMapping("/blog/{shortName}")
-	public String blogDetail(@PathVariable String shortName, Model model) {
+	@RequestMapping(value = "/blog/{shortName}")
+	public String blogDetail(Model model, HttpServletRequest request, @RequestParam(defaultValue = "0") Integer page, @PathVariable String shortName, @RequestParam(required = false) String orderBy) {
 		findBlog(shortName, model);
-		return showFirstPage(model, "index", shortName);
+		return showPage(model, page, shortName, request, orderBy);
 	}
 
-	@RequestMapping(value = "/blog/{shortName}", params = "page")
-	public String blogDetail(Model model, @RequestParam int page, @RequestParam String shortName) {
-		findBlog(shortName, model);
-		return showPage(model, page, "index", shortName);
-	}
-
-	private String showFirstPage(Model model, String tilesPage, String shortName) {
-		return showPage(model, 0, tilesPage, shortName);
-	}
-
-	private String showPage(Model model, int page, String tilesPage, String shortName) {
-		model.addAttribute("items", itemService.getDtoItems(page, shortName));
+	private String showPage(Model model, int page, String shortName, HttpServletRequest request, String orderBy) {
+		boolean showAll = false;
+		if (request.isUserInRole("ADMIN")) {
+			showAll = true;
+		}
+		OrderType orderType = OrderType.LATEST;
+		if (orderBy != null && orderBy.contains("top")) {
+			orderType = OrderType.MOST_VIEWED;
+		}
+		MaxType maxType = MaxType.UNDEFINED;
+		if (orderBy != null && orderBy.toLowerCase().contains("month")) {
+			maxType = MaxType.MONTH;
+		} else if (orderBy != null && orderBy.toLowerCase().contains("week")) {
+			maxType = MaxType.WEEK;
+		}
+		model.addAttribute("items", itemService.getDtoItems(page, showAll, orderType, maxType, null, null, shortName));
 		model.addAttribute("nextPage", page + 1);
-		return tilesPage;
-	}
-
-	@ResponseBody
-	@RequestMapping(value = "/page/{page}", params = "shortName")
-	public List<ItemDto> getPageLatest(@PathVariable int page, @RequestParam String shortName) {
-		return itemService.getDtoItems(page, shortName);
+		return "index";
 	}
 
 	@RequestMapping("/blogs")
