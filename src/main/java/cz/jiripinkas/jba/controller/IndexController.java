@@ -1,6 +1,7 @@
 package cz.jiripinkas.jba.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,30 +40,47 @@ public class IndexController {
 	@Autowired
 	private ConfigurationService configurationService;
 
-	private String showFirstPage(Model model, HttpServletRequest request, String tilesPage, OrderType orderType, MaxType maxType) {
-		return showPage(model, request, 0, tilesPage, orderType, maxType);
+	private String showFirstPage(Model model, HttpServletRequest request, OrderType orderType, MaxType maxType, String selectedCategoriesString) {
+		return showPage(model, request, 0, orderType, maxType, selectedCategoriesString);
 	}
 
-	private String showPage(Model model, HttpServletRequest request, int page, String tilesPage, OrderType orderType, MaxType maxType) {
+	private String showPage(Model model, HttpServletRequest request, int page, OrderType orderType, MaxType maxType, String selectedCategoriesString) {
 		boolean showAll = false;
 		if (request.isUserInRole("ADMIN")) {
 			showAll = true;
 		}
-		model.addAttribute("items", itemService.getDtoItems(page, showAll, orderType, maxType, allCategoriesService.getAllCategoryIds()));
+		model.addAttribute("items", itemService.getDtoItems(page, showAll, orderType, maxType, getSelectedCategories(selectedCategoriesString)));
 		model.addAttribute("nextPage", page + 1);
-		return tilesPage;
+		return "index";
+	}
+
+	private Integer[] getSelectedCategories(String selectedCategoriesString) {
+		Integer[] selectedCategories;
+		if (selectedCategoriesString == null) {
+			selectedCategories = allCategoriesService.getAllCategoryIds();
+		} else {
+			String[] strings = selectedCategoriesString.replace("[", "").replace("]", "").split(",");
+			List<Integer> selectedCategoriesList = new ArrayList<>();
+			for (String string : strings) {
+				if (!string.trim().isEmpty()) {
+					selectedCategoriesList.add(Integer.parseInt(string.trim()));
+				}
+			}
+			selectedCategories = selectedCategoriesList.toArray(new Integer[] {});
+		}
+		return selectedCategories;
 	}
 
 	@RequestMapping("/index")
-	public String index(Model model, HttpServletRequest request) {
+	public String index(Model model, HttpServletRequest request, @CookieValue(value = "selectedCategories", required = false) String selectedCategoriesString) {
 		model.addAttribute("title", configurationService.find().getHomepageHeading());
-		return showFirstPage(model, request, "index", OrderType.LATEST, MaxType.UNDEFINED);
+		return showFirstPage(model, request, OrderType.LATEST, MaxType.UNDEFINED, selectedCategoriesString);
 	}
 
 	@RequestMapping(value = "/index", params = "page")
-	public String index(Model model, @RequestParam int page, HttpServletRequest request) {
+	public String index(Model model, @RequestParam int page, HttpServletRequest request, @CookieValue(required = false) String selectedCategoriesString) {
 		model.addAttribute("title", configurationService.find().getHomepageHeading());
-		return showPage(model, request, page, "index", OrderType.LATEST, MaxType.UNDEFINED);
+		return showPage(model, request, page, OrderType.LATEST, MaxType.UNDEFINED, selectedCategoriesString);
 	}
 
 	@ResponseBody

@@ -84,11 +84,11 @@
 				<script type="text/javascript">
 					$(document).ready(function() {
 						$('.withTooltip').tooltip();
-
+						
 						// set selectedCategories
-						if(localStorage.getItem("selectedCategories")) {
-							// retrieve categories from localStorage
-							selectedCategories = JSON.parse(localStorage.getItem("selectedCategories"));
+						if($.cookie("selectedCategories")) {
+							// retrieve categories from cookie
+							selectedCategories = JSON.parse(unescape($.cookie("selectedCategories")));
 							// update category labels
 							$(".categoryLabel").css("text-decoration", "line-through");
 							for (var i = 0; i < selectedCategories.length; i++) {
@@ -98,7 +98,7 @@
 							// select all categories
 							$.getJSON("<spring:url value='/all-categories.json' />", function(data) {
 								selectedCategories = data;
-								localStorage.setItem("selectedCategories", JSON.stringify(selectedCategories));
+								$.cookie("selectedCategories", JSON.stringify(selectedCategories), {expires: 30, path: '/'});
 							});
 						}
 						
@@ -112,8 +112,8 @@
 								selectedCategories.push(categoryId);
 								$(this).css("text-decoration", "none");
 							}
-							// store categories to localStorage
-							localStorage.setItem("selectedCategories", JSON.stringify(selectedCategories));
+							// store categories to cookie
+							$.cookie("selectedCategories", unescape(JSON.stringify(selectedCategories)), {expires: 30, path: '/'});
 							// reload first page
 							loadNextPage(null, true);
 						});
