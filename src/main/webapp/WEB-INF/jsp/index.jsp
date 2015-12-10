@@ -14,7 +14,12 @@
 					</a>
 				</td>
 				<td>
-					<h1 style="font-size:25px">${title}</h1>
+					<h1 style="font-size:25px">
+						${title}
+						<span style="font-size:16px;">
+							<tags:popularity popularity="${blog.popularity}" />
+						</span>
+					</h1>
 				</td>
 			</tr>
 		</table>

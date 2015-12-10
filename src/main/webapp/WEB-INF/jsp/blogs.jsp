@@ -53,33 +53,7 @@
 					</a>
 				</td>
 				<td>
-					<c:choose>
-						<c:when test="${blog.popularity >= 30}">
-							<i class="fa fa-star" style="color:yellow;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: orange;"></i>
-							<i class="fa fa-star" style="color:yellow;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: orange;"></i>
-							<i class="fa fa-star" style="color:yellow;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: orange;"></i>
-							<i class="fa fa-star" style="color:yellow;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: orange;"></i>
-							<i class="fa fa-star" style="color:yellow;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: orange;"></i>
-						</c:when>
-						<c:when test="${blog.popularity >= 20}">
-							<i class="fa fa-star" style="color:yellow;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: orange;"></i>
-							<i class="fa fa-star" style="color:yellow;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: orange;"></i>
-							<i class="fa fa-star" style="color:yellow;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: orange;"></i>
-							<i class="fa fa-star" style="color:yellow;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: orange;"></i>
-						</c:when>
-						<c:when test="${blog.popularity >= 15}">
-							<i class="fa fa-star" style="color:yellow;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: orange;"></i>
-							<i class="fa fa-star" style="color:yellow;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: orange;"></i>
-							<i class="fa fa-star" style="color:yellow;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: orange;"></i>
-						</c:when>
-						<c:when test="${blog.popularity >= 10}">
-							<i class="fa fa-star" style="color:yellow;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: orange;"></i>
-							<i class="fa fa-star" style="color:yellow;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: orange;"></i>
-						</c:when>
-						<c:otherwise>
-							<i class="fa fa-star" style="color:yellow;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: orange;"></i>
-						</c:otherwise>
-					</c:choose>
+					<tags:popularity popularity="${blog.popularity}" />
 				</td>
 				<td>
 					<span class="label label-default">${blog.category.name}</span>
