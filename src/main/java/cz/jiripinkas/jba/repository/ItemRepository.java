@@ -66,7 +66,7 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 	@Query("update Item i set i.savedDate = i.publishedDate where i.savedDate is null")
 	void updateSavedDates();
 
-	@Query("select sum(i.likeCount + ((log(i.clickCount + 1) * 10) + (log(i.twitterRetweetCount + 1) * 10) + (log(i.facebookShareCount + 1) * 10) + (log(i.linkedinShareCount + 1) * 10))) / count(i) from Item i where i.blog.id = ?1 and i.savedDate > ?2")
+	@Query("select sum(coalesce(i.likeCount, 0) + ((log(coalesce(i.clickCount, 0) + 1) * 10) + (log(coalesce(i.twitterRetweetCount, 0) + 1) * 10) + (log(coalesce(i.facebookShareCount, 0) + 1) * 10) + (log(coalesce(i.linkedinShareCount, 0) + 1) * 10))) / coalesce(count(i), 0) from Item i where i.blog.id = ?1 and i.savedDate > ?2")
 	Integer getSocialSum(int blogId, Date dateFrom);
 
 }
