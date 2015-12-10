@@ -29,6 +29,9 @@ public class Item {
 	@Column(length = Integer.MAX_VALUE)
 	private String description;
 
+	/**
+	 * When was the item published by it's owner
+	 */
 	@Column(name = "published_date")
 	private Date publishedDate;
 
@@ -58,6 +61,12 @@ public class Item {
 
 	@Column(name = "linkedin_share_count", nullable = false)
 	private Integer linkedinShareCount;
+
+	/**
+	 * When was the item saved to local database
+	 */
+	@Column(name = "saved_date")
+	private Date savedDate;
 
 	@Transient
 	private String error;
@@ -182,6 +191,14 @@ public class Item {
 
 	public void setLink(String link) {
 		this.link = link;
+	}
+
+	public Date getSavedDate() {
+		return savedDate;
+	}
+
+	public void setSavedDate(Date savedDate) {
+		this.savedDate = savedDate;
 	}
 
 }

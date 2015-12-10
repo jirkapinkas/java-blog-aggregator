@@ -1,5 +1,6 @@
 package cz.jiripinkas.jba.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
@@ -60,5 +61,12 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 	@Query("update Item i set i.linkedinShareCount = ?2 where i.id = ?1")
 	void setLinkedinShareCount(int id, int count);
 
+	@Transactional
+	@Modifying
+	@Query("update Item i set i.savedDate = i.publishedDate where i.publishedDate is null")
+	void updateSavedDates();
+
+	@Query("select sum(i.likeCount + ((log(i.clickCount + 1) * 10) + (log(i.twitterRetweetCount + 1) * 10) + (log(i.facebookShareCount + 1) * 10) + (log(i.linkedinShareCount + 1) * 10))) / count(i) from Item i where i.blog.id = ?1 and i.savedDate > ?2")
+	Integer getSocialSum(int blogId, Date dateFrom);
 
 }

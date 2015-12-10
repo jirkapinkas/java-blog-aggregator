@@ -14,7 +14,7 @@ public class ItemDto {
 
 	private String link;
 
-	private Date publishedDate;
+	private Date savedDate;
 
 	private BlogDto blog;
 
@@ -128,12 +128,12 @@ public class ItemDto {
 		this.link = link;
 	}
 
-	public Date getPublishedDate() {
-		return publishedDate;
+	public Date getSavedDate() {
+		return savedDate;
 	}
 
-	public void setPublishedDate(Date publishedDate) {
-		this.publishedDate = publishedDate;
+	public void setSavedDate(Date savedDate) {
+		this.savedDate = savedDate;
 	}
 
 	public BlogDto getBlog() {

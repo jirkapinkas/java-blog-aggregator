@@ -73,9 +73,14 @@ public class BlogService {
 						duplicate = true;
 					}
 					if (!duplicate) {
+						item.setSavedDate(new Date());
 						item.setBlog(blog);
 						itemRepository.save(item);
+						// when I save something, I must set lastIndexedDate
+						blogResultService.saveLastIndexedDate(blog);
 						allLinksMap.put(item.getLink(), null);
+						// break this loop, so that only single item is saved.
+						break;
 					}
 				}
 			}

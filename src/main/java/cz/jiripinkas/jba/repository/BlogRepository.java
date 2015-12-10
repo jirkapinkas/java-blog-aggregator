@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import cz.jiripinkas.jba.entity.Blog;
 
-public interface BlogRepository extends JpaRepository<Blog, Integer>{
+public interface BlogRepository extends JpaRepository<Blog, Integer> {
 
 	@Query("select distinct b from Blog b left join fetch b.items where b.user.id = ?1 order by b.id")
 	List<Blog> findByUserId(int id);
@@ -25,7 +25,7 @@ public interface BlogRepository extends JpaRepository<Blog, Integer>{
 	List<Blog> findAllFetchUser();
 
 	Blog findByIdAndUserName(int id, String username);
-	
+
 	@Modifying
 	@Query("update Blog b set b.lastCheckErrorText = null, b.lastCheckErrorCount = 0, b.lastCheckStatus = true where b.id = ?1")
 	void saveOk(int blogId);
@@ -35,5 +35,13 @@ public interface BlogRepository extends JpaRepository<Blog, Integer>{
 	void saveFail(int blogId, int errorCount, String errorText);
 
 	int countByCategoryId(int categoryId);
+
+	@Modifying
+	@Query("update Blog b set b.lastIndexedDate = current_timestamp where b.id = ?1")
+	void saveLastIndexedDate(int blogId);
+
+	@Modifying
+	@Query("update Blog b set b.popularity = ?2 where b.id = ?1")
+	void setPopularity(int blogId, int popularity);
 
 }

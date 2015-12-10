@@ -182,10 +182,10 @@
 							</td>
 						</tr>
 					</table>
-					<c:if test="${item.publishedDate > yesterdayDate}">
+					<c:if test="${item.savedDate > yesterdayDate}">
 						<i class="fa fa-plus" title="today"></i>
 					</c:if>
-					<span class="label" style="color: grey;"><fmt:formatDate value="${item.publishedDate}" pattern="dd-MM-yyyy hh:mm:ss" /></span>
+					<span class="label" style="color: grey;"><fmt:formatDate value="${item.savedDate}" pattern="dd-MM-yyyy HH:mm:ss" /></span>
 					<span class="label label-info"><a href="<spring:url value='/blog/${item.blog.shortName}.html' />" style="color: white"><c:out value="${item.blog.publicName}" /></a></span>
 					<c:if test="${item.blog.category.shortName != null}">
 						<span class="label label-default"><c:out value="${item.blog.category.name}" /></span>
@@ -370,7 +370,7 @@
 				html += ' </tr>';
 				html += ' </table>';
 
-				var date = new Date(value.publishedDate);
+				var date = new Date(value.savedDate);
 				if(date.getTime() > "${yesterdayDate.time}") {
 					html += '<i class="fa fa-plus" title="today"></i> ';
 				}

@@ -1,5 +1,6 @@
 package cz.jiripinkas.jba.entity;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -60,14 +61,20 @@ public class Blog {
 	@Column(name = "homepage")
 	private String homepageUrl;
 
-	@Column(name = "last_check_status")
+	@Column(name = "last_check_status", updatable = false)
 	private Boolean lastCheckStatus;
 
+	/**
+	 * Date when was some item added.
+	 */
+	@Column(name = "last_indexed_date", updatable = false)
+	private Date lastIndexedDate;
+
 	@Lob
-	@Column(name = "last_check_error_text", length = Integer.MAX_VALUE)
+	@Column(name = "last_check_error_text", length = Integer.MAX_VALUE, updatable = false)
 	private String lastCheckErrorText;
 
-	@Column(name = "last_check_error_count")
+	@Column(name = "last_check_error_count", updatable = false)
 	private Integer lastCheckErrorCount;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -75,6 +82,17 @@ public class Blog {
 	private Category category;
 
 	private Boolean aggregator;
+
+	@Column(updatable = false)
+	private Integer popularity;
+
+	public Integer getPopularity() {
+		return popularity;
+	}
+
+	public void setPopularity(Integer popularity) {
+		this.popularity = popularity;
+	}
 
 	public String getPublicName() {
 		return MyUtil.getPublicName(nick, name);
@@ -190,6 +208,14 @@ public class Blog {
 
 	public void setNick(String nick) {
 		this.nick = nick;
+	}
+
+	public Date getLastIndexedDate() {
+		return lastIndexedDate;
+	}
+
+	public void setLastIndexedDate(Date lastIndexedDate) {
+		this.lastIndexedDate = lastIndexedDate;
 	}
 
 }

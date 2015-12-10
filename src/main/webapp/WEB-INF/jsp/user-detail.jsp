@@ -46,7 +46,7 @@ $(document).ready(function() {
 						<br />
 						${item.description}
 						<br />
-						${item.publishedDate}
+						${item.savedDate}
 					</td>
 				</tr>
 			</c:forEach>

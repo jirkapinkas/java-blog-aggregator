@@ -87,6 +87,8 @@ public class ScheduledTasksService {
 		// next blogs with aggregator = false
 		// and last blogs with aggregator = true
 		List<Blog> blogs = blogRepository.findAll(new Sort(Direction.ASC, "aggregator"));
+
+		// TODO this is very memory-intensive
 		List<String> allLinks = itemRepository.findAllLinks();
 		List<String> allLowercaseTitles = itemRepository.findAllLowercaseTitles();
 		Map<String, Object> allLinksMap = new HashMap<String, Object>();
@@ -98,9 +100,48 @@ public class ScheduledTasksService {
 			allLowercaseTitlesMap.put(title, null);
 		}
 		for (Blog blog : blogs) {
-			blogService.saveItems(blog, allLinksMap, allLowercaseTitlesMap);
+			if (reindexTimeoutPassed(blog.getLastIndexedDate())) {
+				blogService.saveItems(blog, allLinksMap, allLowercaseTitlesMap);
+			}
 		}
 		blogService.setLastIndexedDateFinish(new Date());
+	}
+
+	/**
+	 * Return whether reindex timeout passed. Reindex timeout is between two
+	 * dates: current date and the last time some item was saved for some blog.
+	 * 
+	 * @param lastReindexDate
+	 * @return
+	 */
+	protected boolean reindexTimeoutPassed(Date lastReindexDate) {
+		if (lastReindexDate == null) {
+			return true;
+		}
+		Calendar lastReindexCalendar = new GregorianCalendar();
+		lastReindexCalendar.setTime(lastReindexDate);
+		// reindex timeout is 6 hours
+		lastReindexCalendar.add(Calendar.HOUR_OF_DAY, 6);
+		return lastReindexCalendar.before(new GregorianCalendar());
+	}
+
+	/**
+	 * Run every day
+	 */
+	@Transactional
+	@Scheduled(fixedDelay = 24 * 60 * 60 * 1000, initialDelay = 10000)
+	public void computePopularity() {
+		for (Blog blog : blogService.findAll()) {
+			// int popularity = 5;
+			Calendar dateFromCalendar = new GregorianCalendar();
+			dateFromCalendar.add(Calendar.MONTH, -3);
+			Integer sumPopularity = itemRepository.getSocialSum(blog.getId(), dateFromCalendar.getTime());
+			int popularity = 0;
+			if(sumPopularity != null) {
+				popularity = sumPopularity;
+			}
+			blogRepository.setPopularity(blog.getId(), popularity);
+		}
 	}
 
 	/**

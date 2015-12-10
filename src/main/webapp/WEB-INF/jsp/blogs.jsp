@@ -28,6 +28,7 @@
 			<th>blog</th>
 			<th style="width:100px">category</th>
 			<security:authorize access="${isAdmin}">
+				<th>popularity</th>
 				<th>user</th>
 				<th>edit</th>
 			</security:authorize>
@@ -55,6 +56,9 @@
 					<span class="label label-default">${blog.category.name}</span>
 				</td>
 				<security:authorize access="${isAdmin}">
+					<td>
+						${blog.popularity}
+					</td>
 					<td>
 						<a href="<spring:url value='/users/${blog.user.id}.html' />">
 							${blog.user.name}

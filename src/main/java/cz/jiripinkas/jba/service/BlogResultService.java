@@ -20,6 +20,11 @@ public class BlogResultService {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public void saveLastIndexedDate(Blog blog) {
+		blogRepository.saveLastIndexedDate(blog.getId());
+	}
+
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void saveFail(Blog blog, String errorText) {
 		int errorCount = 0;
 		if (blog.getLastCheckErrorCount() != null) {

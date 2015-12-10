@@ -39,15 +39,20 @@ public class InitDbService {
 
 	@Autowired
 	private ItemRepository itemRepository;
-	
+
 	@Autowired
 	private ConfigurationService configurationService;
-	
+
 	@Autowired
 	private CategoryRepository categoryRepository;
 
 	@PostConstruct
 	public void init() throws IOException {
+		// One-time operation needed to transform old publishedDate to new
+		// savedDate, delete afterwards
+		itemRepository.updateSavedDates();
+
+		// init db
 		if (roleRepository.findByName("ROLE_ADMIN") == null) {
 			Role roleUser = new Role();
 			roleUser.setName("ROLE_USER");
@@ -73,12 +78,11 @@ public class InitDbService {
 			springCategory.setName("Spring");
 			springCategory.setShortName("spring");
 			springCategory = categoryRepository.save(springCategory);
-			
 
 			Blog blogSpring = new Blog();
 			blogSpring.setName("Spring");
-			blogSpring.setUrl("http://spring.io/blog.atom");
-			blogSpring.setHomepageUrl("http://spring.io/");
+			blogSpring.setUrl("https://spring.io/blog.atom");
+			blogSpring.setHomepageUrl("https://spring.io/");
 			blogSpring.setShortName("spring");
 			blogSpring.setUser(userAdmin);
 			blogSpring.setCategory(springCategory);
@@ -96,7 +100,7 @@ public class InitDbService {
 			czechTrainingsCategory.setName("Czech Trainings");
 			czechTrainingsCategory.setShortName("czech-trainings");
 			czechTrainingsCategory = categoryRepository.save(czechTrainingsCategory);
-			
+
 			Blog blogJavaSkoleni = new Blog();
 			blogJavaSkoleni.setName("java skoleni");
 			blogJavaSkoleni.setUrl("http://novinky.seico.cz/java-skoleni");
@@ -114,12 +118,11 @@ public class InitDbService {
 			blogSqlSkoleni.setUser(userAdmin);
 			blogSqlSkoleni.setCategory(czechTrainingsCategory);
 			blogRepository.save(blogSqlSkoleni);
-			
-			
+
 		}
 
 		Configuration configuration = configurationService.find();
-		if(configuration == null) {
+		if (configuration == null) {
 			configuration = new Configuration();
 			configuration.setIcon(IOUtils.toByteArray(getClass().getResourceAsStream("/java-logo.png")));
 			configuration.setFavicon(IOUtils.toByteArray(getClass().getResourceAsStream("/favicon.ico")));
@@ -131,55 +134,25 @@ public class InitDbService {
 			configuration.setChannelTitle("Top Java Blogs");
 			configuration.setChannelLink("http://www.topjavablogs.com");
 			configuration.setChannelDescription("Top Java Blogs is a Java blog aggregator (with English-written blogs only) focused on Java SE, Java EE, Framework Spring and Hibernate.");
-			configuration.setFooter(
-					"&copy; Jiri Pinkas \n" + 
-					" | this project on <a href='https://github.com/jirkapinkas/java-blog-aggregator' target='_blank'>GitHub</a>\n" +
-					" | related: <a href='http://www.javavids.com' target='_blank'>JavaVids</a>\n" +
-					" | <a href='http://www.java-skoleni.cz' target='_blank'>Java školení</a>\n" +
-					" | monitored using: <a href='http://sitemonitoring.sourceforge.net/' target='_blank' title='free open source website monitoring software'>sitemonitoring</a>\n" +
-					" <br />\n" +
-					" <br />\n" +
-					" Top Java Blogs is a Java blog aggregator (with English-written blogs only) focused on Java SE, Java EE, Spring Framework and Hibernate.\n"
-					);
-			configuration.setGoogleAnalytics(
-					"<script>\n" +
-					"  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){\n" +
-					"  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),\n" +
-					"  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)\n" +
-					"  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');\n" +
-					"  ga('create', 'UA-49851353-1', 'topjavablogs.com');\n" +
-					"  ga('send', 'pageview');\n" +
-					"</script>\n"
-					);
-			configuration.setGoogleAdsense(
-					"<script async src='//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'></script>\n" + 
-					"<!-- top java blogs responsive -->\n" + 
-					"<ins class='adsbygoogle'\n" + 
-					"     style='display:block'\n" + 
-					"     data-ad-client='ca-pub-7085637172523095'\n" + 
-					"     data-ad-slot='5679428406'\n" + 
-					"     data-ad-format='auto'></ins>\n" + 
-					"<script>\n" + 
-					"(adsbygoogle = window.adsbygoogle || []).push({});\n" + 
-					"</script>\n"
-					);
-			configuration.setNewsSocialButtons(
-					"<script>\n" +
-					"document.write('<script src=\"//sharebutton.net/plugin/sharebutton.php?type=vertical&u=' + encodeURIComponent(document.location.href) + '\"></scr' + 'ipt>');\n" +
-					"</script>\n"
-					);
-			configuration.setDisqusCode(
-					"<div id=\"disqus_thread\"></div>\n" + 
-					"<script type=\"text/javascript\">\n" + 
-					"    var disqus_shortname = 'topjavablogs';\n" + 
-					"    (function() {\n" + 
-					"        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;\n" + 
-					"        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';\n" + 
-					"        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);\n" + 
-					"    })();\n" + 
-					"</script>\n" + 
-					"<noscript>Please enable JavaScript to view the <a href=\"https://disqus.com/?ref_noscript\" rel=\"nofollow\">comments powered by Disqus.</a></noscript>\n" 
-					);
+			configuration.setFooter("&copy; Jiri Pinkas \n" + " | this project on <a href='https://github.com/jirkapinkas/java-blog-aggregator' target='_blank'>GitHub</a>\n"
+					+ " | related: <a href='http://www.javavids.com' target='_blank'>JavaVids</a>\n" + " | <a href='http://www.java-skoleni.cz' target='_blank'>Java školení</a>\n"
+					+ " | monitored using: <a href='http://sitemonitoring.sourceforge.net/' target='_blank' title='free open source website monitoring software'>sitemonitoring</a>\n" + " <br />\n"
+					+ " <br />\n" + " Top Java Blogs is a Java blog aggregator (with English-written blogs only) focused on Java SE, Java EE, Spring Framework and Hibernate.\n");
+			configuration.setGoogleAnalytics("<script>\n" + "  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){\n"
+					+ "  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),\n" + "  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)\n"
+					+ "  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');\n" + "  ga('create', 'UA-49851353-1', 'topjavablogs.com');\n" + "  ga('send', 'pageview');\n"
+					+ "</script>\n");
+			configuration.setGoogleAdsense("<script async src='//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'></script>\n" + "<!-- top java blogs responsive -->\n"
+					+ "<ins class='adsbygoogle'\n" + "     style='display:block'\n" + "     data-ad-client='ca-pub-7085637172523095'\n" + "     data-ad-slot='5679428406'\n"
+					+ "     data-ad-format='auto'></ins>\n" + "<script>\n" + "(adsbygoogle = window.adsbygoogle || []).push({});\n" + "</script>\n");
+			configuration
+					.setNewsSocialButtons("<script>\n"
+							+ "document.write('<script src=\"//sharebutton.net/plugin/sharebutton.php?type=vertical&u=' + encodeURIComponent(document.location.href) + '\"></scr' + 'ipt>');\n"
+							+ "</script>\n");
+			configuration.setDisqusCode("<div id=\"disqus_thread\"></div>\n" + "<script type=\"text/javascript\">\n" + "    var disqus_shortname = 'topjavablogs';\n" + "    (function() {\n"
+					+ "        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;\n" + "        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';\n"
+					+ "        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);\n" + "    })();\n" + "</script>\n"
+					+ "<noscript>Please enable JavaScript to view the <a href=\"https://disqus.com/?ref_noscript\" rel=\"nofollow\">comments powered by Disqus.</a></noscript>\n");
 			configurationService.save(configuration);
 		}
 	}

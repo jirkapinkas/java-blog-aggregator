@@ -70,18 +70,18 @@ public class ItemService {
 		String orderByProperty = null;
 		switch (orderType) {
 		case LATEST:
-			orderByProperty = "i.publishedDate";
+			orderByProperty = "i.savedDate";
 			break;
 		case MOST_VIEWED:
 			orderByProperty = "i.likeCount + ((log(i.clickCount + 1) * 10) + (log(i.twitterRetweetCount + 1) * 10) + (log(i.facebookShareCount + 1) * 10) + (log(i.linkedinShareCount + 1) * 10))";
 			break;
 		}
 
-		Date publishedDate = null;
+		Date savedDate = null;
 		switch (maxType) {
 		case UNDEFINED:
 			try {
-				publishedDate = new SimpleDateFormat("dd.MM.yyyy").parse("01.01.1970");
+				savedDate = new SimpleDateFormat("dd.MM.yyyy").parse("01.01.1970");
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
@@ -90,13 +90,13 @@ public class ItemService {
 		case MONTH:
 			GregorianCalendar calendar1 = new GregorianCalendar();
 			calendar1.add(Calendar.MONTH, -1);
-			publishedDate = calendar1.getTime();
+			savedDate = calendar1.getTime();
 			break;
 
 		case WEEK:
 			GregorianCalendar calendar2 = new GregorianCalendar();
 			calendar2.add(Calendar.WEEK_OF_MONTH, -1);
-			publishedDate = calendar2.getTime();
+			savedDate = calendar2.getTime();
 			break;
 		}
 
@@ -112,7 +112,7 @@ public class ItemService {
 		if (!showAll) {
 			hql += " i.enabled = true and ";
 		}
-		hql += " i.publishedDate >= ?1 and cat.id IN ?2 ";
+		hql += " i.savedDate >= ?1 and cat.id IN ?2 ";
 		if (search != null) {
 			for (String string : search.split(" ")) {
 				String searchStringPart = StringEscapeUtils.escapeSql(string).trim();
@@ -129,7 +129,7 @@ public class ItemService {
 		hql += " order by ";
 		hql += " " + orderByProperty + " ";
 		hql += orderDirection;
-		TypedQuery<Item> query = entityManager.createQuery(hql, Item.class).setParameter(1, publishedDate).setParameter(2, Arrays.asList(selectedCategories));
+		TypedQuery<Item> query = entityManager.createQuery(hql, Item.class).setParameter(1, savedDate).setParameter(2, Arrays.asList(selectedCategories));
 		items = query.setFirstResult(page * 10).setMaxResults(10).getResultList();
 
 		for (Item item : items) {
