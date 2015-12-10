@@ -73,7 +73,7 @@ public class ItemService {
 			orderByProperty = "i.savedDate";
 			break;
 		case MOST_VIEWED:
-			orderByProperty = "i.likeCount + ((log(i.clickCount + 1) * 10) + (log(i.twitterRetweetCount + 1) * 10) + (log(i.facebookShareCount + 1) * 10) + (log(i.linkedinShareCount + 1) * 10))";
+			orderByProperty = "i.likeCount + ((log(i.clickCount + 1) * 10) + (log(i.twitterRetweetCount + 1) * 10) + (log(i.facebookShareCount + 1) * 3) + (log(i.linkedinShareCount + 1) * 10))";
 			break;
 		}
 
