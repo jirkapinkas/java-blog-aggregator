@@ -52,7 +52,7 @@
 						</strong>
 					</a>
 				</td>
-				<td>
+				<td data-sort="${blog.popularity}">
 					<tags:popularity popularity="${blog.popularity}" />
 				</td>
 				<td>
