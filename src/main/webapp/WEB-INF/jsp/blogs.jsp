@@ -26,9 +26,9 @@
 	<thead>
 		<tr>
 			<th>blog</th>
+			<th style="width:50px">popularity</th>
 			<th style="width:100px">category</th>
 			<security:authorize access="${isAdmin}">
-				<th>popularity</th>
 				<th>user</th>
 				<th>edit</th>
 			</security:authorize>
@@ -53,12 +53,38 @@
 					</a>
 				</td>
 				<td>
+					<c:choose>
+						<c:when test="${blog.popularity == 0}">
+							<i class="fa fa-star" style="color:yellow;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: orange;"></i>
+						</c:when>
+						<c:when test="${blog.popularity >= 30}">
+							<i class="fa fa-star" style="color:yellow;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: orange;"></i>
+							<i class="fa fa-star" style="color:yellow;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: orange;"></i>
+							<i class="fa fa-star" style="color:yellow;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: orange;"></i>
+							<i class="fa fa-star" style="color:yellow;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: orange;"></i>
+							<i class="fa fa-star" style="color:yellow;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: orange;"></i>
+						</c:when>
+						<c:when test="${blog.popularity >= 20}">
+							<i class="fa fa-star" style="color:yellow;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: orange;"></i>
+							<i class="fa fa-star" style="color:yellow;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: orange;"></i>
+							<i class="fa fa-star" style="color:yellow;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: orange;"></i>
+							<i class="fa fa-star" style="color:yellow;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: orange;"></i>
+						</c:when>
+						<c:when test="${blog.popularity >= 15}">
+							<i class="fa fa-star" style="color:yellow;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: orange;"></i>
+							<i class="fa fa-star" style="color:yellow;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: orange;"></i>
+							<i class="fa fa-star" style="color:yellow;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: orange;"></i>
+						</c:when>
+						<c:when test="${blog.popularity >= 10}">
+							<i class="fa fa-star" style="color:yellow;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: orange;"></i>
+							<i class="fa fa-star" style="color:yellow;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: orange;"></i>
+						</c:when>
+					</c:choose>
+				</td>
+				<td>
 					<span class="label label-default">${blog.category.name}</span>
 				</td>
 				<security:authorize access="${isAdmin}">
-					<td>
-						${blog.popularity}
-					</td>
 					<td>
 						<a href="<spring:url value='/users/${blog.user.id}.html' />">
 							${blog.user.name}
