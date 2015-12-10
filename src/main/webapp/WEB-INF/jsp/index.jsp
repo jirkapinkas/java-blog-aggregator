@@ -168,7 +168,7 @@
 					</script>
 
 						<a id="${item.id}" href="<c:out value="${item.link}" />" style="${customCss}" class="itemLink" onClick="itemClick(event)" target="_blank">
-							<img class="lazy" data-src="<spring:url value='/spring/icon/${item.blog.id}' />" style="float:left;padding-right:5px" alt="blog's logo" />
+							<img class="lazy" data-src="<spring:url value='/spring/icon/${item.blog.id}' />" style="float:left;padding-right:5px" />
 							<strong id="${item.id}" class="itemTitle">${item.title} <span class="glyphicon glyphicon-share-alt"></span></strong></a>
 					<br />
 					<span style="${customCss}" class="itemDesc">${item.description}</span>
