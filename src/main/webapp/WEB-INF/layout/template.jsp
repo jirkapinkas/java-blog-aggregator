@@ -6,7 +6,7 @@
 
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 
 <%@ include file="taglib.jsp" %>
