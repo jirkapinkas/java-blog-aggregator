@@ -63,7 +63,7 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 
 	@Transactional
 	@Modifying
-	@Query("update Item i set i.savedDate = i.publishedDate where i.publishedDate is null")
+	@Query("update Item i set i.savedDate = i.publishedDate where i.savedDate is null")
 	void updateSavedDates();
 
 	@Query("select sum(i.likeCount + ((log(i.clickCount + 1) * 10) + (log(i.twitterRetweetCount + 1) * 10) + (log(i.facebookShareCount + 1) * 10) + (log(i.linkedinShareCount + 1) * 10))) / count(i) from Item i where i.blog.id = ?1 and i.savedDate > ?2")
