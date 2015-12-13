@@ -75,7 +75,7 @@
 							<div class="form-group">
 								<label>filter:</label>
 								<c:forEach items="${categories}" var="category">
-									<span class="label label-primary categoryLabel withTooltip" id="${category.id}" style="cursor: pointer;" data-toggle="tooltip" data-placement="top" title="toggle category visibility">${category.name} (${category.blogCount})</span>
+									<span class="label label-primary categoryLabel" id="${category.id}" style="cursor: pointer;" title="toggle category visibility">${category.name} (${category.blogCount})</span>
 								</c:forEach>
 							</div>
 						</c:if>
@@ -88,7 +88,6 @@
 				
 				<script type="text/javascript">
 					$(document).ready(function() {
-						$('.withTooltip').tooltip();
 						
 						// set selectedCategories
 						if($.cookie("selectedCategories")) {
