@@ -30,7 +30,7 @@ public class SitemapController {
 	@RequestMapping("/robots.txt")
 	public String getRobots() {
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("sitemap: ");
+		stringBuilder.append("Sitemap: ");
 		stringBuilder.append(configurationService.find().getChannelLink());
 		stringBuilder.append("/sitemap.xml");
 		stringBuilder.append("\n");
