@@ -19,6 +19,7 @@
 	<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 	<script type="text/javascript" src="//cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
 	<script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="<spring:url value='/resources/prettyprint/run_prettify.js' />"></script>
 
 	<% if ("dev".equals(System.getProperty("spring.profiles.active"))) { %>
 		<%-- javascript resources & custom css used in development --%>
