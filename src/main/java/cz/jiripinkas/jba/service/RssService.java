@@ -47,7 +47,6 @@ import cz.jiripinkas.jba.atom.Link;
 import cz.jiripinkas.jba.entity.Item;
 import cz.jiripinkas.jba.exception.RssException;
 import cz.jiripinkas.jba.exception.UrlException;
-import cz.jiripinkas.jba.repository.ItemRepository;
 import cz.jiripinkas.jba.rss.TRss;
 import cz.jiripinkas.jba.rss.TRssChannel;
 import cz.jiripinkas.jba.rss.TRssItem;
@@ -60,9 +59,6 @@ public class RssService {
 	private static Unmarshaller unmarshallerRss;
 	private static Unmarshaller unmarshallerAtom;
 	private static DocumentBuilder db;
-
-	@Autowired
-	private ItemRepository itemRepository;
 
 	@Autowired
 	private CloseableHttpClient httpClient;
@@ -219,7 +215,7 @@ public class RssService {
 	}
 
 	private List<Item> getRssItems(Reader reader, int blogId, Map<String, Object> allLinksMap) throws RssException {
-		ArrayList<Item> list = new ArrayList<Item>();
+		ArrayList<Item> list = new ArrayList<>();
 		try {
 			TRss rss = (TRss) unmarshallerRss.unmarshal(reader);
 
@@ -266,7 +262,7 @@ public class RssService {
 	}
 
 	private List<Item> getAtomItems(Reader reader, int blogId, Map<String, Object> allLinksMap) throws RssException {
-		ArrayList<Item> list = new ArrayList<Item>();
+		ArrayList<Item> list = new ArrayList<>();
 		try {
 			Feed atom = (Feed) unmarshallerAtom.unmarshal(reader);
 			List<Entry> entries = atom.getEntries();
@@ -402,7 +398,7 @@ public class RssService {
 	}
 
 	public ArrayList<String> pullLinks(String text) {
-		ArrayList<String> links = new ArrayList<String>();
+		ArrayList<String> links = new ArrayList<>();
 
 		String regex = "\\(?\\b(mailto:|ftp://|http://|https://|www[.])[-A-Za-z0-9+&amp;@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&amp;@#/%=~_()|]";
 		Pattern p = Pattern.compile(regex);
@@ -415,10 +411,6 @@ public class RssService {
 			links.add(urlStr);
 		}
 		return links;
-	}
-
-	public void setItemRepository(ItemRepository itemRepository) {
-		this.itemRepository = itemRepository;
 	}
 
 	public void setHttpClient(CloseableHttpClient httpClient) {
