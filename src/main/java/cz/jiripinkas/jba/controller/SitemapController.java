@@ -48,8 +48,6 @@ public class SitemapController {
 		WebSitemapGenerator webSitemapGenerator = new WebSitemapGenerator(configuration.getChannelLink());
 		webSitemapGenerator.addPage(new WebPage().setName(""));
 		webSitemapGenerator.addPage(new WebPage().setName("blogs.html"));
-		webSitemapGenerator.addPage(new WebPage().setName("index.html?top-views&amp;max=week"));
-		webSitemapGenerator.addPage(new WebPage().setName("index.html?top-views&amp;max=month"));
 		webSitemapGenerator.addPage(new WebPage().setName("news.html"));
 		for (Blog blog : blogService.findAll()) {
 			webSitemapGenerator.addPage(new WebPage().setName("blog/" + blog.getShortName() + ".html"));

@@ -227,16 +227,6 @@
 						<c:when test="${blogDetail eq true}">
 							<c:set var="noscriptNextPageUrl" value="?page=${nextPage}&shortName=${blogShortName}" />
 						</c:when>
-						<c:when test="${topViews eq true}">
-							<c:choose>
-								<c:when test="${max eq true}">
-									<c:set var="noscriptNextPageUrl" value="?page=${nextPage}&top-views&max=${maxValue}" />
-								</c:when>
-								<c:otherwise>
-									<c:set var="noscriptNextPageUrl" value="?page=${nextPage}&top-views" />
-								</c:otherwise>
-							</c:choose>
-						</c:when>
 						<c:otherwise>
 							<c:set var="noscriptNextPageUrl" value="?page=${nextPage}" />
 						</c:otherwise>
