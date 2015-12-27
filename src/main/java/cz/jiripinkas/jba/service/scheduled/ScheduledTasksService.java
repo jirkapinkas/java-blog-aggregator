@@ -265,7 +265,7 @@ public class ScheduledTasksService {
 		int page = 0;
 		int retrievedItems = 0;
 		do {
-			List<ItemDto> dtoItems = itemService.getDtoItems(page++, false, OrderType.LATEST, MaxType.WEEK, allCategories);
+			List<ItemDto> dtoItems = itemService.getDtoItems(page++, true, OrderType.LATEST, MaxType.WEEK, allCategories);
 			retrievedItems = dtoItems.size();
 			for (ItemDto itemDto : dtoItems) {
 				try {
