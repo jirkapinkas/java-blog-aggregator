@@ -26,7 +26,12 @@
 <link rel="icon" href="<spring:url value="/spring/favicon" />" />
 <link rel="apple-touch-icon" href="<spring:url value="/spring/appleTouchIcon" />" />
 
-<title>${configuration.title}: <tiles:insertAttribute name="title" /></title>
+<tiles:importAttribute name="title" scope="request" toName="tilesTitle" />
+<title>${configuration.title}
+<c:if test="${tilesTitle != ''}">
+: ${tilesTitle}
+</c:if>
+</title>
 
 <link rel="alternate" type="application/rss+xml" title="News feed" href="<spring:url value='/news/feed.xml' />" />
 
