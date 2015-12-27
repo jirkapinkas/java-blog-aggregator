@@ -141,6 +141,8 @@ public class RssServiceTest {
 				rssService
 						.cleanDescription("<![CDATA[ This tutorial will show example codes on how to convert &lt;strong&gt;Java String To Long&lt;/strong&gt;. This is a common scenario when programming with Core Java. <a href='http://javadevnotes.com/java-string-to-long-examples' class='excerpt-more'>[...]</a> ]]>"));
 		assertEquals("test", rssService.cleanDescription("test <script> alert('hello')</script>"));
+		assertEquals("it's working", rssService.cleanDescription("it's working"));
+		assertEquals("Hello hello hello! It's time", rssService.cleanDescription("Hello hello hello! It&#8217;s time"));
 	}
 
 	@Test

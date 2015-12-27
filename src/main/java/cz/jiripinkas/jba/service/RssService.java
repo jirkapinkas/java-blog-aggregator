@@ -351,7 +351,7 @@ public class RssService {
 	}
 
 	public String cleanDescription(String description) {
-		String unescapedDescription = StringEscapeUtils.unescapeHtml3(description);
+		String unescapedDescription = StringEscapeUtils.unescapeHtml4(description);
 		unescapedDescription = unescapedDescription.replace("<![CDATA[", "").replace("]]>", "");
 		unescapedDescription = unescapedDescription.replace("<br />", "BREAK_HERE").replace("<br/>", "BREAK_HERE").replace("<br>", "BREAK_HERE").replace("&lt;br /&gt;", "BREAK_HERE")
 				.replace("&lt;br/&gt;", "BREAK_HERE").replace("&lt;br&gt;", "BREAK_HERE");
@@ -385,6 +385,7 @@ public class RssService {
 
 		// return only first 140 characters (plus '...')
 		String returnDescription = finalDescription.toString();
+		returnDescription = returnDescription.replace("’", "'");
 		// this will replace all multiple whitespaces with just single
 		// whitespace
 		// fix for http://www.tutorial4soft.com/feeds/posts/default?alt=rss
