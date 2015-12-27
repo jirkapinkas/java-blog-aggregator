@@ -31,15 +31,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 import cz.jiripinkas.jba.entity.Item;
 import cz.jiripinkas.jba.exception.RssException;
 import cz.jiripinkas.jba.exception.UrlException;
-import cz.jiripinkas.jba.repository.ItemRepository;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RssServiceTest {
 
 	private RssService rssService;
-
-	@Mock
-	private ItemRepository itemRepository;
 
 	@Mock
 	private CloseableHttpClient httpClient;
@@ -50,8 +46,6 @@ public class RssServiceTest {
 	@Before
 	public void setUp() throws Exception {
 		rssService = new RssService();
-		rssService.setItemRepository(itemRepository);
-		Mockito.when(itemRepository.findItemIdByLinkAndBlogId(Mockito.anyString(), Mockito.anyInt())).thenReturn(null);
 		rssService.setHttpClient(httpClient);
 	}
 
@@ -168,6 +162,7 @@ public class RssServiceTest {
 
 	@Test
 	public void testRedirect() throws Exception {
+		@SuppressWarnings("resource")
 		CloseableHttpResponse closeableHttpResponse = Mockito.mock(CloseableHttpResponse.class);
 		HttpEntity httpEntity = Mockito.mock(HttpEntity.class);
 		StatusLine statusLine = Mockito.mock(StatusLine.class);
@@ -196,6 +191,7 @@ public class RssServiceTest {
 	}
 
 	private void mockHttpClientStatus(int returnStatus) throws IllegalStateException, IOException {
+		@SuppressWarnings("resource")
 		CloseableHttpResponse closeableHttpResponse = Mockito.mock(CloseableHttpResponse.class);
 		HttpEntity httpEntity = Mockito.mock(HttpEntity.class);
 		StatusLine statusLine = Mockito.mock(StatusLine.class);
