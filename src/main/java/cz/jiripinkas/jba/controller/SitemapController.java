@@ -49,7 +49,7 @@ public class SitemapController {
 		webSitemapGenerator.addPage(new WebPage().setName(""));
 		webSitemapGenerator.addPage(new WebPage().setName("blogs.html"));
 		webSitemapGenerator.addPage(new WebPage().setName("news.html"));
-		for (Blog blog : blogService.findAll()) {
+		for (Blog blog : blogService.findAll(false)) {
 			webSitemapGenerator.addPage(new WebPage().setName("blog/" + blog.getShortName() + ".html"));
 		}
 		for (NewsItem newsItem : newsService.findAll()) {

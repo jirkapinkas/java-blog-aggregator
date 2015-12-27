@@ -69,7 +69,8 @@ public class BlogService {
 					if (allLinksMap.containsKey(item.getLink())) {
 						duplicate = true;
 					}
-					if (Boolean.TRUE.equals(blog.getAggregator()) && allLowercaseTitlesMap.containsKey(item.getTitle().toLowerCase())) {
+					if (Boolean.TRUE.equals(blog.getAggregator())
+							&& allLowercaseTitlesMap.containsKey(item.getTitle().toLowerCase())) {
 						duplicate = true;
 					}
 					if (!duplicate) {
@@ -127,7 +128,8 @@ public class BlogService {
 		blogRepository.save(managedBlog);
 	}
 
-	@Caching(evict = { @CacheEvict(value = "blogCount", allEntries = true), @CacheEvict(value = "icons", allEntries = true) })
+	@Caching(evict = { @CacheEvict(value = "blogCount", allEntries = true),
+			@CacheEvict(value = "icons", allEntries = true) })
 	@Transactional
 	@PreAuthorize("#blog.user.name == authentication.name or hasRole('ROLE_ADMIN')")
 	public void delete(@P("blog") Blog blog) {
@@ -180,9 +182,21 @@ public class BlogService {
 		return blogRepository.findByShortName(shortName);
 	}
 
+	/**
+	 * Return list of blogs.
+	 * 
+	 * @param showAll
+	 *            Whether all blogs should be returned, or just those, which are
+	 *            enabled (have assigned category).
+	 * @return
+	 */
 	@Transactional
-	public List<Blog> findAll() {
-		return blogRepository.findAllFetchUser();
+	public List<Blog> findAll(boolean showAll) {
+		if (showAll) {
+			return blogRepository.findAllFetchUser();
+		} else {
+			return blogRepository.findAllWithCategoryFetchUser();
+		}
 	}
 
 }

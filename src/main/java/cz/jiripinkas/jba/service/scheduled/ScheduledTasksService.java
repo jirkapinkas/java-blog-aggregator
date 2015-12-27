@@ -132,7 +132,7 @@ public class ScheduledTasksService {
 	@Scheduled(fixedDelay = 24 * 60 * 60 * 1000, initialDelay = 10000)
 	public void computePopularity() {
 		log.info("compute popularity start");
-		for (Blog blog : blogService.findAll()) {
+		for (Blog blog : blogService.findAll(true)) {
 			Calendar dateFromCalendar = new GregorianCalendar();
 			dateFromCalendar.add(Calendar.MONTH, -3);
 			Integer sumPopularity = itemRepository.getSocialSum(blog.getId(), dateFromCalendar.getTime());

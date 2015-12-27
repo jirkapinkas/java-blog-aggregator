@@ -24,6 +24,9 @@ public interface BlogRepository extends JpaRepository<Blog, Integer> {
 	@Query("select b from Blog b join fetch b.user left join fetch b.category order by b.shortName")
 	List<Blog> findAllFetchUser();
 
+	@Query("select b from Blog b join fetch b.user join fetch b.category order by b.shortName")
+	List<Blog> findAllWithCategoryFetchUser();
+
 	Blog findByIdAndUserName(int id, String username);
 
 	@Modifying

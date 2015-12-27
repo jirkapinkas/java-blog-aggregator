@@ -75,8 +75,12 @@ public class BlogController {
 	}
 
 	@RequestMapping("/blogs")
-	public String showBlogs(Model model) {
-		model.addAttribute("blogs", blogService.findAll());
+	public String showBlogs(Model model, HttpServletRequest request) {
+		boolean showAll = false;
+		if (request.isUserInRole("ADMIN")) {
+			showAll = true;
+		}
+		model.addAttribute("blogs", blogService.findAll(showAll));
 		return "blogs";
 	}
 
