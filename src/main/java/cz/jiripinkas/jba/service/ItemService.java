@@ -100,7 +100,7 @@ public class ItemService {
 			break;
 		}
 
-		ArrayList<ItemDto> result = new ArrayList<ItemDto>();
+		ArrayList<ItemDto> result = new ArrayList<>();
 
 		List<Item> items = null;
 
