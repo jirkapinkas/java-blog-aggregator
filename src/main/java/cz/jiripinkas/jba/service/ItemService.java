@@ -3,7 +3,6 @@ package cz.jiripinkas.jba.service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -112,7 +111,23 @@ public class ItemService {
 		if (!showAll) {
 			hql += " i.enabled = true and ";
 		}
-		hql += " i.savedDate >= ?1 and cat.id IN ?2 ";
+		hql += " i.savedDate >= ?1 ";
+		
+		// construct query for selected categories
+		hql += " and (";
+		for (int i = 0; i < selectedCategories.length; i++) {
+			hql += " cat.id = " + selectedCategories[i];
+			if(i != selectedCategories.length - 1) {
+				hql += " or ";
+			}
+		}
+		if(showAll) {
+			// add "null" to selectedCategories, otherwise items from those categories wouldn't be shown.
+			// It's necessary so that an administrator can see items from blogs which have no category
+			hql += " or cat.id is null ";
+		}
+		hql += ") ";
+		
 		if (search != null) {
 			for (String string : search.split(" ")) {
 				String searchStringPart = StringEscapeUtils.escapeSql(string).trim();
@@ -129,7 +144,7 @@ public class ItemService {
 		hql += " order by ";
 		hql += " " + orderByProperty + " ";
 		hql += orderDirection;
-		TypedQuery<Item> query = entityManager.createQuery(hql, Item.class).setParameter(1, savedDate).setParameter(2, Arrays.asList(selectedCategories));
+		TypedQuery<Item> query = entityManager.createQuery(hql, Item.class).setParameter(1, savedDate);
 		items = query.setFirstResult(page * 10).setMaxResults(10).getResultList();
 
 		for (Item item : items) {
