@@ -357,12 +357,20 @@ public class RssService {
 				.replace("&lt;br/&gt;", "BREAK_HERE").replace("&lt;br&gt;", "BREAK_HERE");
 		String cleanDescription = Jsoup.parse(Jsoup.clean(unescapedDescription, Whitelist.none())).text();
 		cleanDescription = cleanDescription.replace("BREAK_HERE", " ");
+		
 		// fix for Tomcat blog
 		cleanDescription = cleanDescription.replace("~", "");
+		
 		cleanDescription = cleanDescription.replace("... Continue reading", "");
 		cleanDescription = cleanDescription.replace("[OmniFaces utilities]", "");
 		cleanDescription = cleanDescription.replace("[Note from Pinal]:", "");
 		cleanDescription = cleanDescription.replace("[Additional]", "");
+		
+		// fix for Venkat Subramaniam
+		if(cleanDescription.startsWith("Tweet ") && cleanDescription.length() > 6 && Character.isUpperCase(cleanDescription.charAt(6))) {
+			cleanDescription = cleanDescription.substring(6, cleanDescription.length());
+		}
+		
 		ArrayList<String> links = pullLinks(cleanDescription);
 		for (String link : links) {
 			cleanDescription = cleanDescription.replace(link, "");

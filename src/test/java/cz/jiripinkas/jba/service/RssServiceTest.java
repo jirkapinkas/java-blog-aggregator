@@ -143,6 +143,7 @@ public class RssServiceTest {
 		assertEquals("test", rssService.cleanDescription("test <script> alert('hello')</script>"));
 		assertEquals("it's working", rssService.cleanDescription("it's working"));
 		assertEquals("Hello hello hello! It's time", rssService.cleanDescription("Hello hello hello! It&#8217;s time"));
+		assertEquals("The following were the five most viewed presentation on in the year 2015", rssService.cleanDescription("Tweet The following were the five most viewed presentation on in the year 2015"));
 	}
 
 	@Test
