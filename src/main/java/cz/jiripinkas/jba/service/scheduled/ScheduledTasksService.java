@@ -21,12 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import twitter4j.Query;
-import twitter4j.QueryResult;
-import twitter4j.RateLimitStatus;
-import twitter4j.Twitter;
-import twitter4j.TwitterFactory;
-import twitter4j.conf.ConfigurationBuilder;
 import cz.jiripinkas.jba.dto.ItemDto;
 import cz.jiripinkas.jba.entity.Blog;
 import cz.jiripinkas.jba.entity.Category;
@@ -43,6 +37,12 @@ import cz.jiripinkas.jba.service.ItemService;
 import cz.jiripinkas.jba.service.ItemService.MaxType;
 import cz.jiripinkas.jba.service.ItemService.OrderType;
 import cz.jiripinkas.jba.service.NewsService;
+import twitter4j.Query;
+import twitter4j.QueryResult;
+import twitter4j.RateLimitStatus;
+import twitter4j.Twitter;
+import twitter4j.TwitterFactory;
+import twitter4j.conf.ConfigurationBuilder;
 
 @Service
 public class ScheduledTasksService {
@@ -91,11 +91,11 @@ public class ScheduledTasksService {
 		// TODO this is very memory-intensive
 		List<String> allLinks = itemRepository.findAllLinks();
 		List<String> allLowercaseTitles = itemRepository.findAllLowercaseTitles();
-		Map<String, Object> allLinksMap = new HashMap<String, Object>();
+		Map<String, Object> allLinksMap = new HashMap<>();
 		for (String link : allLinks) {
 			allLinksMap.put(link, null);
 		}
-		Map<String, Object> allLowercaseTitlesMap = new HashMap<String, Object>();
+		Map<String, Object> allLowercaseTitlesMap = new HashMap<>();
 		for (String title : allLowercaseTitles) {
 			allLowercaseTitlesMap.put(title, null);
 		}
