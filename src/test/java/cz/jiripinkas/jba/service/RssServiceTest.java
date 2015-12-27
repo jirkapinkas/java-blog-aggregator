@@ -144,6 +144,9 @@ public class RssServiceTest {
 		assertEquals("it's working", rssService.cleanDescription("it's working"));
 		assertEquals("Hello hello hello! It's time", rssService.cleanDescription("Hello hello hello! It&#8217;s time"));
 		assertEquals("The following were the five most viewed presentation on in the year 2015", rssService.cleanDescription("Tweet The following were the five most viewed presentation on in the year 2015"));
+		assertEquals("I'm honored to deliver", rssService.cleanDescription("I’m honored to deliver"));
+		assertEquals("I couldn't think of anything", rssService.cleanDescription("I couldn&#039;t think of anything"));
+		assertEquals("Unless you", rssService.cleanDescription("TL;DR Unless you"));
 	}
 
 	@Test

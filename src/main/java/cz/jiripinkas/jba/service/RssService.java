@@ -364,10 +364,16 @@ public class RssService {
 		cleanDescription = cleanDescription.replace("... Continue reading", "");
 		cleanDescription = cleanDescription.replace("[OmniFaces utilities]", "");
 		cleanDescription = cleanDescription.replace("[Note from Pinal]:", "");
+		cleanDescription = cleanDescription.replace("[Notes from Pinal]:", "");
 		cleanDescription = cleanDescription.replace("[Additional]", "");
 		
 		// fix for Venkat Subramaniam
 		if(cleanDescription.startsWith("Tweet ") && cleanDescription.length() > 6 && Character.isUpperCase(cleanDescription.charAt(6))) {
+			cleanDescription = cleanDescription.substring(6, cleanDescription.length());
+		}
+		
+		// fix for TL;DR
+		if(cleanDescription.startsWith("TL;DR ") && cleanDescription.length() > 6) {
 			cleanDescription = cleanDescription.substring(6, cleanDescription.length());
 		}
 		
