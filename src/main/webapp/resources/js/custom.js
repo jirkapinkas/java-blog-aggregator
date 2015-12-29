@@ -25,6 +25,10 @@ function qualifyURL(url){
  */
 function itemClick(e) {
 	var itemId = $(e.target).attr("id");
+	if(!itemId) {
+		// inside <a> is <img>, find closest <a>
+		$(e.target).closest("a").attr("id");
+	}
 	var url = qualifyURL("/") + "inc-count.html";
 	$.post(
 			url,
