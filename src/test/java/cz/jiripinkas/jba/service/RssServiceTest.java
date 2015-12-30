@@ -147,6 +147,7 @@ public class RssServiceTest {
 		assertEquals("I'm honored to deliver", rssService.cleanDescription("I’m honored to deliver"));
 		assertEquals("I couldn't think of anything", rssService.cleanDescription("I couldn&#039;t think of anything"));
 		assertEquals("Unless you", rssService.cleanDescription("TL;DR Unless you"));
+		assertEquals("Cyber technology couldn't", rssService.cleanDescription("Cyber technology couldn’t"));
 	}
 
 	@Test

@@ -12,6 +12,7 @@
 		<apache.tiles>3.0.5</apache.tiles>
 		<spring.security.version>4.0.1.RELEASE</spring.security.version>
 		<jackson.version>2.2.3</jackson.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<dependencies>
@@ -315,7 +316,7 @@
 				<plugins>
 					<plugin>
 						<artifactId>maven-war-plugin</artifactId>
-						<version>2.1.1</version>
+						<version>2.6</version>
 						<configuration>
 							<outputDirectory>webapps</outputDirectory>
 							<warName>ROOT</warName>
