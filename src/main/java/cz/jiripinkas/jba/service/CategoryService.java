@@ -49,6 +49,7 @@ public class CategoryService {
 		return mapper.map(categoryRepository.findOne(id), CategoryDto.class);
 	}
 
+	@CacheEvict(value = "blogCountUnapproved", allEntries = true)
 	public void addMapping(int blogId, int categoryId) {
 		Category category = categoryRepository.findOne(categoryId);
 		Blog blog = blogRepository.findOne(blogId);

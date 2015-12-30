@@ -37,6 +37,7 @@ public class ConfigurationInterceptor extends HandlerInterceptorAdapter {
 			if (request.isUserInRole("ADMIN")) {
 				modelAndView.getModelMap().addAttribute("itemCount", itemService.count());
 				modelAndView.getModelMap().addAttribute("userCount", userService.count());
+				modelAndView.getModelMap().addAttribute("blogCountUnapproved", blogService.countUnapproved());
 			}
 		}
 	}

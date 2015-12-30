@@ -61,6 +61,7 @@
 							<security:authorize access="${isAdmin}">
 								<span class="label label-default">items: ${itemCount}</span>
 								<span class="label label-default">users: ${userCount}</span>
+								<span class="label label-default">${blogCountUnapproved} unapproved blogs</span>
 							</security:authorize>
 						</div>
 						

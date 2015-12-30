@@ -47,4 +47,7 @@ public interface BlogRepository extends JpaRepository<Blog, Integer> {
 	@Query("update Blog b set b.popularity = ?2 where b.id = ?1")
 	void setPopularity(int blogId, int popularity);
 
+	@Query("select count(b) from Blog b where b.category is null")
+	long countUnapproved();
+
 }

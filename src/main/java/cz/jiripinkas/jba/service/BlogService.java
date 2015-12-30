@@ -103,7 +103,8 @@ public class BlogService {
 		return (int) ((new Date().getTime() - lastIndexedDateFinish.getTime()) / (1000 * 60));
 	}
 
-	@CacheEvict(value = "blogCount", allEntries = true)
+	@Caching(evict = { @CacheEvict(value = "blogCount", allEntries = true),
+			@CacheEvict(value = "blogCountUnapproved", allEntries = true)})
 	@Async
 	public void save(Blog blog, String name) {
 		User user = userRepository.findByName(name);
@@ -129,6 +130,7 @@ public class BlogService {
 	}
 
 	@Caching(evict = { @CacheEvict(value = "blogCount", allEntries = true),
+			@CacheEvict(value = "blogCountUnapproved", allEntries = true),
 			@CacheEvict(value = "icons", allEntries = true) })
 	@Transactional
 	@PreAuthorize("#blog.user.name == authentication.name or hasRole('ROLE_ADMIN')")
@@ -164,6 +166,11 @@ public class BlogService {
 	@Cacheable("blogCount")
 	public long count() {
 		return blogRepository.count();
+	}
+	
+	@Cacheable("blogCountUnapproved")
+	public long countUnapproved() {
+		return blogRepository.countUnapproved();
 	}
 
 	public void setLastIndexedDateFinish(Date lastIndexedDateFinish) {

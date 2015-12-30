@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beansProjectDescription>
 	<version>1</version>
-	<pluginVersion><![CDATA[3.6.2.201410090854-RELEASE]]></pluginVersion>
+	<pluginVersion><![CDATA[3.7.2.201511260958-RELEASE]]></pluginVersion>
 	<configSuffixes>
 		<configSuffix><![CDATA[xml]]></configSuffix>
 	</configSuffixes>
@@ -10,7 +10,6 @@
 		<config>src/main/webapp/WEB-INF/dispatcher-servlet.xml</config>
 		<config>src/main/webapp/WEB-INF/applicationContext.xml</config>
 		<config>src/main/webapp/WEB-INF/security.xml</config>
-		<config>src/main/webapp/WEB-INF/cache.xml</config>
 		<config>src/main/webapp/WEB-INF/database-heroku.xml</config>
 	</configs>
 	<autoconfigs>

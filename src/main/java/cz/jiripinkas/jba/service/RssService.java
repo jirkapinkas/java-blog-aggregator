@@ -376,6 +376,9 @@ public class RssService {
 		if(cleanDescription.startsWith("TL;DR ") && cleanDescription.length() > 6) {
 			cleanDescription = cleanDescription.substring(6, cleanDescription.length());
 		}
+		if(cleanDescription.startsWith("TL;DR: ") && cleanDescription.length() > 7) {
+			cleanDescription = cleanDescription.substring(6, cleanDescription.length());
+		}
 		
 		ArrayList<String> links = pullLinks(cleanDescription);
 		for (String link : links) {
