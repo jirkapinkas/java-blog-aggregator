@@ -138,13 +138,16 @@ public class ItemService {
 			}
 		}
 		if (blogShortName != null) {
-			String blogShortNameEscaped = StringEscapeUtils.escapeSql(blogShortName);
-			hql += " and b.shortName = '" + blogShortNameEscaped + "' ";
+			hql += " and b.shortName = :blogShortName ";
 		}
 		hql += " order by ";
 		hql += " " + orderByProperty + " ";
 		hql += orderDirection;
 		TypedQuery<Item> query = entityManager.createQuery(hql, Item.class).setParameter(1, savedDate);
+		if (blogShortName != null) {
+			String blogShortNameEscaped = StringEscapeUtils.escapeSql(blogShortName);
+			query.setParameter("blogShortName", blogShortNameEscaped);
+		}
 		items = query.setFirstResult(page * 10).setMaxResults(10).getResultList();
 
 		for (Item item : items) {
