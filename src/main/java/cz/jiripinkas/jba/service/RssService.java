@@ -377,6 +377,9 @@ public class RssService {
 		if(cleanDescription.startsWith("Tweet ") && cleanDescription.length() > 6 && Character.isUpperCase(cleanDescription.charAt(6))) {
 			cleanDescription = cleanDescription.substring(6, cleanDescription.length());
 		}
+		if(cleanDescription.startsWith("Tweet") && cleanDescription.length() > 5 && Character.isUpperCase(cleanDescription.charAt(5))) {
+			cleanDescription = cleanDescription.substring(5, cleanDescription.length());
+		}
 		
 		// fix for TL;DR
 		if(cleanDescription.startsWith("TL;DR ") && cleanDescription.length() > 6) {
