@@ -3,6 +3,7 @@ package cz.jiripinkas.jba.service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -114,13 +115,7 @@ public class ItemService {
 		hql += " i.savedDate >= ?1 ";
 		
 		// construct query for selected categories
-		hql += " and (";
-		for (int i = 0; i < selectedCategories.length; i++) {
-			hql += " cat.id = " + selectedCategories[i];
-			if(i != selectedCategories.length - 1) {
-				hql += " or ";
-			}
-		}
+		hql += " and (cat.id in (:selectedCategories) ";
 		if(showAll) {
 			// add "null" to selectedCategories, otherwise items from those categories wouldn't be shown.
 			// It's necessary so that an administrator can see items from blogs which have no category
@@ -138,13 +133,17 @@ public class ItemService {
 			}
 		}
 		if (blogShortName != null) {
-			String blogShortNameEscaped = StringEscapeUtils.escapeSql(blogShortName);
-			hql += " and b.shortName = '" + blogShortNameEscaped + "' ";
+			hql += " and b.shortName = :blogShortName ";
 		}
 		hql += " order by ";
 		hql += " " + orderByProperty + " ";
 		hql += orderDirection;
 		TypedQuery<Item> query = entityManager.createQuery(hql, Item.class).setParameter(1, savedDate);
+		query.setParameter("selectedCategories", Arrays.asList(selectedCategories));
+		if (blogShortName != null) {
+			String blogShortNameEscaped = StringEscapeUtils.escapeSql(blogShortName);
+			query.setParameter("blogShortName", blogShortNameEscaped);
+		}
 		items = query.setFirstResult(page * 10).setMaxResults(10).getResultList();
 
 		for (Item item : items) {
@@ -155,7 +154,7 @@ public class ItemService {
 		}
 		return result;
 	}
-
+	
 	private int calculateDisplayLikeCount(Item item) {
 		return (int) (item.getLikeCount() + ((Math.log10(item.getClickCount() + 1)) * 10) + (Math.log10(item.getFacebookShareCount() + 1) * 10) + (Math.log10(item.getTwitterRetweetCount() + 1) * 10) + (Math
 				.log10(item.getLinkedinShareCount() + 1) * 10));
