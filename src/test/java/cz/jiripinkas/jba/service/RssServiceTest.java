@@ -21,7 +21,6 @@ import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.protocol.HttpContext;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -107,6 +106,9 @@ public class RssServiceTest {
 	public void testCleanTitle() {
 		assertEquals("test", rssService.cleanTitle("   test   "));
 		assertEquals("Pat & Mat", rssService.cleanTitle("Pat & Mat"));
+		assertEquals("bla bla", rssService.cleanTitle("[OmniFaces utilities 2.0] bla bla"));
+		assertEquals("Thank You", rssService.cleanTitle("Blog Post: Thank You"));
+		assertEquals("return \"*\"?", rssService.cleanTitle("return “*”?"));
 		assertEquals("link:", rssService.cleanTitle("link: <a href='http://something.com'></a>"));
 		assertEquals("script:", rssService.cleanTitle("script: <script><!-- alert('hello'); --></script>"));
 	}
@@ -148,6 +150,7 @@ public class RssServiceTest {
 		assertEquals("I couldn't think of anything", rssService.cleanDescription("I couldn&#039;t think of anything"));
 		assertEquals("Unless you", rssService.cleanDescription("TL;DR Unless you"));
 		assertEquals("Cyber technology couldn't", rssService.cleanDescription("Cyber technology couldn’t"));
+		assertEquals("return \"*\"?", rssService.cleanDescription("return “*”?"));
 	}
 
 	@Test
@@ -230,7 +233,6 @@ public class RssServiceTest {
 		assertEquals("http://www.knitelius.com/2015/03/03/jsf-2-ajaxsubmit-issues-with-conversationscoped-beans/", firstItem.getLink());
 	}
 
-	@Ignore
 	@Test
 	public void testPlanetMysqlSpecialCharacters() throws Exception {
 		mockHttpClient200Status();

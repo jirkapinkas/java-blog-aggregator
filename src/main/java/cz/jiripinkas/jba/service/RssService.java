@@ -347,6 +347,12 @@ public class RssService {
 	public String cleanTitle(String title) {
 		String textTitle = Jsoup.parse(title).text();
 		textTitle = textTitle.replace("[OmniFaces utilities 2.0]", "").trim();
+		if(textTitle.startsWith("Blog Post: ") && textTitle.length() > 11) {
+			textTitle = textTitle.substring(11, textTitle.length());
+		}
+		textTitle = textTitle.replace("’", "'");
+		textTitle = textTitle.replace("“", "\"");
+		textTitle = textTitle.replace("”", "\"");
 		return cleanXml10(textTitle);
 	}
 
@@ -377,7 +383,7 @@ public class RssService {
 			cleanDescription = cleanDescription.substring(6, cleanDescription.length());
 		}
 		if(cleanDescription.startsWith("TL;DR: ") && cleanDescription.length() > 7) {
-			cleanDescription = cleanDescription.substring(6, cleanDescription.length());
+			cleanDescription = cleanDescription.substring(7, cleanDescription.length());
 		}
 		
 		ArrayList<String> links = pullLinks(cleanDescription);
@@ -403,6 +409,8 @@ public class RssService {
 		// return only first 140 characters (plus '...')
 		String returnDescription = finalDescription.toString();
 		returnDescription = returnDescription.replace("’", "'");
+		returnDescription = returnDescription.replace("“", "\"");
+		returnDescription = returnDescription.replace("”", "\"");
 		// this will replace all multiple whitespaces with just single
 		// whitespace
 		// fix for http://www.tutorial4soft.com/feeds/posts/default?alt=rss
