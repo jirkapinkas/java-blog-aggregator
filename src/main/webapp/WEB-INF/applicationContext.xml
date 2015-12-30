@@ -20,8 +20,6 @@
 
 	<import resource="security.xml" />
 	
-	<import resource="cache.xml" />
-	
 	<bean id="scheduler" class="org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler">
 		<!-- 1 = min priority -->
 		<property name="threadPriority" value="1" />
