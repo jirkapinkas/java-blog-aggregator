@@ -59,24 +59,13 @@ public class ItemService {
 		// call getDtoItems without search
 		return getDtoItems(page, showAll, orderType, maxType, selectedCategories, search, null);
 	}
-
-	@Transactional
-	public List<ItemDto> getDtoItems(int page, boolean showAll, OrderType orderType, MaxType maxType, Integer[] selectedCategories, String search, String blogShortName) {
-		if (selectedCategories == null) {
-			selectedCategories = allCategoriesService.getAllCategoryIds();
-		}
-		Direction orderDirection = Direction.DESC;
-
-		String orderByProperty = null;
-		switch (orderType) {
-		case LATEST:
-			orderByProperty = "i.savedDate";
-			break;
-		case MOST_VIEWED:
-			orderByProperty = "i.likeCount + ((log(i.clickCount + 1) * 10) + (log(i.twitterRetweetCount + 1) * 10) + (log(i.facebookShareCount + 1) * 3) + (log(i.linkedinShareCount + 1) * 10))";
-			break;
-		}
-
+	
+	/**
+	 * Returns from which date will be items retrieved (current date - date interval)
+	 * @param maxType Date interval
+	 * @return Date
+	 */
+	private Date getLastSavedDate(MaxType maxType) {
 		Date savedDate = null;
 		switch (maxType) {
 		case UNDEFINED:
@@ -97,6 +86,25 @@ public class ItemService {
 			GregorianCalendar calendar2 = new GregorianCalendar();
 			calendar2.add(Calendar.WEEK_OF_MONTH, -1);
 			savedDate = calendar2.getTime();
+			break;
+		}
+		return savedDate;
+	}
+
+	@Transactional
+	public List<ItemDto> getDtoItems(int page, boolean showAll, OrderType orderType, MaxType maxType, Integer[] selectedCategories, String search, String blogShortName) {
+		if (selectedCategories == null) {
+			selectedCategories = allCategoriesService.getAllCategoryIds();
+		}
+		Direction orderDirection = Direction.DESC;
+
+		String orderByProperty = null;
+		switch (orderType) {
+		case LATEST:
+			orderByProperty = "i.savedDate";
+			break;
+		case MOST_VIEWED:
+			orderByProperty = "i.likeCount + ((log(i.clickCount + 1) * 10) + (log(i.twitterRetweetCount + 1) * 10) + (log(i.facebookShareCount + 1) * 3) + (log(i.linkedinShareCount + 1) * 10))";
 			break;
 		}
 
@@ -123,12 +131,32 @@ public class ItemService {
 		}
 		hql += ") ";
 		
+		List<String> parameterNames = new ArrayList<>();
+		List<String> parameterValues = new ArrayList<>();
 		if (search != null) {
-			for (String string : search.split(" ")) {
+			String[] strings = search.split(" ");
+			for(int i = 0; i < strings.length; i++) {
+				String string = strings[i];
 				String searchStringPart = StringEscapeUtils.escapeSql(string).trim();
-				if (!searchStringPart.isEmpty()) {
-					hql += " and (lower(i.title) like lower('%" + searchStringPart + "%') " + " or lower(i.description) like lower('%" + searchStringPart + "%') " + " or lower(b.name) like lower('%"
-							+ searchStringPart + "%') " + " or lower(b.nick) like lower('%" + searchStringPart + "%')) ";
+				String[] stopWords = new String[] {"a", "an", "and", "are", "as", "at", 
+						"be", "but", "by","for", "if", "in", "into", "is", "it","no", "not", "of", "on", "or", 
+						"such","that", "the", "their", "then", "there", "these","they", "this", "to", "was", "will", 
+						"with", "..."};
+				if(searchStringPart.isEmpty() || Arrays.asList(stopWords).contains(searchStringPart)) {
+					// ignore
+				} else {
+					parameterNames.add("searchParamTitle" + i);
+					parameterValues.add("%" + searchStringPart + "%");
+					parameterNames.add("searchParamDescription" + i);
+					parameterValues.add("%" + searchStringPart + "%");
+					parameterNames.add("searchParamName" + i);
+					parameterValues.add("%" + searchStringPart + "%");
+					parameterNames.add("searchParamNick" + i);
+					parameterValues.add("%" + searchStringPart + "%");
+					hql += " and (lower(i.title) like lower(:searchParamTitle" + i + ") ";
+					hql += " or lower(i.description) like lower(:searchParamDescription" + i + ") "; 
+					hql += " or lower(b.name) like lower(:searchParamName" + i + ") ";
+					hql += " or lower(b.nick) like lower(:searchParamNick" + i + ")) ";
 				}
 			}
 		}
@@ -138,8 +166,14 @@ public class ItemService {
 		hql += " order by ";
 		hql += " " + orderByProperty + " ";
 		hql += orderDirection;
+		Date savedDate = getLastSavedDate(maxType);
 		TypedQuery<Item> query = entityManager.createQuery(hql, Item.class).setParameter(1, savedDate);
 		query.setParameter("selectedCategories", Arrays.asList(selectedCategories));
+		
+		for(int i = 0; i < parameterNames.size(); i++) {
+			query.setParameter(parameterNames.get(i), parameterValues.get(i));
+		}
+		
 		if (blogShortName != null) {
 			String blogShortNameEscaped = StringEscapeUtils.escapeSql(blogShortName);
 			query.setParameter("blogShortName", blogShortNameEscaped);
