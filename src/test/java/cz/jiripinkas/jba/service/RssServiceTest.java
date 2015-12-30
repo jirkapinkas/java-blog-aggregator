@@ -109,6 +109,7 @@ public class RssServiceTest {
 		assertEquals("bla bla", rssService.cleanTitle("[OmniFaces utilities 2.0] bla bla"));
 		assertEquals("Thank You", rssService.cleanTitle("Blog Post: Thank You"));
 		assertEquals("return \"*\"?", rssService.cleanTitle("return “*”?"));
+		assertEquals("return \"*\"?", rssService.cleanTitle("return &#8220;*&#8221;?"));
 		assertEquals("link:", rssService.cleanTitle("link: <a href='http://something.com'></a>"));
 		assertEquals("script:", rssService.cleanTitle("script: <script><!-- alert('hello'); --></script>"));
 	}
@@ -151,6 +152,7 @@ public class RssServiceTest {
 		assertEquals("Unless you", rssService.cleanDescription("TL;DR Unless you"));
 		assertEquals("Cyber technology couldn't", rssService.cleanDescription("Cyber technology couldn’t"));
 		assertEquals("return \"*\"?", rssService.cleanDescription("return “*”?"));
+		assertEquals("return \"*\"?", rssService.cleanDescription("return &#8220;*&#8221;?"));
 	}
 
 	@Test
