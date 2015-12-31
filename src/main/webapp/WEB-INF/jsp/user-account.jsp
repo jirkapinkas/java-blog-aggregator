@@ -156,7 +156,16 @@
 												},
 												shortName : {
 													required : true,
-													minlength : 1
+													minlength : 1,
+													remote : {
+														url: "<spring:url value='/blog/shortname/available.html' />",
+														type: "get",
+														data: {
+															username: function() {
+																return $("#shortName").val();
+															}
+														}
+													}
 												}
 											},
 											highlight : function(element) {
@@ -176,6 +185,9 @@
 											messages : {
 												url : {
 													remote : "Such blog already exists!"
+												},
+												shortName: {
+													remote: "Such short name already exists!"
 												}
 											}
 										});

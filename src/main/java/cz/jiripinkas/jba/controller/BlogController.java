@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import cz.jiripinkas.jba.entity.Blog;
 import cz.jiripinkas.jba.service.BlogService;
 import cz.jiripinkas.jba.service.ItemService;
 import cz.jiripinkas.jba.service.ItemService.MaxType;
 import cz.jiripinkas.jba.service.ItemService.OrderType;
+import cz.jiripinkas.jba.util.MyUtil;
 
 @Controller
 public class BlogController {
@@ -82,6 +84,13 @@ public class BlogController {
 		}
 		model.addAttribute("blogs", blogService.findAll(showAll));
 		return "blogs";
+	}
+	
+	@RequestMapping("/blog/shortname/available")
+	@ResponseBody
+	public String available(@RequestParam String shortName) {
+		Boolean available = blogService.findByShortName(MyUtil.generatePermalink(shortName)) == null;
+		return available.toString();
 	}
 
 }

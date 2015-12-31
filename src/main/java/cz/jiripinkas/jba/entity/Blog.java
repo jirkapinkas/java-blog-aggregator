@@ -19,6 +19,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.URL;
 
 import cz.jiripinkas.jba.annotation.UniqueBlog;
+import cz.jiripinkas.jba.annotation.UniqueShortName;
 import cz.jiripinkas.jba.util.MyUtil;
 
 @Entity
@@ -48,9 +49,10 @@ public class Blog {
 	@OneToMany(mappedBy = "blog", cascade = CascadeType.REMOVE)
 	private List<Item> items;
 
+	@UniqueShortName(message = "This short name already exists!")
 	@NotNull
 	@Size(min = 1, message = "Short name cannot be empty!")
-	@Column(name = "short_name")
+	@Column(name = "short_name", unique = true)
 	private String shortName;
 
 	private String nick;
