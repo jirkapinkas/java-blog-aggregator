@@ -1,7 +1,5 @@
 package cz.jiripinkas.jba.service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -62,18 +60,14 @@ public class ItemService {
 	
 	/**
 	 * Returns from which date will be items retrieved (current date - date interval)
-	 * @param maxType Date interval
+	 * @param maxType Date interval or null if undefined
 	 * @return Date
 	 */
 	private Date getLastSavedDate(MaxType maxType) {
 		Date savedDate = null;
 		switch (maxType) {
 		case UNDEFINED:
-			try {
-				savedDate = new SimpleDateFormat("dd.MM.yyyy").parse("01.01.1970");
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
+			savedDate = null;
 			break;
 
 		case MONTH:
@@ -116,11 +110,13 @@ public class ItemService {
 			return result;
 		}
 
-		String hql = "select i from Item i join fetch i.blog b left join fetch b.category cat where ";
+		String hql = "select i from Item i join fetch i.blog b left join fetch b.category cat where 1=1 ";
 		if (!showAll) {
-			hql += " i.enabled = true and ";
+			hql += " and i.enabled = true ";
 		}
-		hql += " i.savedDate >= ?1 ";
+		if(maxType != MaxType.UNDEFINED) {
+			hql += " and i.savedDate >= :maxSavedDate ";
+		}
 		
 		// construct query for selected categories
 		hql += " and (cat.id in (:selectedCategories) ";
@@ -166,8 +162,11 @@ public class ItemService {
 		hql += " order by ";
 		hql += " " + orderByProperty + " ";
 		hql += orderDirection;
-		Date savedDate = getLastSavedDate(maxType);
-		TypedQuery<Item> query = entityManager.createQuery(hql, Item.class).setParameter(1, savedDate);
+		TypedQuery<Item> query = entityManager.createQuery(hql, Item.class);
+		if(maxType != MaxType.UNDEFINED) {
+			Date savedDate = getLastSavedDate(maxType);
+			query.setParameter("maxSavedDate", savedDate);
+		}
 		query.setParameter("selectedCategories", Arrays.asList(selectedCategories));
 		
 		for(int i = 0; i < parameterNames.size(); i++) {
