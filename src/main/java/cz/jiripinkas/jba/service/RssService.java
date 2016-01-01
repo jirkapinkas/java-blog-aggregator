@@ -332,7 +332,11 @@ public class RssService {
 					try {
 						return new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse(stringDate);
 					} catch (ParseException e4) {
-						return new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH).parse(stringDate);
+						try {
+							return new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH).parse(stringDate);
+						} catch (ParseException e5) {
+							return new SimpleDateFormat("yyyy.MM.dd", Locale.ENGLISH).parse(stringDate);
+						}
 					}
 				}
 			}
