@@ -386,6 +386,15 @@ public class RssService {
 		}
 		
 		// fix for TL;DR
+		if(cleanDescription.startsWith("TLDR ") && cleanDescription.length() > 5) {
+			cleanDescription = cleanDescription.substring(5, cleanDescription.length());
+		}
+		if(cleanDescription.startsWith("TLDR; ") && cleanDescription.length() > 6) {
+			cleanDescription = cleanDescription.substring(6, cleanDescription.length());
+		}
+		if(cleanDescription.startsWith("TLDR: ") && cleanDescription.length() > 6) {
+			cleanDescription = cleanDescription.substring(6, cleanDescription.length());
+		}
 		if(cleanDescription.startsWith("TL;DR ") && cleanDescription.length() > 6) {
 			cleanDescription = cleanDescription.substring(6, cleanDescription.length());
 		}
