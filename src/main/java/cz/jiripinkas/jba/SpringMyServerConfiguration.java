@@ -2,7 +2,6 @@ package cz.jiripinkas.jba;
 
 import java.util.Properties;
 
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
@@ -12,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.jndi.JndiTemplate;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 import cz.jiripinkas.jba.annotation.MyServerProfile;
@@ -31,8 +31,8 @@ public class SpringMyServerConfiguration {
 
 	@Bean
 	public DataSource dataSource() throws NamingException {
-        InitialContext context = new InitialContext();
-        return (DataSource) context.lookup("jdbc/" + jndiJdbcName);
+		JndiTemplate jndi = new JndiTemplate();
+        return (DataSource) jndi.lookup("java:comp/env/jdbc/" + jndiJdbcName);
 	}
 
 	@Bean
