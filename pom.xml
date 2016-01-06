@@ -24,12 +24,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.zaxxer</groupId>
-			<artifactId>HikariCP-java6</artifactId>
-			<version>2.3.9</version>
-		</dependency>
-
-		<dependency>
 			<groupId>cz.jiripinkas</groupId>
 			<artifactId>jsitemapgenerator</artifactId>
 			<version>1.5</version>
@@ -284,6 +278,11 @@
 			<id>openshift</id>
 			<dependencies>
 				<dependency>
+					<groupId>com.zaxxer</groupId>
+					<artifactId>HikariCP-java6</artifactId>
+					<version>2.3.9</version>
+				</dependency>
+				<dependency>
 					<groupId>org.postgresql</groupId>
 					<artifactId>postgresql</artifactId>
 					<version>9.3-1103-jdbc41</version>
@@ -348,6 +347,13 @@
 					<groupId>org.postgresql</groupId>
 					<artifactId>postgresql</artifactId>
 					<version>9.3-1103-jdbc41</version>
+					<scope>provided</scope>
+				</dependency>
+				<dependency>
+					<groupId>com.zaxxer</groupId>
+					<artifactId>HikariCP-java6</artifactId>
+					<version>2.3.9</version>
+					<scope>provided</scope>
 				</dependency>
 				<dependency>
 					<groupId>org.hsqldb</groupId>
