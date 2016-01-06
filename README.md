@@ -17,6 +17,11 @@ You can use this user to login (name / password): <code>admin / admin</code>
 
 <p>You can easily add this application either to Heroku or OpenShift. It uses PostgreSQL database.</p>
 
+<h2>My production settings</h2>
+
+<p>For topjavablogs run: <code>mvn clean package -P myserver -Djndi.jdbc.name=topjavablogs</code><br />
+   For topsqlblogs run: <code>mvn clean package -P myserver -Djndi.jdbc.name=topsqlblogs</code><br /></p>
+
 <h2>To develop JBA from scratch:</h2>
 
 <p>

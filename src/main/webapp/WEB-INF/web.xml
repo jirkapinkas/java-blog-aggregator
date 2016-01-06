@@ -85,7 +85,7 @@
 
 	<context-param>
 		<param-name>spring.profiles.default</param-name>
-		<param-value>openshift</param-value>
+		<param-value>myserver</param-value>
 	</context-param>
 
 	<session-config>
