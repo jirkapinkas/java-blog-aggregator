@@ -244,14 +244,6 @@ public class RssServiceTest {
 	}
 
 	@Test
-	public void testPlanetMysqlSpecialCharacters() throws Exception {
-		mockHttpClient200Status();
-		List<Item> items = rssService.getItems("test-rss/planetmysql.xml", true, 0, new HashMap<String, Object>());
-		assertEquals("Introducing 'MySQL 101,' a 2-day intensive educational track at Percona Live this April 15-16", items.get(5).getTitle());
-		assertEquals("MySQL Character encoding - part 2", items.get(8).getTitle());
-	}
-
-	@Test
 	public void testDfetter() throws Exception {
 		mockHttpClient200Status();
 		List<Item> items = rssService.getItems("test-rss/dfetter.xml", true, 0, new HashMap<String, Object>());
