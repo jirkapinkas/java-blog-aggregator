@@ -385,6 +385,10 @@ public class RssService {
 			cleanDescription = cleanDescription.substring(5, cleanDescription.length());
 		}
 		
+		if(cleanDescription.startsWith("Preface ") && cleanDescription.length() > 9 && Character.isUpperCase(cleanDescription.charAt(8))) {
+			cleanDescription = cleanDescription.substring(8, cleanDescription.length());
+		}
+		
 		// fix for TL;DR
 		if(cleanDescription.startsWith("TLDR ") && cleanDescription.length() > 5) {
 			cleanDescription = cleanDescription.substring(5, cleanDescription.length());
@@ -401,7 +405,7 @@ public class RssService {
 		if(cleanDescription.startsWith("TL;DR: ") && cleanDescription.length() > 7) {
 			cleanDescription = cleanDescription.substring(7, cleanDescription.length());
 		}
-		
+
 		ArrayList<String> links = pullLinks(cleanDescription);
 		for (String link : links) {
 			cleanDescription = cleanDescription.replace(link, "");

@@ -158,6 +158,7 @@ public class RssServiceTest {
 		assertEquals("Unless you", rssService.cleanDescription("TLDR Unless you"));
 		assertEquals("Unless you", rssService.cleanDescription("TLDR: Unless you"));
 		assertEquals("Unless you", rssService.cleanDescription("TLDR; Unless you"));
+		assertEquals("Well, if this would be", rssService.cleanDescription("Preface Well, if this would be"));
 		assertEquals("Cyber technology couldn't", rssService.cleanDescription("Cyber technology couldn’t"));
 		assertEquals("return \"*\"?", rssService.cleanDescription("return “*”?"));
 		assertEquals("return \"*\"?", rssService.cleanDescription("return &#8220;*&#8221;?"));
