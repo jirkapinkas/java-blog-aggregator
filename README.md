@@ -2,6 +2,8 @@
 
 <p>Project <a href="http://www.topjavablogs.com" target="_blank" title="Top Java Blogs">Top Java Blogs</a> uses this system to aggregate latest news from Java world.</p>
 
+<p><strong>NOTE: On January 16 2016 the project has moved to new repository: <a href="https://github.com/jirkapinkas/java-blog-aggregator-boot">java-blog-aggregator-boot</a> and now runs on Spring Boot and instead of JSP is used Thymeleaf.</strong></p>
+
 <h2>To run in development mode (using embedded HSQL database):</h2>
 
 <p>
