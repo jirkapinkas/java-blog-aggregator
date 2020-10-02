@@ -1,4 +1,5 @@
 <h1>Java Blog Aggregator</h1>
+ultra pro max
 
 <p>Project <a href="http://www.topjavablogs.com" target="_blank" title="Top Java Blogs">Top Java Blogs</a> uses this system to aggregate latest news from Java world.</p>
 
@@ -44,6 +45,6 @@ Because I recorded this project creation from scratch, you can learn from it:
 		<a href="http://www.javavids.com" target="_blank" title="Java video tutorials">Java video tutorials</a> (free online tutorials)
 	</li>
     <li>
-		<a href="http://www.java-skoleni.cz" target="_blank" title="Java školení">Java školení</a> (in Czech)
+		<a href="http://www.java-skoleni.cz" target="_blank" title="Java Å¡kolenÃ­">Java Å¡kolenÃ­</a> (in Czech)
 	</li>
 </ul>
